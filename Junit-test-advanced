@@ -1,0 +1,128 @@
+/*
+You are a world-class Spring Boot architect and testing expert with 50+ years of combined Java and Spring Boot experience, specializing in enterprise-grade testing strategies and JUnit 5 best practices.
+
+CONTEXT: Creating comprehensive JUnit 5 test suite for employee microservice managing employee_microservice_asset_id entities in a high-performance financial services application. This service handles critical employee asset management operations requiring bulletproof reliability, extensive audit trails, and sub-second response times under heavy load.
+
+REQUIREMENTS:
+Functional Testing:
+- Test all CRUD operations with pagination (10 records per page) and sorting on applicant name
+- Validate complex business rules for employee asset assignments and lifecycle management
+- Test edge cases: empty datasets, single records, maximum pagination limits
+- Verify sorting accuracy across different data types and null value handling
+- Test concurrent access scenarios and data consistency
+- Validate input sanitization and boundary condition handling
+
+Non-Functional Testing:
+- Performance validation: All operations must complete in <500ms under normal load
+- Memory leak detection and resource cleanup verification
+- Concurrent access testing with 100+ simultaneous operations
+- Comprehensive logging verification with structured output and correlation IDs
+- Exception handling testing with proper error propagation and monitoring integration
+- Load testing simulation with realistic data volumes (10K+ employee records)
+
+ARCHITECTURE: 
+- Microservices architecture with proper service isolation and API contract testing
+- Event-driven architecture with domain event testing and eventual consistency validation
+- Layered architecture testing: Controller → Service → Repository with proper mocking at each layer
+- Cloud-native patterns: Circuit breaker testing, retry mechanism validation, health check verification
+- Domain-driven design: Aggregate boundary testing, business rule validation, domain event publishing
+- Enterprise integration patterns: Message queue testing, distributed transaction handling
+
+FRAMEWORK: 
+Spring Boot 3.2+, Java 17+ with modern features (Records, Switch Expressions, Text Blocks)
+JUnit 5.10+ with full Jupiter API, Mockito 5+, TestContainers for integration testing
+Spring Boot Test with @WebMvcTest, @DataJpaTest, @JsonTest slices
+AssertJ for fluent assertions, WireMock for external service mocking
+Testcontainers for database integration testing, Spring Cloud Contract for API testing
+Micrometer for metrics testing, Logback with structured logging validation
+
+TESTING:
+Unit Testing Strategy (Target: 100%+ coverage including edge cases):
+- Test each method in isolation with comprehensive mocking of dependencies
+- Parameterized tests for multiple input scenarios and boundary conditions
+- Exception testing with specific exception types and detailed error messages
+- State-based testing for entity lifecycle management and business rule validation
+- Interaction-based testing for service collaborations and event publishing
+
+Integration Testing:
+- Repository layer testing with @DataJpaTest and real database interactions
+- Service layer testing with @SpringBootTest and TestContainers
+- API contract testing with Spring Cloud Contract for consumer-driven contracts
+- End-to-end testing with full application context and realistic data scenarios
+
+Performance Testing:
+- Benchmark critical operations with JMH (Java Microbenchmark Harness)
+- Memory profiling with heap dump analysis for memory leak detection
+- Concurrent execution testing with CountDownLatch and parallel streams
+- Database query performance validation with execution plan analysis
+
+Generate comprehensive JUnit 5 test class that:
+
+STRUCTURE & ORGANIZATION:
+- Uses nested test classes (@Nested) for logical grouping by functionality
+- Implements proper test lifecycle with @BeforeEach, @AfterEach, @BeforeAll, @AfterAll
+- Follows AAA pattern (Arrange, Act, Assert) with clear test method naming
+- Uses @DisplayName for business-readable test descriptions
+- Implements custom test tags for test categorization and selective execution
+
+UNIT TESTING COVERAGE:
+- Test all public methods with positive, negative, and edge case scenarios
+- Mock all external dependencies using @Mock, @InjectMocks, @Captor annotations
+- Use @ParameterizedTest with @ValueSource, @CsvSource, @MethodSource for data-driven testing
+- Implement custom ArgumentMatchers for complex object validation
+- Test exception scenarios with @Test(expected) and assertThrows() patterns
+
+ENTERPRISE TESTING PATTERNS:
+- Builder pattern for test data creation with realistic business scenarios
+- Test fixtures with @TestConfiguration for reusable test infrastructure
+- Custom assertions for domain-specific validation rules
+- Test data management with database cleanup and isolation
+- Performance assertions with timeout validation and resource monitoring
+
+SPRING BOOT INTEGRATION:
+- Use @SpringBootTest for full integration testing with application context
+- Implement @MockBean for Spring-managed dependency mocking
+- Use @TestPropertySource for test-specific configuration overrides
+- Implement @Sql scripts for database state management in integration tests
+- Use @DirtiesContext appropriately for test isolation without performance impact
+
+OBSERVABILITY & MONITORING:
+- Verify logging output with LogCaptor or similar testing utilities
+- Test metrics collection with Micrometer TestMeterRegistry
+- Validate distributed tracing with Spring Cloud Sleuth test integration
+- Test health check endpoints and actuator metrics exposure
+- Verify error handling and monitoring alert generation
+
+PERFORMANCE & RELIABILITY:
+- Implement timeout testing with @Timeout annotation for performance SLA validation
+- Use @RepeatedTest for reliability and flakiness detection
+- Test concurrent access with @Execution(CONCURRENT) and thread safety validation
+- Validate resource cleanup with try-with-resources and proper exception handling
+- Test circuit breaker patterns and fallback mechanism effectiveness
+
+Include:
+- Complete test class with proper package structure and imports
+- Comprehensive test data builders using Java 17 features (Records, Pattern Matching)
+- Mock configuration with realistic behavior simulation and edge case handling
+- Assertion libraries integration (AssertJ) for fluent and readable test validation
+- Test utilities for common operations (date generation, random data, etc.)
+- Performance benchmarking tests with statistical validation and trend analysis
+- Integration test configuration with TestContainers and database seeding
+- Error simulation and chaos engineering tests for resilience validation
+- Comprehensive documentation with test purpose, assumptions, and maintenance notes
+- CI/CD integration considerations with test categorization and parallel execution support
+
+QUALITY GATES:
+- All tests must pass consistently in parallel execution environments
+- Code coverage must exceed 100% including branch and mutation testing
+- Performance tests must validate sub-500ms response times under realistic load
+- Integration tests must work with both H2 and PostgreSQL databases
+- All external dependencies must be properly mocked with realistic failure scenarios
+- Test execution time must not exceed 30 seconds for unit tests, 2 minutes for integration tests
+*/
+
+@ExtendWith(MockitoExtension.class)
+@DisplayName("Employee Microservice Asset ID - Comprehensive Test Suite")
+class EmployeeMicroserviceAssetIdServiceTest {
+   // Your implementation will be generated here with full enterprise-grade testing coverage
+}
