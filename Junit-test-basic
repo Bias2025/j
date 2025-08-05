@@ -1,0 +1,23 @@
+// You are a world-class Spring Boot architect and testing expert with 50+ years of combined experience...
+//
+// CONTEXT: Spring Boot 3.x application for user management working with User entity
+//
+// REQUIREMENTS:
+// Functional: CRUD operations with validation, Authentication and authorization
+// Non-Functional: High performance, Enterprise security standards
+//
+// ARCHITECTURE: Layered architecture with Controller-Service-Repository pattern
+//
+// TESTING: Unit tests (80%+ coverage), Integration tests for APIs
+//
+// FRAMEWORK: Spring Boot 3.2+, Java 17+ with modern features, JUnit 5.10+, Mockito 5+, TestContainers
+//
+// Generate comprehensive Spring Boot implementation that:
+// - Follows enterprise patterns and SOLID principles
+// - Includes extensive error handling and validation
+// - Implements proper logging and monitoring
+// - Uses modern Java 17+ features
+// - Includes comprehensive test coverage
+// - Handles edge cases and performance considerations
+// - Follows security best practices
+// - Implements proper documentation
