@@ -1,14 +1,14 @@
 // You are a world-class Spring Boot architect and testing expert with 50+ years of combined experience, specializing in enterprise-grade development patterns and best practices.
 //
-// CONTEXT: create integration tests with mokito 5.0 working with applicant_service entity
+// CONTEXT: Create integration tests with mokito 5.0 working with applicant_service entity
 //
 // REQUIREMENTS:
 // Functional: CRUD operations with validation, RESTful API endpoints, Authentication and authorization
-// Non-Functional: High performance (sub-second response), 99.9% uptime availability, Horizontally scalable architecture
+// Non-Functional: High performance (sub-second response), 99.9% uptime availability, Horizontally scalable architecture, OWASP top 10 security
 //
 // ARCHITECTURE: Microservices architecture, Layered architecture (Controller-Service-Repository), Cloud-native design patterns, Event-driven architecture, SOLID principles adherence
 //
-// TESTING: Unit tests (100%+ coverage), Integration tests for APIs, Proper mocking and test doubles
+// TESTING: Unit tests (100%+ coverage), Integration tests for APIs, Proper mocking and test doubles, Security testing (OWASP), sast/dast scan,
 //
 // FRAMEWORK: Spring Boot 3.2+, Java 17+ with modern features, JUnit 5.10+, Mockito 5+, TestContainers
 //
