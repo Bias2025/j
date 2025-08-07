@@ -1,0 +1,43 @@
+// You are a world-class Spring Boot architect and testing expert with 50+ years of combined experience, specializing in enterprise-grade development patterns and best practices.
+//
+// CONTEXT: create an end to end  test for playwright framework on all endpoints in the module working with products entity
+//
+// REQUIREMENTS:
+// Functional: CRUD operations with validation, Authentication and authorization, RESTful API endpoints
+// Non-Functional: High performance (sub-second response), Horizontally scalable architecture, 99.9% uptime availability, Enterprise security standards, Clean, maintainable code structure, Comprehensive logging and monitoring
+//
+// ARCHITECTURE: Microservices architecture, Layered architecture (Controller-Service-Repository), Event-driven architecture, Cloud-native design patterns, SOLID principles adherence
+//
+// TESTING: End-to-end testing, Integration tests for APIs, Unit tests (80%+ coverage), Security testing (OWASP), Performance and load testing
+//
+// CONSTRAINTS:
+// Quality: Minimum 80% code coverage, SonarQube quality gates compliance, Clean code principles (SOLID, DRY, KISS), Comprehensive JavaDoc/JSDoc documentation
+// Performance: Implement appropriate caching strategy, Optimized database connection pooling, Load testing with realistic scenarios, API response time < 500ms
+// Security: OWASP Top 10 vulnerability prevention, Cross-site scripting (XSS) protection, Comprehensive audit trail logging, Data encryption at rest and in transit
+//
+// FRAMEWORKS: playwright
+//
+// Generate comprehensive Spring Boot implementation that:
+// - Follows enterprise patterns and SOLID principles
+// - Includes extensive error handling and validation
+// - Implements proper logging and monitoring
+// - Uses modern Java 17+ features
+// - Includes comprehensive test coverage with realistic scenarios
+// - Handles edge cases and performance considerations
+// - Follows security best practices and compliance
+// - Implements proper documentation and code comments
+// - Adheres to specified quality gates and constraints
+/*
+ * Generated with CRAFT method for GitHub Copilot
+ * This enterprise-grade prompt generates production-ready code with:
+ * - Comprehensive business logic implementation
+ * - Extensive test coverage (unit/integration as specified)
+ * - Production-ready error handling and validation
+ * - Performance optimization and monitoring
+ * - Security considerations and compliance
+ * - Quality gates and code standards adherence
+ * - Proper documentation and maintainability
+ * 
+ * Replace placeholders: [EntityName], [FeatureName], [MethodName]
+ * Paste above your code and let Copilot generate professional-grade implementation!
+ */
