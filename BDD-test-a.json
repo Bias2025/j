@@ -15,7 +15,7 @@
 // Performance: Implement appropriate caching strategy, Optimized database connection pooling, Load testing with realistic scenarios, API response time < 500ms
 // Security: OWASP Top 10 vulnerability prevention, Cross-site scripting (XSS) protection, Comprehensive audit trail logging, Data encryption at rest and in transit
 //
-// FRAMEWORKS: Cucumber, Spring Boot Test
+// FRAMEWORKS: Cucumber 4.8, Spring Boot Test 3.5
 //
 // Generate comprehensive Spring Boot implementation that:
 // - Follows enterprise patterns and SOLID principles
