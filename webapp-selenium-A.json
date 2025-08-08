@@ -1,0 +1,85 @@
+## C - CONTEXT (Environmental Understanding)
+```yaml
+CONTEXT:
+  domain: Government & Public Sector
+  scale: 10K-100K users, 1K-10K RPS, 10-100GB data
+  constraints: [Budget, timeline, regulations]
+  team: [Team size, skill level, existing stack]
+  integration: [External systems, APIs, legacy]
+```
+
+## R - REQUIREMENTS (Explicit Specifications)
+```yaml
+REQUIREMENTS:
+  functional:
+    - [Define what the system MUST do]
+  non_functional:
+    performance: [Define performance specs]
+    security: [Define security requirements]
+    scalability: [Define scale requirements]
+    reliability: 100%
+  compliance: [GDPR, HIPAA, PCI-DSS, etc.]
+```
+
+## A - ARCHITECTURE (Design Decisions)
+```yaml
+ARCHITECTURE:
+  pattern: Event-Driven Architecture
+  style: Microservices
+  layers:
+    presentation: GraphQL API
+    application: [Application logic]
+    domain: [Business rules]
+    infrastructure: [Infrastructure layer]
+  data_flow: Event-Driven
+```
+
+## F - FRAMEWORK (Technical Stack)
+```yaml
+FRAMEWORK:
+  core:
+    language: Java 17 (LTS)
+    framework: Spring Boot 3.5
+  persistence:
+    database: MySQL 8.0
+    orm: Spring Data JPA
+    migration: Flyway
+  messaging: Apache Kafka 3.6
+  caching: Redis 7.2
+  monitoring: SonarQube (Code Quality)
+  deployment: Kubernetes
+  testing:
+    unit_testing: JUnit 5 + Mockito 5.0.0
+    integration_testing: TestContainers
+    bdd_testing: Cucumber + Selenium
+    e2e_testing: Selenium + Cucumber
+    performance_testing: JMeter 5.6
+    contract_testing: [Contract testing approach]
+```
+
+# GENERATION REQUEST
+Generate production-ready code with:
+- Complete implementation (no placeholders)
+- OWASP security by default with SAST-DAST integration
+- Sub-100ms P99 latency optimizations
+- Comprehensive test coverage (90%+) using JUnit 5 + Mockito 5.0.0
+- Integration tests with TestContainers
+- Security scanning with SonarQube, SAST-DAST, and Blackduck
+- PostgreSQL advanced features utilization
+- Monitoring and observability hooks
+- Detailed inline documentation
+
+**Testing Requirements:**
+- Unit tests: JUnit 5 + Mockito 5.0.0 with proper mocking strategies
+- Integration tests: TestContainers for real database testing
+- BDD tests: Cucumber + Selenium for behavior-driven development
+- E2E tests: Selenium + Cucumber for end-to-end validation
+- Performance tests: JMeter 5.6 for load testing
+- Contract tests: Spring Cloud Contract for API contract validation
+
+**Security Integration:**
+- SAST tools: SonarQube code quality gates and security rules
+- DAST tools: OWASP ZAP integration for runtime security testing
+- Dependency scanning: Snyk or Blackduck for vulnerability detection
+- Code quality: SonarQube integration with quality gates
+- Security headers: CSRF, XSS, and other protective measures
