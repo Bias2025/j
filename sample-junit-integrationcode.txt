@@ -1,0 +1,145 @@
+============================
+Controller
+===========================
+
+----------- JUnit5 Unit Test for Controller 
+
+-- Here's a JUnit 5 unit test example for a Spring Boot controller using MockMvc and Mockito, fully utilizing JUnit Jupiter features:
+
+ import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+@ExtendWith(MockitoExtension.class)
+public class UserControllerTest {
+
+    private MockMvc mockMvc;
+
+    @Mock
+    private UserService userService;
+
+    private UserController userController;
+
+    private ObjectMapper objectMapper;
+
+    @BeforeEach
+    void setUp() {
+        userController = new UserController(userService);
+        mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
+        objectMapper = new ObjectMapper();
+    }
+
+    @Test
+    void testGetUser_Success() throws Exception {
+        User sampleUser = new User(1L, "John Doe", "john@example.com");
+        when(userService.getUserById(1L)).thenReturn(sampleUser);
+
+        mockMvc.perform(get("/api/users/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.name").value("John Doe"))
+                .andExpect(jsonPath("$.email").value("john@example.com"));
+    }
+
+    @Test
+    void testCreateUser_Success() throws Exception {
+        User inputUser = new User(null, "Jane Doe", "jane@example.com");
+        User createdUser = new User(1L, "Jane Doe", "jane@example.com");
+
+        when(userService.createUser(any(User.class))).thenReturn(createdUser);
+
+        mockMvc.perform(post("/api/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(inputUser)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.name").value("Jane Doe"))
+                .andExpect(jsonPath("$.email").value("jane@example.com"));
+    }
+}
+
+------> Integration Test for Controller (SpringBootTest + MockMvc)
+-- Below is a Spring Boot Integration Test example for your controller class using JUnit 5 and MockMvc. This test loads the full application context, including real beans (service, repository), 
+-- and uses an in-memory database (like H2) for persistence.
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import org.springframework.http.MediaType;
+
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
+
+@SpringBootTest
+@Transactional  // rollback DB changes after each test
+public class UserControllerIntegrationTest {
+
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+
+    private MockMvc mockMvc;
+
+    private ObjectMapper objectMapper;
+
+    private User sampleUser;
+
+    @BeforeEach
+    void setup() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        objectMapper = new ObjectMapper();
+
+        sampleUser = new User(null, "Jane Doe", "jane@example.com");
+    }
+
+    @Test
+    void testCreateAndGetUser() throws Exception {
+        // Create user
+        String userJson = objectMapper.writeValueAsString(sampleUser);
+
+        String response = mockMvc.perform(post("/api/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(userJson))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.id").exists())
+            .andExpect(jsonPath("$.name").value("Jane Doe"))
+            .andExpect(jsonPath("$.email").value("jane@example.com"))
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+        User createdUser = objectMapper.readValue(response, User.class);
+
+        // Get user by ID
+        mockMvc.perform(get("/api/users/" + createdUser.getId()))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(createdUser.getId()))
+            .andExpect(jsonPath("$.name").value("Jane Doe"))
+            .andExpect(jsonPath("$.email").value("jane@example.com"));
+    }
+}
+
+
+
