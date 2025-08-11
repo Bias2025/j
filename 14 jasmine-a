@@ -1,0 +1,1581 @@
+# Jasmine BDD Test Case Generation Prompt - CRAFT Format
+
+```javascript
+// You are a world-class behavior-driven development (BDD) expert and Jasmine testing specialist with 20+ years of experience in enterprise-grade test automation,
+// specializing in comprehensive test strategy development, domain-driven testing patterns, and business-readable test specifications.
+//
+// CONTEXT: Jasmine BDD test suite development for Spring Boot 3.x bank account entity with comprehensive business scenario coverage
+//
+// REQUIREMENTS:
+// Functional: Comprehensive BDD test coverage for CRUD operations, Account transaction validation, Balance calculation accuracy, Fund transfer workflows, Account status management, Interest calculation algorithms, Overdraft protection logic, Multi-currency support validation, Account type-specific business rules, Regulatory compliance testing, Audit trail verification, Customer notification workflows
+// Non-Functional: High-performance test execution (<5 seconds per suite), Parallel test execution capability, Real-time test reporting with business metrics, Comprehensive test data management, CI/CD pipeline integration, Cross-browser compatibility (for web components), Test environment isolation, Performance regression detection, Memory leak detection during testing, Flake-free test reliability (>99.5%)
+//
+// ARCHITECTURE: Behavior-driven development (BDD) methodology, Given-When-Then specification format, Business-readable test scenarios, Modular test suite organization, Reusable step definitions, Data-driven testing patterns, Mock service integration, Test fixture management, Page object model integration (for UI tests)
+//
+// TESTING: Unit-level BDD scenarios, Integration BDD testing, API contract testing with BDD, Database transaction testing, Security boundary testing, Performance testing with BDD, User acceptance criteria validation, Regression testing automation, Edge case and error condition testing, Business rule validation testing
+//
+// CONSTRAINTS:
+// Quality: Minimum 90% business scenario coverage, Living documentation generation, Comprehensive test reporting with business metrics, Clean test code principles (DRY, SOLID), Maintainable test architecture, Business stakeholder readability, Traceability to user stories and acceptance criteria
+// Performance: Test suite execution time optimization (<300 seconds for full suite), Efficient test data setup/teardown, Resource usage minimization, Fast feedback loop for developers (<2 minutes for smoke tests), Parallel execution optimization, Memory-efficient test data management
+// Security: Test data privacy and anonymization, Secure test environment configuration, Authentication token management in tests, Test user privilege isolation, Sensitive data masking in test reports, Compliance with data protection regulations
+//
+// FRAMEWORKS: Jasmine 4.x, Karma test runner, Protractor/WebDriver integration, Supertest for API testing, Sinon.js for mocking, Istanbul for coverage, Allure reporting
+//
+// ORIGINALITY REQUIREMENTS:
+// - Create UNIQUE BDD scenarios specific to bank account domain business workflows and regulatory requirements
+// - Use distinctive Given-When-Then patterns that reflect real banking business processes
+// - Implement domain-specific test data builders and realistic financial scenarios
+// - Add original business rule validation and custom assertion patterns specific to banking operations
+// - Include contextual test descriptions explaining banking business context and regulatory compliance
+// - Avoid generic BDD patterns - create targeted, business-driven test scenarios
+// - Use creative scenario naming conventions that reflect specific banking business processes
+// - Implement custom test utilities and assertion methods specific to financial domain requirements
+//
+// Generate comprehensive Jasmine BDD test suite that:
+// - Follows modern BDD best practices with unique domain-focused business scenarios
+// - Includes extensive business rule testing with bank account-specific validation scenarios
+// - Implements proper test data management with realistic banking business data
+// - Uses modern Jasmine features and ES6+ syntax in creative testing combinations
+// - Includes comprehensive test documentation with realistic business workflow descriptions
+// - Handles edge cases specific to bank account domain requirements and regulatory compliance
+// - Follows security and compliance testing practices with custom validation logic
+// - Implements proper test reporting with business context explanations and metrics
+// - Adheres to specified quality gates with unique BDD testing approach
+// - Creates original test architecture that reflects specific banking business workflows and compliance requirements
+
+/*
+ * JASMINE BDD TEST METHODOLOGY FOR BANKING DOMAIN
+ * This comprehensive BDD test suite generates UNIQUE, enterprise-grade behavioral tests with:
+ * - Custom business scenarios tailored to bank account domain workflows and regulatory requirements
+ * - Original Given-When-Then implementations and business-readable test specifications
+ * - Domain-specific test data management and realistic banking business scenario coverage
+ * - Unique BDD testing patterns based on real banking system user journeys and compliance requirements
+ * - Creative test validation approaches that avoid generic BDD testing patterns
+ * - Contextual test assertions with detailed banking business workflow verification
+ * - Advanced BDD testing strategies specific to financial services and regulatory compliance
+ * - Custom test metrics and reporting relevant to banking business operations and audit requirements
+ * - Original test architecture focusing on banking process automation validation and compliance testing
+ * - Innovative BDD maintenance frameworks for continuous banking workflow testing and regulatory compliance
+ */
+
+## JASMINE BDD TEST SUITE ARCHITECTURE FRAMEWORK
+
+### Phase 1: BDD Test Environment Setup and Configuration
+**Enterprise Banking Domain Test Infrastructure**
+
+#### Jasmine Configuration for Banking Domain Testing
+```javascript
+// karma.conf.js - Enterprise banking BDD testing configuration
+module.exports = function(config) {
+  config.set({
+    basePath: '',
+    frameworks: ['jasmine'],
+    
+    files: [
+      'src/test/javascript/spec/helpers/banking-test-setup.js',
+      'src/test/javascript/spec/helpers/financial-data-builders.js',
+      'src/test/javascript/spec/helpers/regulatory-compliance-matchers.js',
+      'src/main/resources/static/js/**/*.js',
+      'src/test/javascript/spec/**/*-spec.js'
+    ],
+    
+    exclude: [],
+    
+    preprocessors: {
+      'src/main/resources/static/js/**/*.js': ['coverage']
+    },
+    
+    reporters: ['progress', 'coverage', 'spec', 'allure'],
+    
+    coverageReporter: {
+      type: 'html',
+      dir: 'target/coverage/',
+      subdir: 'banking-bdd-coverage',
+      check: {
+        global: {
+          statements: 90,
+          branches: 85,
+          functions: 90,
+          lines: 90
+        }
+      }
+    },
+    
+    allureReporter: {
+      outputDir: 'target/allure-results',
+      enableScreenshots: true,
+      enableBrowserLogs: true
+    },
+    
+    port: 9876,
+    colors: true,
+    logLevel: config.LOG_INFO,
+    autoWatch: true,
+    browsers: ['Chrome', 'Firefox'],
+    
+    customLaunchers: {
+      ChromeHeadlessCI: {
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox', '--disable-web-security']
+      }
+    },
+    
+    singleRun: false,
+    concurrency: Infinity,
+    
+    // Banking-specific test configuration
+    client: {
+      jasmine: {
+        random: false,
+        failFast: false,
+        timeout: 10000
+      },
+      bankingTestConfig: {
+        baseApiUrl: 'http://localhost:8080/api/v1',
+        testDataUrl: 'http://localhost:8080/test-data',
+        regulatoryComplianceMode: true,
+        auditTrailValidation: true
+      }
+    }
+  });
+};
+```
+
+#### Banking Domain Test Helpers and Utilities
+```javascript
+// spec/helpers/banking-test-setup.js
+/**
+ * Banking Domain BDD Test Setup and Configuration
+ * Provides enterprise-grade test infrastructure for banking workflows
+ */
+
+// Custom Jasmine matchers for banking domain
+beforeEach(function() {
+  jasmine.addMatchers({
+    
+    /**
+     * Validates account balance with precision for financial calculations
+     */
+    toHaveAccurateBalance: function() {
+      return {
+        compare: function(account, expectedBalance) {
+          const actualBalance = parseFloat(account.balance);
+          const expected = parseFloat(expectedBalance);
+          const tolerance = 0.01; // 1 cent tolerance for floating point precision
+          
+          const result = {
+            pass: Math.abs(actualBalance - expected) <= tolerance
+          };
+          
+          if (result.pass) {
+            result.message = `Expected account balance ${actualBalance} not to equal ${expected} within ${tolerance} tolerance`;
+          } else {
+            result.message = `Expected account balance ${actualBalance} to equal ${expected} within ${tolerance} tolerance. Difference: ${Math.abs(actualBalance - expected)}`;
+          }
+          
+          return result;
+        }
+      };
+    },
+    
+    /**
+     * Validates regulatory compliance for banking operations
+     */
+    toMeetRegulatoryCompliance: function() {
+      return {
+        compare: function(transaction, complianceRules) {
+          const violations = [];
+          
+          // Anti-Money Laundering (AML) compliance check
+          if (transaction.amount > complianceRules.amlThreshold && !transaction.amlReported) {
+            violations.push(`Transaction amount ${transaction.amount} exceeds AML threshold ${complianceRules.amlThreshold} without proper reporting`);
+          }
+          
+          // Know Your Customer (KYC) compliance check
+          if (!transaction.customerKycVerified) {
+            violations.push('Customer KYC verification required for this transaction type');
+          }
+          
+          // Daily transaction limit compliance
+          if (transaction.dailyTotal > complianceRules.dailyTransactionLimit) {
+            violations.push(`Daily transaction total ${transaction.dailyTotal} exceeds regulatory limit ${complianceRules.dailyTransactionLimit}`);
+          }
+          
+          const result = {
+            pass: violations.length === 0
+          };
+          
+          if (result.pass) {
+            result.message = 'Expected transaction not to meet regulatory compliance requirements';
+          } else {
+            result.message = `Transaction failed regulatory compliance: ${violations.join(', ')}`;
+          }
+          
+          return result;
+        }
+      };
+    },
+    
+    /**
+     * Validates audit trail completeness for banking operations
+     */
+    toHaveCompleteAuditTrail: function() {
+      return {
+        compare: function(auditTrail, requiredFields) {
+          const missingFields = requiredFields.filter(field => 
+            !auditTrail.hasOwnProperty(field) || auditTrail[field] === null || auditTrail[field] === undefined
+          );
+          
+          const result = {
+            pass: missingFields.length === 0
+          };
+          
+          if (result.pass) {
+            result.message = 'Expected audit trail to be incomplete';
+          } else {
+            result.message = `Audit trail missing required fields: ${missingFields.join(', ')}`;
+          }
+          
+          return result;
+        }
+      };
+    }
+  });
+});
+
+// Banking domain test data cleanup
+afterEach(function() {
+  // Clean up test accounts, transactions, and audit trails
+  if (window.testDataCleanup) {
+    window.testDataCleanup.cleanupBankingTestData();
+  }
+});
+```
+
+#### Financial Data Builders for Realistic Test Scenarios
+```javascript
+// spec/helpers/financial-data-builders.js
+/**
+ * Banking Domain Test Data Builders
+ * Creates realistic financial data for comprehensive BDD testing
+ */
+
+class BankAccountDataBuilder {
+  constructor() {
+    this.reset();
+  }
+  
+  reset() {
+    this.accountData = {
+      accountNumber: this.generateAccountNumber(),
+      accountType: 'CHECKING',
+      balance: 1000.00,
+      currency: 'USD',
+      status: 'ACTIVE',
+      customerId: this.generateCustomerId(),
+      branchCode: 'NYC001',
+      routingNumber: '021000021',
+      interestRate: 0.01,
+      overdraftLimit: 500.00,
+      monthlyMaintenanceFee: 12.00,
+      minimumBalance: 100.00,
+      openingDate: new Date().toISOString(),
+      lastTransactionDate: new Date().toISOString(),
+      regulatoryFlags: {
+        kycVerified: true,
+        amlCleared: true,
+        fatcaReporting: false
+      },
+      features: {
+        onlineBankingEnabled: true,
+        mobileBankingEnabled: true,
+        overdraftProtection: true,
+        automaticSavings: false
+      }
+    };
+    return this;
+  }
+  
+  /**
+   * Creates premium checking account with enhanced features
+   */
+  asPremiumCheckingAccount() {
+    this.accountData.accountType = 'PREMIUM_CHECKING';
+    this.accountData.balance = 25000.00;
+    this.accountData.interestRate = 0.025;
+    this.accountData.overdraftLimit = 2500.00;
+    this.accountData.monthlyMaintenanceFee = 0.00; // Waived for premium accounts
+    this.accountData.minimumBalance = 10000.00;
+    this.accountData.features = {
+      ...this.accountData.features,
+      premiumSupport: true,
+      freeWireTransfers: true,
+      reimbursedAtmFees: true,
+      investmentAdvisory: true
+    };
+    return this;
+  }
+  
+  /**
+   * Creates business account with commercial banking features
+   */
+  asBusinessAccount() {
+    this.accountData.accountType = 'BUSINESS_CHECKING';
+    this.accountData.balance = 50000.00;
+    this.accountData.customerId = this.generateBusinessCustomerId();
+    this.accountData.interestRate = 0.015;
+    this.accountData.overdraftLimit = 10000.00;
+    this.accountData.monthlyMaintenanceFee = 25.00;
+    this.accountData.minimumBalance = 2500.00;
+    this.accountData.features = {
+      ...this.accountData.features,
+      ach ProcessingEnabled: true,
+      wireTransfersEnabled: true,
+      merchantServices: true,
+      cashManagement: true,
+      multiUserAccess: true
+    };
+    this.accountData.regulatoryFlags = {
+      ...this.accountData.regulatoryFlags,
+      businessLicenseVerified: true,
+      beneficialOwnershipDisclosed: true,
+      sanctionsScreeningCompleted: true
+    };
+    return this;
+  }
+  
+  /**
+   * Creates savings account with compound interest calculations
+   */
+  asSavingsAccount() {
+    this.accountData.accountType = 'HIGH_YIELD_SAVINGS';
+    this.accountData.balance = 15000.00;
+    this.accountData.interestRate = 0.045;
+    this.accountData.overdraftLimit = 0.00; // No overdraft for savings
+    this.accountData.monthlyMaintenanceFee = 0.00;
+    this.accountData.minimumBalance = 500.00;
+    this.accountData.features = {
+      ...this.accountData.features,
+      compoundInterestDaily: true,
+      automaticTransfers: true,
+      goalBasedSaving: true,
+      overdraftProtection: false
+    };
+    this.accountData.transactionLimits = {
+      monthlyWithdrawalLimit: 6, // Regulation D compliance
+      dailyTransferLimit: 3,
+      minimumTransferAmount: 50.00
+    };
+    return this;
+  }
+  
+  /**
+   * Creates account with specific balance for testing scenarios
+   */
+  withBalance(amount) {
+    this.accountData.balance = parseFloat(amount);
+    return this;
+  }
+  
+  /**
+   * Creates account with overdraft conditions for testing
+   */
+  withOverdraftConditions(overdraftLimit, currentBalance) {
+    this.accountData.overdraftLimit = parseFloat(overdraftLimit);
+    this.accountData.balance = parseFloat(currentBalance);
+    this.accountData.features.overdraftProtection = true;
+    return this;
+  }
+  
+  /**
+   * Creates account with regulatory compliance issues for negative testing
+   */
+  withComplianceIssues() {
+    this.accountData.regulatoryFlags = {
+      kycVerified: false,
+      amlCleared: false,
+      fatcaReporting: true,
+      sanctionsFlagged: true,
+      suspiciousActivityReported: true
+    };
+    this.accountData.status = 'RESTRICTED';
+    return this;
+  }
+  
+  /**
+   * Creates dormant account for reactivation testing
+   */
+  asDormantAccount() {
+    this.accountData.status = 'DORMANT';
+    this.accountData.lastTransactionDate = new Date(Date.now() - (365 * 24 * 60 * 60 * 1000)).toISOString(); // 1 year ago
+    this.accountData.features = {
+      onlineBankingEnabled: false,
+      mobileBankingEnabled: false,
+      overdraftProtection: false,
+      automaticSavings: false
+    };
+    return this;
+  }
+  
+  build() {
+    const account = { ...this.accountData };
+    this.reset();
+    return account;
+  }
+  
+  // Helper methods for generating realistic banking data
+  generateAccountNumber() {
+    return '4' + Math.random().toString().substr(2, 11); // 12-digit account number starting with 4
+  }
+  
+  generateCustomerId() {
+    return 'CUST' + Math.random().toString().substr(2, 8);
+  }
+  
+  generateBusinessCustomerId() {
+    return 'BIZ' + Math.random().toString().substr(2, 8);
+  }
+}
+
+class BankTransactionDataBuilder {
+  constructor() {
+    this.reset();
+  }
+  
+  reset() {
+    this.transactionData = {
+      transactionId: this.generateTransactionId(),
+      accountNumber: null,
+      transactionType: 'DEBIT',
+      amount: 100.00,
+      currency: 'USD',
+      description: 'Test transaction',
+      merchantName: null,
+      merchantCategory: null,
+      transactionDate: new Date().toISOString(),
+      postingDate: new Date().toISOString(),
+      referenceNumber: this.generateReferenceNumber(),
+      balanceAfterTransaction: null,
+      fee: 0.00,
+      status: 'COMPLETED',
+      channel: 'ONLINE',
+      authorizationCode: null,
+      regulatoryReporting: {
+        amlReportRequired: false,
+        ctReportRequired: false,
+        fatcaReportable: false
+      }
+    };
+    return this;
+  }
+  
+  /**
+   * Creates large cash deposit transaction requiring regulatory reporting
+   */
+  asLargeCashDeposit() {
+    this.transactionData.transactionType = 'CREDIT';
+    this.transactionData.amount = 12000.00; // Above CTR threshold
+    this.transactionData.description = 'Large cash deposit - business revenue';
+    this.transactionData.channel = 'BRANCH';
+    this.transactionData.regulatoryReporting = {
+      amlReportRequired: true,
+      ctReportRequired: true, // Currency Transaction Report required for $10k+
+      fatcaReportable: false,
+      structuringFlag: false
+    };
+    return this;
+  }
+  
+  /**
+   * Creates international wire transfer with compliance requirements
+   */
+  asInternationalWireTransfer() {
+    this.transactionData.transactionType = 'WIRE_TRANSFER_OUTGOING';
+    this.transactionData.amount = 25000.00;
+    this.transactionData.description = 'International wire transfer to UK';
+    this.transactionData.currency = 'GBP';
+    this.transactionData.fee = 45.00;
+    this.transactionData.channel = 'BRANCH';
+    this.transactionData.beneficiaryInfo = {
+      name: 'John Smith',
+      bankName: 'HSBC UK',
+      swiftCode: 'HBUKGB4B',
+      accountNumber: 'GB82 WEST 1234 5698 7654 32',
+      address: 'London, UK'
+    };
+    this.transactionData.regulatoryReporting = {
+      amlReportRequired: true,
+      ofacScreeningRequired: true,
+      foreignExchangeReporting: true,
+      fatcaReportable: true
+    };
+    return this;
+  }
+  
+  /**
+   * Creates overdraft transaction for fee calculation testing
+   */
+  asOverdraftTransaction() {
+    this.transactionData.transactionType = 'DEBIT';
+    this.transactionData.amount = 150.00;
+    this.transactionData.description = 'ATM withdrawal causing overdraft';
+    this.transactionData.channel = 'ATM';
+    this.transactionData.fee = 35.00; // Overdraft fee
+    this.transactionData.overdraftDetails = {
+      overdraftAmount: 50.00,
+      overdraftFee: 35.00,
+      overdraftProtectionUsed: true
+    };
+    return this;
+  }
+  
+  generateTransactionId() {
+    return 'TXN' + Date.now() + Math.random().toString().substr(2, 6);
+  }
+  
+  generateReferenceNumber() {
+    return 'REF' + Math.random().toString().substr(2, 10);
+  }
+  
+  build() {
+    const transaction = { ...this.transactionData };
+    this.reset();
+    return transaction;
+  }
+}
+
+// Export builders for use in test specifications
+window.BankAccountDataBuilder = BankAccountDataBuilder;
+window.BankTransactionDataBuilder = BankTransactionDataBuilder;
+```
+
+### Phase 2: Comprehensive BDD Test Scenarios
+**Banking Domain Business Rule Testing**
+
+#### Account Management BDD Scenarios
+```javascript
+// spec/account-management-spec.js
+/**
+ * Bank Account Management BDD Test Scenarios
+ * Comprehensive behavioral testing for banking account operations
+ */
+
+describe('Bank Account Management System', function() {
+  
+  let accountBuilder, transactionBuilder, bankingService;
+  
+  beforeEach(function() {
+    accountBuilder = new BankAccountDataBuilder();
+    transactionBuilder = new BankTransactionDataBuilder();
+    bankingService = jasmine.createSpyObj('BankingService', [
+      'createAccount', 'updateAccount', 'closeAccount', 'getAccountBalance',
+      'processTransaction', 'calculateInterest', 'validateCompliance'
+    ]);
+  });
+  
+  describe('Account Creation and Validation', function() {
+    
+    describe('Given a new customer wants to open a checking account', function() {
+      
+      it('When they provide valid personal information and initial deposit, Then a new checking account should be created successfully', function() {
+        // Given - Customer data and initial deposit
+        const customerData = {
+          firstName: 'Sarah',
+          lastName: 'Johnson',
+          ssn: '555-66-7777',
+          dateOfBirth: '1985-03-15',
+          address: {
+            street: '123 Main St',
+            city: 'New York',
+            state: 'NY',
+            zipCode: '10001'
+          },
+          initialDeposit: 1500.00
+        };
+        
+        const expectedAccount = accountBuilder
+          .withBalance(customerData.initialDeposit)
+          .build();
+        
+        bankingService.createAccount.and.returnValue({
+          success: true,
+          account: expectedAccount,
+          welcomePackage: {
+            debitCardOrdered: true,
+            checksOrdered: true,
+            onlineBankingActivated: true
+          }
+        });
+        
+        // When - Account creation is requested
+        const result = bankingService.createAccount(customerData);
+        
+        // Then - Account should be created with proper setup
+        expect(result.success).toBe(true);
+        expect(result.account).toHaveAccurateBalance(1500.00);
+        expect(result.account.accountType).toBe('CHECKING');
+        expect(result.account.status).toBe('ACTIVE');
+        expect(result.welcomePackage.debitCardOrdered).toBe(true);
+        expect(result.welcomePackage.onlineBankingActivated).toBe(true);
+        
+        // Verify KYC compliance
+        expect(result.account.regulatoryFlags.kycVerified).toBe(true);
+        expect(result.account.regulatoryFlags.amlCleared).toBe(true);
+      });
+      
+      it('When they provide insufficient initial deposit, Then account creation should be rejected with appropriate message', function() {
+        // Given - Customer data with insufficient deposit
+        const customerData = {
+          firstName: 'Mike',
+          lastName: 'Wilson',
+          initialDeposit: 50.00 // Below minimum $100 requirement
+        };
+        
+        bankingService.createAccount.and.returnValue({
+          success: false,
+          errorCode: 'INSUFFICIENT_INITIAL_DEPOSIT',
+          errorMessage: 'Initial deposit of $50.00 is below the required minimum of $100.00 for checking accounts',
+          minimumRequired: 100.00
+        });
+        
+        // When - Account creation is attempted
+        const result = bankingService.createAccount(customerData);
+        
+        // Then - Account creation should be rejected
+        expect(result.success).toBe(false);
+        expect(result.errorCode).toBe('INSUFFICIENT_INITIAL_DEPOSIT');
+        expect(result.errorMessage).toContain('below the required minimum');
+        expect(result.minimumRequired).toBe(100.00);
+      });
+    });
+    
+    describe('Given a high-net-worth customer wants to open a premium account', function() {
+      
+      it('When they meet eligibility criteria and provide substantial initial deposit, Then a premium account should be created with enhanced features', function() {
+        // Given - High-net-worth customer data
+        const premiumCustomerData = {
+          firstName: 'Robert',
+          lastName: 'Anderson',
+          creditScore: 780,
+          annualIncome: 250000,
+          initialDeposit: 50000.00,
+          requestedAccountType: 'PREMIUM_CHECKING'
+        };
+        
+        const expectedPremiumAccount = accountBuilder
+          .asPremiumCheckingAccount()
+          .withBalance(premiumCustomerData.initialDeposit)
+          .build();
+        
+        bankingService.createAccount.and.returnValue({
+          success: true,
+          account: expectedPremiumAccount,
+          premiumBenefits: {
+            personalBanker: 'Jennifer Smith',
+            freeWireTransfers: true,
+            atmFeeReimbursement: true,
+            investmentAdvisoryAccess: true,
+            conciergeServices: true
+          }
+        });
+        
+        // When - Premium account creation is requested
+        const result = bankingService.createAccount(premiumCustomerData);
+        
+        // Then - Premium account should be created with enhanced features
+        expect(result.success).toBe(true);
+        expect(result.account.accountType).toBe('PREMIUM_CHECKING');
+        expect(result.account).toHaveAccurateBalance(50000.00);
+        expect(result.account.interestRate).toBe(0.025);
+        expect(result.account.monthlyMaintenanceFee).toBe(0.00);
+        expect(result.premiumBenefits.personalBanker).toBeDefined();
+        expect(result.premiumBenefits.freeWireTransfers).toBe(true);
+      });
+    });
+  });
+  
+  describe('Account Balance Management and Transactions', function() {
+    
+    describe('Given an active checking account with sufficient balance', function() {
+      
+      it('When a valid debit transaction is processed, Then the account balance should be updated correctly with proper audit trail', function() {
+        // Given - Active account with sufficient balance
+        const account = accountBuilder
+          .withBalance(1500.00)
+          .build();
+        
+        const debitTransaction = transactionBuilder
+          .reset()
+          .transactionData.transactionType = 'DEBIT';
+        debitTransaction.amount = 250.00;
+        debitTransaction.description = 'ATM withdrawal at Main Street branch';
+        debitTransaction.accountNumber = account.accountNumber;
+        
+        const expectedNewBalance = 1250.00;
+        
+        bankingService.processTransaction.and.returnValue({
+          success: true,
+          transaction: debitTransaction,
+          newBalance: expectedNewBalance,
+          auditTrail: {
+            transactionId: debitTransaction.transactionId,
+            previousBalance: 1500.00,
+            newBalance: expectedNewBalance,
+            processedBy: 'SYSTEM',
+            processedAt: new Date().toISOString(),
+            ipAddress: '192.168.1.100',
+            channel: 'ATM',
+            location: 'Main Street Branch ATM #001'
+          }
+        });
+        
+        // When - Transaction is processed
+        const result = bankingService.processTransaction(debitTransaction);
+        
+        // Then - Balance should be updated correctly
+        expect(result.success).toBe(true);
+        expect(result.newBalance).toHaveAccurateBalance(expectedNewBalance);
+        expect(result.transaction.status).toBe('COMPLETED');
+        
+        // Verify audit trail completeness
+        expect(result.auditTrail).toHaveCompleteAuditTrail([
+          'transactionId', 'previousBalance', 'newBalance', 'processedBy', 
+          'processedAt', 'ipAddress', 'channel', 'location'
+        ]);
+      });
+      
+      it('When a transaction would cause an overdraft, Then overdraft protection should be evaluated and fees calculated appropriately', function() {
+        // Given - Account with limited balance and overdraft protection
+        const account = accountBuilder
+          .withOverdraftConditions(500.00, 75.00)
+          .build();
+        
+        const overdraftTransaction = transactionBuilder
+          .asOverdraftTransaction()
+          .build();
+        overdraftTransaction.amount = 150.00;
+        overdraftTransaction.accountNumber = account.accountNumber;
+        
+        bankingService.processTransaction.and.returnValue({
+          success: true,
+          transaction: overdraftTransaction,
+          newBalance: -75.00, // Negative balance
+          overdraftUsed: 75.00,
+          feesApplied: {
+            overdraftFee: 35.00,
+            description: 'Overdraft protection fee for exceeding available balance'
+          },
+          balanceAfterFees: -110.00
+        });
+        
+        // When - Overdraft transaction is processed
+        const result = bankingService.processTransaction(overdraftTransaction);
+        
+        // Then - Overdraft should be handled with proper fees
+        expect(result.success).toBe(true);
+        expect(result.overdraftUsed).toBe(75.00);
+        expect(result.feesApplied.overdraftFee).toBe(35.00);
+        expect(result.balanceAfterFees).toHaveAccurateBalance(-110.00);
+        expect(result.newBalance).toBeLessThan(0);
+      });
+    });
+  });
+  
+  describe('Regulatory Compliance and Reporting', function() {
+    
+    describe('Given a large cash transaction that triggers regulatory reporting requirements', function() {
+      
+      it('When the transaction amount exceeds CTR threshold, Then proper compliance reporting should be initiated', function() {
+        // Given - Large cash deposit transaction
+        const account = accountBuilder
+          .asBusinessAccount()
+          .build();
+        
+        const largeCashTransaction = transactionBuilder
+          .asLargeCashDeposit()
+          .build();
+        largeCashTransaction.accountNumber = account.accountNumber;
+        
+        const complianceRules = {
+          ctrThreshold: 10000.00,
+          amlThreshold: 10000.00,
+          structuringDetectionEnabled: true
+        };
+        
+        bankingService.validateCompliance.and.returnValue({
+          complianceStatus: 'REPORTING_REQUIRED',
+          reportsGenerated: ['CTR', 'SAR_REVIEW'],
+          complianceOfficerNotified: true,
+          transactionHold: false,
+          additionalDocumentationRequired: true
+        });
+        
+        // When - Compliance validation is performed
+        const complianceResult = bankingService.validateCompliance(largeCashTransaction, complianceRules);
+        
+        // Then - Proper regulatory reporting should be triggered
+        expect(complianceResult.complianceStatus).toBe('REPORTING_REQUIRED');
+        expect(complianceResult.reportsGenerated).toContain('CTR');
+        expect(complianceResult.complianceOfficerNotified).toBe(true);
+        expect(largeCashTransaction).toMeetRegulatoryCompliance({
+          amlThreshold: 10000.00,
+          ctrThreshold: 10000.00,
+          kycRequired: true
+        });
+      });
+      
+      it('When suspicious activity patterns are detected, Then SAR filing should be initiated with proper documentation', function() {
+        // Given - Multiple structured transactions below reporting threshold
+        const account = accountBuilder.build();
+        const suspiciousTransactions = [
+          { amount: 9500.00, date: '2024-01-15', description: 'Cash deposit' },
+          { amount: 9800.00, date: '2024-01-16', description: 'Cash deposit' },
+          { amount: 9200.00, date: '2024-01-17', description: 'Cash deposit' }
+        ];
+        
+        bankingService.validateCompliance.and.returnValue({
+          complianceStatus: 'SUSPICIOUS_ACTIVITY_DETECTED',
+          suspiciousPatterns: ['STRUCTURING', 'RAPID_SUCCESSION_LARGE_CASH'],
+          reportsGenerated: ['SAR'],
+          investigationRequired: true,
+          accountRestricted: true,
+          lawEnforcementNotified: false // Internal investigation first
+        });
+        
+        // When - Pattern analysis detects suspicious activity
+        const complianceResult = bankingService.validateCompliance(suspiciousTransactions);
+        
+        // Then - SAR should be filed and investigation initiated
+        expect(complianceResult.complianceStatus).toBe('SUSPICIOUS_ACTIVITY_DETECTED');
+        expect(complianceResult.suspiciousPatterns).toContain('STRUCTURING');
+        expect(complianceResult.reportsGenerated).toContain('SAR');
+        expect(complianceResult.investigationRequired).toBe(true);
+        expect(complianceResult.accountRestricted).toBe(true);
+      });
+    });
+  });
+  
+  describe('Interest Calculation and Fee Management', function() {
+    
+    describe('Given a high-yield savings account with daily compounding interest', function() {
+      
+      it('When monthly interest calculation is performed, Then compound interest should be calculated accurately with proper precision', function() {
+        // Given - High-yield savings account
+        const savingsAccount = accountBuilder
+          .asSavingsAccount()
+          .withBalance(25000.00)
+          .build();
+        
+        const interestCalculationPeriod = {
+          startDate: '2024-01-01',
+          endDate: '2024-01-31',
+          daysInPeriod: 31,
+          compoundingFrequency: 'DAILY'
+        };
+        
+        // Expected calculation: P(1 + r/n)^(nt) where P=25000, r=0.045, n=365, t=31/365
+        const expectedInterest = 94.25; // Approximately $94.25 for the month
+        
+        bankingService.calculateInterest.and.returnValue({
+          principalAmount: 25000.00,
+          interestRate: 0.045,
+          compoundingPeriods: 31,
+          interestEarned: expectedInterest,
+          newBalance: 25094.25,
+          calculation: {
+            formula: 'P(1 + r/n)^(nt)',
+            dailyRate: 0.045 / 365,
+            compoundingDays: 31,
+            precision: 2
+          }
+        });
+        
+        // When - Interest is calculated for the period
+        const interestResult = bankingService.calculateInterest(savingsAccount, interestCalculationPeriod);
+        
+        // Then - Interest should be calculated with financial precision
+        expect(interestResult.interestEarned).toHaveAccurateBalance(expectedInterest);
+        expect(interestResult.newBalance).toHaveAccurateBalance(25094.25);
+        expect(interestResult.calculation.precision).toBe(2);
+        expect(interestResult.calculation.compoundingDays).toBe(31);
+      });
+    });
+    
+    describe('Given an account with monthly maintenance fees', function() {
+      
+      it('When monthly fee assessment is due and minimum balance is not maintained, Then fees should be calculated and applied correctly', function() {
+        // Given - Account below minimum balance threshold
+        const account = accountBuilder
+          .withBalance(75.00) // Below $100 minimum
+          .build();
+        
+        const feeAssessment = {
+          assessmentDate: '2024-01-31',
+          minimumBalanceRequired: 100.00,
+          averageMonthlyBalance: 85.00,
+          monthlyMaintenanceFee: 12.00,
+          feeWaiverEligible: false
+        };
+        
+        bankingService.calculateFees.and.returnValue({
+          feesAssessed: {
+            maintenanceFee: 12.00,
+            lowBalanceFee: 5.00
+          },
+          totalFees: 17.00,
+          balanceAfterFees: 58.00,
+          feeExplanation: 'Monthly maintenance fee applied due to average balance below minimum threshold',
+          nextAssessmentDate: '2024-02-29'
+        });
+        
+        // When - Monthly fee assessment is performed
+        const feeResult = bankingService.calculateFees(account, feeAssessment);
+        
+        // Then - Appropriate fees should be calculated and applied
+        expect(feeResult.feesAssessed.maintenanceFee).toBe(12.00);
+        expect(feeResult.feesAssessed.lowBalanceFee).toBe(5.00);
+        expect(feeResult.totalFees).toBe(17.00);
+        expect(feeResult.balanceAfterFees).toHaveAccurateBalance(58.00);
+      });
+    });
+  });
+});
+```
+
+#### International Banking and Currency Exchange BDD Scenarios
+```javascript
+// spec/international-banking-spec.js
+/**
+ * International Banking Operations BDD Test Scenarios
+ * Cross-border transaction and currency exchange testing
+ */
+
+describe('International Banking Operations', function() {
+  
+  let accountBuilder, transactionBuilder, currencyService, complianceService;
+  
+  beforeEach(function() {
+    accountBuilder = new BankAccountDataBuilder();
+    transactionBuilder = new BankTransactionDataBuilder();
+    currencyService = jasmine.createSpyObj('CurrencyService', [
+      'getExchangeRate', 'convertCurrency', 'validateCurrencyPair'
+    ]);
+    complianceService = jasmine.createSpyObj('ComplianceService', [
+      'validateInternationalTransfer', 'performOFACSanctionsCheck', 'generateFATCAReport'
+    ]);
+  });
+  
+  describe('Currency Exchange and Conversion', function() {
+    
+    describe('Given a customer wants to exchange USD to EUR for travel', function() {
+      
+      it('When they request currency exchange with valid amounts, Then exchange should be processed with accurate rate calculation', function() {
+        // Given - Currency exchange request
+        const exchangeRequest = {
+          fromCurrency: 'USD',
+          toCurrency: 'EUR',
+          fromAmount: 5000.00,
+          customerAccountNumber: '404012345678',
+          purpose: 'TRAVEL_EXPENSES'
+        };
+        
+        const currentExchangeRate = 0.92; // 1 USD = 0.92 EUR
+        const exchangeFee = 25.00; // Flat fee for currency exchange
+        
+        currencyService.getExchangeRate.and.returnValue({
+          fromCurrency: 'USD',
+          toCurrency: 'EUR',
+          rate: currentExchangeRate,
+          rateTimestamp: new Date().toISOString(),
+          rateSource: 'REUTERS',
+          spread: 0.005 // 0.5% spread
+        });
+        
+        currencyService.convertCurrency.and.returnValue({
+          exchangeRate: currentExchangeRate,
+          amountDebited: 5025.00, // Including fee
+          amountConverted: 4600.00, // 5000 * 0.92
+          exchangeFee: 25.00,
+          netAmountReceived: 4600.00,
+          conversionId: 'CONV_2024_001234',
+          executionTimestamp: new Date().toISOString()
+        });
+        
+        // When - Currency exchange is processed
+        const exchangeResult = currencyService.convertCurrency(exchangeRequest);
+        
+        // Then - Exchange should be processed with accurate calculations
+        expect(exchangeResult.exchangeRate).toBe(0.92);
+        expect(exchangeResult.amountConverted).toHaveAccurateBalance(4600.00);
+        expect(exchangeResult.exchangeFee).toBe(25.00);
+        expect(exchangeResult.amountDebited).toHaveAccurateBalance(5025.00);
+        expect(exchangeResult.conversionId).toMatch(/^CONV_\d{4}_\d{6}$/);
+      });
+      
+      it('When exchange rates are volatile and exceed daily limits, Then rate protection and limits should be enforced', function() {
+        // Given - Volatile market conditions
+        const volatileExchangeRequest = {
+          fromCurrency: 'USD',
+          toCurrency: 'GBP',
+          fromAmount: 25000.00, // Large amount during volatility
+          customerAccountNumber: '404012345678'
+        };
+        
+        currencyService.getExchangeRate.and.returnValue({
+          fromCurrency: 'USD',
+          toCurrency: 'GBP',
+          rate: 0.78,
+          volatilityIndicator: 'HIGH',
+          dailyChangePercentage: 3.2, // High volatility
+          rateProtectionAvailable: true,
+          maximumExchangeAmount: 10000.00 // Daily limit due to volatility
+        });
+        
+        // When - Exchange is attempted during high volatility
+        const exchangeResult = currencyService.convertCurrency(volatileExchangeRequest);
+        
+        // Then - Appropriate limits and protections should be applied
+        expect(exchangeResult.volatilityWarning).toBe(true);
+        expect(exchangeResult.maximumAllowedAmount).toBe(10000.00);
+        expect(exchangeResult.rateProtectionOffered).toBe(true);
+        expect(exchangeResult.requiresManagerApproval).toBe(true);
+      });
+    });
+  });
+  
+  describe('International Wire Transfers', function() {
+    
+    describe('Given a customer wants to send an international wire transfer', function() {
+      
+      it('When all compliance requirements are met, Then wire transfer should be processed with proper documentation', function() {
+        // Given - International wire transfer request
+        const wireTransferRequest = {
+          senderAccount: '404012345678',
+          beneficiaryName: 'Pierre Dubois',
+          beneficiaryBank: 'BNP Paribas',
+          beneficiaryAccount: 'FR1420041010050500013M02606',
+          swiftCode: 'BNPAFRPP',
+          transferAmount: 15000.00,
+          currency: 'EUR',
+          purpose: 'BUSINESS_PAYMENT',
+          referenceNumber: 'INV-2024-001234'
+        };
+        
+        complianceService.validateInternationalTransfer.and.returnValue({
+          complianceStatus: 'APPROVED',
+          ofacScreeningPassed: true,
+          amlCheckCompleted: true,
+          sourceOfFundsVerified: true,
+          beneficiaryScreeningPassed: true,
+          requiredDocumentation: ['COMMERCIAL_INVOICE', 'BUSINESS_LICENSE'],
+          processingTime: '1-2_BUSINESS_DAYS'
+        });
+        
+        // When - Wire transfer is processed
+        const transferResult = complianceService.validateInternationalTransfer(wireTransferRequest);
+        
+        // Then - Transfer should be approved with proper compliance validation
+        expect(transferResult.complianceStatus).toBe('APPROVED');
+        expect(transferResult.ofacScreeningPassed).toBe(true);
+        expect(transferResult.amlCheckCompleted).toBe(true);
+        expect(transferResult.sourceOfFundsVerified).toBe(true);
+        expect(transferResult.requiredDocumentation).toContain('COMMERCIAL_INVOICE');
+      });
+      
+      it('When beneficiary is on sanctions list, Then transfer should be blocked with appropriate alerts', function() {
+        // Given - Wire transfer to sanctioned entity
+        const sanctionedTransferRequest = {
+          senderAccount: '404012345678',
+          beneficiaryName: 'Sanctioned Entity LLC',
+          beneficiaryCountry: 'SANCTIONED_COUNTRY',
+          transferAmount: 50000.00,
+          currency: 'USD'
+        };
+        
+        complianceService.performOFACSanctionsCheck.and.returnValue({
+          sanctionsMatch: true,
+          matchDetails: {
+            listName: 'SDN_LIST',
+            matchScore: 98.5,
+            matchType: 'EXACT_NAME_MATCH',
+            sanctionsProgram: 'UKRAINE_RUSSIA_SANCTIONS'
+          },
+          actionRequired: 'BLOCK_TRANSACTION',
+          authoritiesNotified: true,
+          investigationOpened: true,
+          customerNotificationRequired: false // Security reasons
+        });
+        
+        // When - Sanctions screening is performed
+        const sanctionsResult = complianceService.performOFACSanctionsCheck(sanctionedTransferRequest);
+        
+        // Then - Transaction should be blocked and authorities notified
+        expect(sanctionsResult.sanctionsMatch).toBe(true);
+        expect(sanctionsResult.actionRequired).toBe('BLOCK_TRANSACTION');
+        expect(sanctionsResult.authoritiesNotified).toBe(true);
+        expect(sanctionsResult.matchDetails.matchScore).toBeGreaterThan(95.0);
+      });
+    });
+  });
+});
+```
+
+#### Performance and Load Testing BDD Scenarios
+```javascript
+// spec/performance-banking-spec.js
+/**
+ * Banking System Performance and Load Testing BDD Scenarios
+ * High-volume transaction processing and system resilience testing
+ */
+
+describe('Banking System Performance Under Load', function() {
+  
+  let performanceMonitor, loadTestingService, systemMetrics;
+  
+  beforeEach(function() {
+    performanceMonitor = jasmine.createSpyObj('PerformanceMonitor', [
+      'startMonitoring', 'recordMetrics', 'generateReport'
+    ]);
+    loadTestingService = jasmine.createSpyObj('LoadTestingService', [
+      'simulateConcurrentTransactions', 'measureResponseTimes', 'validateSystemStability'
+    ]);
+    systemMetrics = jasmine.createSpyObj('SystemMetrics', [
+      'getCPUUtilization', 'getMemoryUsage', 'getDatabaseConnections'
+    ]);
+  });
+  
+  describe('High-Volume Transaction Processing', function() {
+    
+    describe('Given the banking system is under peak load conditions', function() {
+      
+      it('When 1000+ concurrent transactions are processed, Then system should maintain sub-500ms response times', function() {
+        // Given - Peak load simulation parameters
+        const loadTestParameters = {
+          concurrentUsers: 1000,
+          transactionsPerSecond: 2500,
+          testDuration: 300, // 5 minutes
+          transactionTypes: ['DEBIT', 'CREDIT', 'TRANSFER', 'BALANCE_INQUIRY'],
+          expectedResponseTime: 500 // milliseconds
+        };
+        
+        loadTestingService.simulateConcurrentTransactions.and.returnValue({
+          totalTransactions: 750000,
+          successfulTransactions: 748500,
+          failedTransactions: 1500,
+          averageResponseTime: 285, // milliseconds
+          p95ResponseTime: 420, // 95th percentile
+          p99ResponseTime: 475, // 99th percentile
+          maxResponseTime: 498,
+          successRate: 99.8,
+          systemStability: 'STABLE'
+        });
+        
+        systemMetrics.getCPUUtilization.and.returnValue(78.5); // Below 80% threshold
+        systemMetrics.getMemoryUsage.and.returnValue({
+          heapUsed: 480, // MB
+          heapMax: 512, // MB
+          utilizationPercentage: 93.75
+        });
+        
+        // When - Load testing is executed
+        const loadTestResults = loadTestingService.simulateConcurrentTransactions(loadTestParameters);
+        const cpuUsage = systemMetrics.getCPUUtilization();
+        const memoryUsage = systemMetrics.getMemoryUsage();
+        
+        // Then - Performance requirements should be met
+        expect(loadTestResults.averageResponseTime).toBeLessThan(500);
+        expect(loadTestResults.p95ResponseTime).toBeLessThan(500);
+        expect(loadTestResults.successRate).toBeGreaterThan(99.5);
+        expect(loadTestResults.systemStability).toBe('STABLE');
+        expect(cpuUsage).toBeLessThan(80); // CPU utilization under 80%
+        expect(memoryUsage.utilizationPercentage).toBeLessThan(95); // Memory under 95%
+      });
+      
+      it('When database connections reach maximum capacity, Then connection pooling should handle graceful degradation', function() {
+        // Given - Database connection stress test
+        const connectionStressTest = {
+          maxConnections: 100,
+          connectionRequestRate: 500, // per second
+          testDuration: 180, // 3 minutes
+          expectedBehavior: 'GRACEFUL_DEGRADATION'
+        };
+        
+        systemMetrics.getDatabaseConnections.and.returnValue({
+          activeConnections: 98,
+          maxConnections: 100,
+          connectionPoolUtilization: 98,
+          averageConnectionWaitTime: 25, // milliseconds
+          connectionTimeouts: 0,
+          connectionPoolStatus: 'HEALTHY_HIGH_UTILIZATION'
+        });
+        
+        loadTestingService.validateSystemStability.and.returnValue({
+          connectionPoolBehavior: 'GRACEFUL_DEGRADATION',
+          queueingEnabled: true,
+          connectionTimeoutRate: 0.1, // 0.1% timeout rate
+          systemThroughput: 95, // 95% of normal throughput
+          degradationHandled: true
+        });
+        
+        // When - Connection capacity is stressed
+        const connectionMetrics = systemMetrics.getDatabaseConnections();
+        const stabilityResult = loadTestingService.validateSystemStability(connectionStressTest);
+        
+        // Then - System should handle connection pressure gracefully
+        expect(connectionMetrics.connectionPoolUtilization).toBeLessThan(100);
+        expect(connectionMetrics.averageConnectionWaitTime).toBeLessThan(50);
+        expect(stabilityResult.connectionPoolBehavior).toBe('GRACEFUL_DEGRADATION');
+        expect(stabilityResult.connectionTimeoutRate).toBeLessThan(1.0); // Less than 1% timeouts
+        expect(stabilityResult.degradationHandled).toBe(true);
+      });
+    });
+  });
+  
+  describe('System Recovery and Failover', function() {
+    
+    describe('Given a critical system component failure occurs', function() {
+      
+      it('When primary database becomes unavailable, Then failover to secondary should complete within SLA timeframes', function() {
+        // Given - Database failover scenario
+        const failoverScenario = {
+          primaryDatabase: 'PRIMARY_DB_CLUSTER',
+          secondaryDatabase: 'SECONDARY_DB_CLUSTER',
+          failoverTrigger: 'PRIMARY_DB_UNAVAILABLE',
+          slaRequirement: 30, // seconds maximum downtime
+          automaticFailover: true
+        };
+        
+        loadTestingService.simulateFailover = jasmine.createSpy('simulateFailover').and.returnValue({
+          failoverInitiated: true,
+          failoverCompletionTime: 18, // seconds
+          dataLossOccurred: false,
+          transactionsContinuity: true,
+          systemAvailability: 99.95, // 18 seconds downtime in a day
+          recoverySuccessful: true,
+          rollbackCapability: true
+        });
+        
+        // When - Failover is triggered
+        const failoverResult = loadTestingService.simulateFailover(failoverScenario);
+        
+        // Then - Failover should complete within SLA
+        expect(failoverResult.failoverCompletionTime).toBeLessThan(30);
+        expect(failoverResult.dataLossOccurred).toBe(false);
+        expect(failoverResult.transactionsContinuity).toBe(true);
+        expect(failoverResult.systemAvailability).toBeGreaterThan(99.9);
+        expect(failoverResult.recoverySuccessful).toBe(true);
+      });
+    });
+  });
+});
+```
+
+### Phase 3: Test Execution and Reporting Framework
+
+#### Comprehensive Test Reporting and Analytics
+```javascript
+// spec/helpers/test-reporting-framework.js
+/**
+ * Banking Domain Test Reporting and Analytics Framework
+ * Comprehensive test metrics and business-focused reporting
+ */
+
+class BankingTestReporter {
+  constructor() {
+    this.testMetrics = {
+      totalTests: 0,
+      passedTests: 0,
+      failedTests: 0,
+      skippedTests: 0,
+      businessScenariosValidated: 0,
+      regulatoryComplianceTests: 0,
+      performanceTests: 0,
+      securityTests: 0,
+      executionStartTime: null,
+      executionEndTime: null
+    };
+    
+    this.businessMetrics = {
+      accountOperationsCovered: [],
+      transactionTypesTested: [],
+      complianceRulesTested: [],
+      currenciesValidated: [],
+      performanceBenchmarks: {}
+    };
+  }
+  
+  /**
+   * Generates comprehensive banking test execution report
+   */
+  generateBankingTestReport() {
+    const executionTime = this.testMetrics.executionEndTime - this.testMetrics.executionStartTime;
+    
+    return {
+      executionSummary: {
+        totalExecutionTime: `${executionTime / 1000} seconds`,
+        testPassRate: `${(this.testMetrics.passedTests / this.testMetrics.totalTests * 100).toFixed(2)}%`,
+        businessScenarioCoverage: `${this.businessMetrics.accountOperationsCovered.length} operations tested`,
+        complianceCoverage: `${this.businessMetrics.complianceRulesTested.length} regulatory rules validated`
+      },
+      
+      businessValidation: {
+        accountManagement: {
+          operationsTested: this.businessMetrics.accountOperationsCovered,
+          transactionTypes: this.businessMetrics.transactionTypesTested,
+          currencySupport: this.businessMetrics.currenciesValidated
+        },
+        
+        regulatoryCompliance: {
+          amlTesting: this.getComplianceTestCount('AML'),
+          ctrReporting: this.getComplianceTestCount('CTR'),
+          kycValidation: this.getComplianceTestCount('KYC'),
+          ofacScreening: this.getComplianceTestCount('OFAC')
+        },
+        
+        performanceValidation: {
+          responseTimeBenchmarks: this.businessMetrics.performanceBenchmarks,
+          loadTestingResults: this.getPerformanceTestResults(),
+          systemStabilityMetrics: this.getStabilityMetrics()
+        }
+      },
+      
+      qualityMetrics: {
+        testCoverage: this.calculateTestCoverage(),
+        businessRuleCoverage: this.calculateBusinessRuleCoverage(),
+        riskAreaCoverage: this.calculateRiskAreaCoverage()
+      },
+      
+      recommendations: this.generateTestingRecommendations()
+    };
+  }
+  
+  /**
+   * Tracks business scenario execution for reporting
+   */
+  recordBusinessScenario(scenarioType, operationType, result) {
+    if (!this.businessMetrics.accountOperationsCovered.includes(operationType)) {
+      this.businessMetrics.accountOperationsCovered.push(operationType);
+    }
+    
+    this.businessMetrics.businessScenariosValidated++;
+    
+    // Record performance metrics if available
+    if (result.responseTime) {
+      if (!this.businessMetrics.performanceBenchmarks[operationType]) {
+        this.businessMetrics.performanceBenchmarks[operationType] = [];
+      }
+      this.businessMetrics.performanceBenchmarks[operationType].push(result.responseTime);
+    }
+  }
+  
+  /**
+   * Tracks regulatory compliance test execution
+   */
+  recordComplianceTest(complianceType, ruleName, result) {
+    if (!this.businessMetrics.complianceRulesTested.includes(ruleName)) {
+      this.businessMetrics.complianceRulesTested.push(ruleName);
+    }
+    
+    this.testMetrics.regulatoryComplianceTests++;
+  }
+  
+  /**
+   * Generates actionable testing recommendations based on results
+   */
+  generateTestingRecommendations() {
+    const recommendations = [];
+    
+    // Test coverage recommendations
+    if (this.calculateTestCoverage() < 90) {
+      recommendations.push({
+        category: 'TEST_COVERAGE',
+        priority: 'HIGH',
+        recommendation: 'Increase test coverage to meet 90% minimum requirement',
+        actionItems: [
+          'Add tests for uncovered business scenarios',
+          'Implement additional edge case testing',
+          'Enhance negative testing scenarios'
+        ]
+      });
+    }
+    
+    // Performance testing recommendations
+    const avgResponseTime = this.getAverageResponseTime();
+    if (avgResponseTime > 500) {
+      recommendations.push({
+        category: 'PERFORMANCE',
+        priority: 'MEDIUM',
+        recommendation: `Average response time ${avgResponseTime}ms exceeds 500ms target`,
+        actionItems: [
+          'Optimize database queries',
+          'Implement caching strategies',
+          'Review API endpoint performance'
+        ]
+      });
+    }
+    
+    // Compliance testing recommendations
+    if (this.businessMetrics.complianceRulesTested.length < 10) {
+      recommendations.push({
+        category: 'REGULATORY_COMPLIANCE',
+        priority: 'HIGH',
+        recommendation: 'Expand regulatory compliance test coverage',
+        actionItems: [
+          'Add FATCA reporting validation tests',
+          'Implement sanctions screening test scenarios',
+          'Enhance AML pattern detection testing'
+        ]
+      });
+    }
+    
+    return recommendations;
+  }
+  
+  // Helper methods for metric calculations
+  getComplianceTestCount(complianceType) {
+    return this.businessMetrics.complianceRulesTested
+      .filter(rule => rule.includes(complianceType)).length;
+  }
+  
+  getAverageResponseTime() {
+    const allResponseTimes = Object.values(this.businessMetrics.performanceBenchmarks)
+      .flat();
+    return allResponseTimes.length > 0 
+      ? allResponseTimes.reduce((a, b) => a + b, 0) / allResponseTimes.length 
+      : 0;
+  }
+  
+  calculateTestCoverage() {
+    // Implementation for test coverage calculation
+    return (this.testMetrics.passedTests / this.testMetrics.totalTests) * 100;
+  }
+  
+  calculateBusinessRuleCoverage() {
+    // Implementation for business rule coverage calculation
+    const totalBusinessRules = 50; // Hypothetical total business rules
+    return (this.businessMetrics.accountOperationsCovered.length / totalBusinessRules) * 100;
+  }
+  
+  calculateRiskAreaCoverage() {
+    // Implementation for risk area coverage calculation
+    const highRiskAreas = ['MONEY_LAUNDERING', 'FRAUD_DETECTION', 'SANCTIONS_SCREENING'];
+    const coveredRiskAreas = this.businessMetrics.complianceRulesTested
+      .filter(rule => highRiskAreas.some(risk => rule.includes(risk))).length;
+    return (coveredRiskAreas / highRiskAreas.length) * 100;
+  }
+}
+
+// Global test reporter instance
+window.bankingTestReporter = new BankingTestReporter();
+
+// Jasmine hooks for test reporting
+beforeEach(function() {
+  window.bankingTestReporter.testMetrics.executionStartTime = Date.now();
+});
+
+afterEach(function() {
+  const currentSpec = jasmine.getEnv().currentSpec;
+  
+  if (currentSpec.result.status === 'passed') {
+    window.bankingTestReporter.testMetrics.passedTests++;
+  } else if (currentSpec.result.status === 'failed') {
+    window.bankingTestReporter.testMetrics.failedTests++;
+  } else {
+    window.bankingTestReporter.testMetrics.skippedTests++;
+  }
+  
+  window.bankingTestReporter.testMetrics.totalTests++;
+  window.bankingTestReporter.testMetrics.executionEndTime = Date.now();
+});
+```
+
+### Phase 4: CI/CD Integration and Quality Gates
+
+#### Jenkins Pipeline Integration
+```groovy
+// Jenkinsfile for Banking BDD Test Execution
+pipeline {
+    agent any
+    
+    environment {
+        BANKING_TEST_ENV = 'staging'
+        JASMINE_CONFIG = 'karma.conf.js'
+        ALLURE_RESULTS = 'target/allure-results'
+        TEST_REPORTS = 'target/test-reports'
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        
+        stage('Setup Banking Test Environment') {
+            steps {
+                script {
+                    sh '''
+                        echo "Setting up banking test environment..."
+                        docker-compose -f docker-compose.banking-test.yml up -d
+                        sleep 30 # Wait for services to start
+                        
+                        # Verify banking services are healthy
+                        curl -f http://localhost:8080/actuator/health || exit 1
+                        curl -f http://localhost:5432/health || exit 1 # Database health check
+                    '''
+                }
+            }
+        }
+        
+        stage('Install Dependencies') {
+            steps {
+                sh '''
+                    npm install
+                    npx karma --version
+                    npx jasmine --version
+                '''
+            }
+        }
+        
+        stage('Run Banking BDD Tests') {
+            parallel {
+                stage('Account Management Tests') {
+                    steps {
+                        sh '''
+                            npx karma start $JASMINE_CONFIG --grep="Account Management"
+                        '''
+                    }
+                }
+                
+                stage('Transaction Processing Tests') {
+                    steps {
+                        sh '''
+                            npx karma start $JASMINE_CONFIG --grep="Transaction Processing"
+                        '''
+                    }
+                }
+                
+                stage('Regulatory Compliance Tests') {
+                    steps {
+                        sh '''
+                            npx karma start $JASMINE_CONFIG --grep="Regulatory Compliance"
+                        '''
+                    }
+                }
+                
+                stage('Performance Tests') {
+                    steps {
+                        sh '''
+                            npx karma start $JASMINE_CONFIG --grep="Performance"
+                        '''
+                    }
+                }
+            }
+        }
+        
+        stage('Generate Banking Test Reports') {
+            steps {
+                script {
+                    sh '''
+                        # Generate comprehensive banking test report
+                        node scripts/generate-banking
