@@ -1,8 +1,10 @@
 ============================
-Controller
+1. Controller Layer
 ===========================
 
------------ JUnit5 Unit Test for Controller 
+-------------------------------------------
+1.1  JUnit5 Unit Test cases for Controller 
+-------------------------------------------
 
 -- Here's a JUnit 5 unit test example for a Spring Boot controller using MockMvc and Mockito, fully utilizing JUnit Jupiter features:
 
@@ -70,7 +72,10 @@ public class UserControllerTest {
     }
 }
 
-------> Integration Test for Controller (SpringBootTest + MockMvc)
+---------------------------------------------------------------------
+ 1.2  Integration Test cases for Controller (SpringBootTest + MockMvc)
+---------------------------------------------------------------------
+
 -- Below is a Spring Boot Integration Test example for your controller class using JUnit 5 and MockMvc. This test loads the full application context, including real beans (service, repository), 
 -- and uses an in-memory database (like H2) for persistence.
 
@@ -140,6 +145,209 @@ public class UserControllerIntegrationTest {
             .andExpect(jsonPath("$.email").value("jane@example.com"));
     }
 }
+
+============================
+2. Service  Layer
+============================
+
+Here’s a simple JUnit 5 unit test for a Spring Boot service layer using Mockito:
+
+Service Class (Example)
+
+@Service
+public class UserService {
+
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public User getUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+}
+
+-------------------------------------------
+2.1 JUnit 5 Test Cases for Service Layer
+-------------------------------------------
+Key Points:
+
+Uses Mockito to mock the repository so the service layer can be tested in isolation.
+
+@InjectMocks injects the mocked repository into the service.
+
+Includes both happy-path and failure scenarios.
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.util.Optional;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+public class UserServiceTest {
+
+    @Mock
+    private UserRepository userRepository;
+
+    @InjectMocks
+    private UserService userService;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testGetUserById_Found() {
+        User mockUser = new User(1L, "John Doe");
+        when(userRepository.findById(1L)).thenReturn(Optional.of(mockUser));
+
+        User user = userService.getUserById(1L);
+
+        assertNotNull(user);
+        assertEquals("John Doe", user.getName());
+        verify(userRepository, times(1)).findById(1L);
+    }
+
+    @Test
+    void testGetUserById_NotFound() {
+        when(userRepository.findById(2L)).thenReturn(Optional.empty());
+
+        RuntimeException exception = assertThrows(RuntimeException.class, 
+            () -> userService.getUserById(2L));
+
+        assertEquals("User not found", exception.getMessage());
+        verify(userRepository, times(1)).findById(2L);
+    }
+}
+
+---------------------------------------
+2.2 Integration Test for Service Layer
+---------------------------------------
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+
+@SpringBootTest
+@Transactional // ensures DB is rolled back after each test
+public class UserServiceIntegrationTest {
+
+    @Autowired
+    private UserService userService;
+
+    @Test
+    void testSaveAndGetUser() {
+        // Arrange
+        User newUser = new User("John Doe");
+        User savedUser = userService.saveUser(newUser);
+
+        // Act
+        User fetchedUser = userService.getUserById(savedUser.getId());
+
+        // Assert
+        assertNotNull(fetchedUser);
+        assertEquals("John Doe", fetchedUser.getName());
+    }
+
+    @Test
+    void testGetUser_NotFound() {
+        RuntimeException exception = assertThrows(RuntimeException.class,
+                () -> userService.getUserById(999L));
+
+        assertEquals("User not found", exception.getMessage());
+    }
+}
+
+
+============================
+3. JPA  Layer
+===========================
+
+-------------------------------------------
+3.1 JUnit 5 Test Cases for JPA Repository
+-------------------------------------------
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.Optional;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+@DataJpaTest
+public class UserRepositoryTest {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Test
+    void testSaveAndFindById() {
+        User user = new User("Alice");
+        User savedUser = userRepository.save(user);
+
+        Optional<User> foundUser = userRepository.findById(savedUser.getId());
+
+        assertThat(foundUser).isPresent();
+        assertThat(foundUser.get().getName()).isEqualTo("Alice");
+    }
+
+    @Test
+    void testFindById_NotFound() {
+        Optional<User> user = userRepository.findById(999L);
+        assertThat(user).isNotPresent();
+    }
+}
+
+----------------------------------------
+3.2 Integration Test for JPA Repository
+----------------------------------------
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Optional;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+
+@SpringBootTest
+@Transactional  // Rolls back after each test
+public class UserRepositoryIntegrationTest {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Test
+    void testSaveAndFindById() {
+        User user = new User("John Doe");
+        User savedUser = userRepository.save(user);
+
+        Optional<User> foundUser = userRepository.findById(savedUser.getId());
+
+        assertTrue(foundUser.isPresent());
+        assertEquals("John Doe", foundUser.get().getName());
+    }
+
+    @Test
+    void testFindById_NotFound() {
+        Optional<User> user = userRepository.findById(999L);
+        assertFalse(user.isPresent());
+    }
+}
+
 
 
 
