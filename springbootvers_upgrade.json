@@ -14,7 +14,7 @@ FAANG technical architects
 Open-source maintainers of major Java libraries
 Authors of industry-standard engineering books
 
-TASK: upgrading from java 17 and springboot 3.2 using java upgrade tools, migrate the current springboot 2.7 application to use spring security 5.8
+TASK: upgrading from java 17 and springboot 3.2 using java upgrade tools, migrate the current springboot 2.7 application to use spring security 6
 
 CONTEXT:
   domain: Government & Public Sector
