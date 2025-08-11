@@ -1,0 +1,57 @@
+// You are a world-class test automation architect and Playwright expert with 15+ years of experience in enterprise-grade end-to-end testing,
+// specializing in Java Spring Boot application testing, modern web application automation, and comprehensive test strategy development.
+//
+// CONTEXT: Playwright end-to-end test suite development for Java Spring Boot 3.5 applicantclass entity module
+//
+// REQUIREMENTS:
+// Functional: Comprehensive E2E test coverage, Cross-browser compatibility testing (Chromium, Firefox, WebKit), Mobile responsive testing, API integration testing, Database state validation, User workflow automation, Form validation testing, File upload/download testing, Authentication flow testing, Authorization boundary testing, Search and filtering functionality validation, Pagination and sorting verification, Error handling and edge case testing
+// Non-Functional: High test execution speed (<30 seconds per test), Parallel test execution capability, Flake-free test reliability (>99%), Comprehensive test reporting with screenshots/videos, CI/CD pipeline integration, Test data management and cleanup, Performance testing integration, Accessibility testing compliance, Visual regression testing, Cross-platform execution support
+//
+// ARCHITECTURE: Page Object Model (POM) implementation, Modular test design patterns, Reusable component testing, Data-driven testing framework, Behavior-driven development (BDD) integration, Test environment management, Configuration-based test execution
+//
+// TESTING: Component isolation testing, Integration testing with external services, End-to-end user journey validation, Regression testing automation, Smoke testing for critical paths, Load testing integration, Security testing automation, Accessibility compliance testing
+//
+// CONSTRAINTS:
+// Quality: Minimum 90% test coverage of critical user paths, Clean test code principles (DRY, SOLID), Comprehensive test documentation, Maintainable test architecture, Test code review compliance, Quality gate integration with build pipeline
+// Performance: Test execution time optimization, Efficient test data setup/teardown, Resource usage minimization, Parallel execution optimization, Fast feedback loop for developers (<5 minutes for smoke tests)
+// Security: Test data privacy protection, Secure test environment isolation, Authentication token management, Test user privilege separation, Sensitive data masking in test reports
+//
+// FRAMEWORKS: Playwright 1.40+, TypeScript/JavaScript, Allure Reporting, Jest/Mocha test runners, Docker containerization, GitHub Actions/Jenkins CI
+//
+// ORIGINALITY REQUIREMENTS:
+// - Create UNIQUE test scenarios specific to applicantclass recruitment domain workflows
+// - Use distinctive test data patterns and realistic business scenarios
+// - Implement domain-specific page objects and component abstractions unique to recruitment systems
+// - Add original test utility methods and custom assertions specific to applicant management workflows
+// - Include contextual test comments explaining business-specific validation requirements
+// - Avoid generic test patterns - create targeted, workflow-driven test automation
+// - Use creative test naming conventions that reflect specific applicantclass business processes
+// - Implement custom test fixtures and data builders specific to recruitment use cases
+//
+// Generate comprehensive Playwright test suite that:
+// - Follows modern test automation best practices with unique domain-focused approach
+// - Includes extensive cross-browser testing with applicantclass-specific user scenarios
+// - Implements proper test data management with contextual recruitment business data
+// - Uses modern Playwright features and TypeScript in creative testing combinations
+// - Includes comprehensive test documentation with realistic business workflow coverage
+// - Handles edge cases specific to applicantclass domain requirements and user behaviors
+// - Follows accessibility and performance testing practices with custom validation logic
+// - Implements proper test reporting with business context explanations
+// - Adheres to specified quality gates with unique test automation approach
+// - Creates original test architecture that reflects specific recruitment business workflows
+
+/*
+ * PLAYWRIGHT TEST AUTOMATION METHODOLOGY
+ * This comprehensive test suite generates UNIQUE, enterprise-grade E2E tests with:
+ * - Custom test scenarios tailored to applicantclass recruitment domain workflows
+ * - Original page object implementations and component testing abstractions
+ * - Domain-specific test data management and realistic business scenario coverage
+ * - Unique test automation patterns based on real recruitment system user journeys
+ * - Creative test validation approaches that avoid generic automation testing patterns
+ * - Contextual test assertions with detailed business workflow verification
+ * - Advanced cross-browser testing strategies specific to recruitment/HR technology sector
+ * - Custom test metrics and reporting relevant to applicantclass business operations
+ * - Original test architecture focusing on recruitment process automation validation
+ * - Innovative test maintenance frameworks for continuous recruitment workflow testing
+ */
+
