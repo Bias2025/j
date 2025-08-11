@@ -8,7 +8,7 @@
 //
 // ARCHITECTURE: Microservices architecture, Layered architecture (Controller-Service-Repository), Event-driven architecture, Cloud-native design patterns, SOLID principles adherence
 //
-// TESTING: End-to-end testing, Integration tests for APIs, Unit tests (80%+ coverage), Security testing (OWASP), Performance and load testing
+// TESTING: End-to-end testing, Integration tests for APIs, Unit tests (100+ coverage), Security testing (OWASP), Performance and load testing
 //
 // CONSTRAINTS:
 // Quality: Minimum 80% code coverage, SonarQube quality gates compliance, Clean code principles (SOLID, DRY, KISS), Comprehensive JavaDoc/JSDoc documentation
@@ -17,7 +17,7 @@
 //
 // FRAMEWORKS: Spring Boot 3.2+, Java 17+ with modern features, JUnit 5.10+, Mockito 5+
 //
-// Generate comprehensive Spring Boot implementation that:
+// Generate comprehensive Spring Boot implementation for all {rootpackages} that:
 // - Follows enterprise patterns and SOLID principles
 // - Includes extensive error handling and validation
 // - Implements proper logging and monitoring
@@ -27,6 +27,8 @@
 // - Follows security best practices and compliance
 // - Implements proper documentation and code comments
 // - Adheres to specified quality gates and constraints
+// - Mock repository dependencies with Mockito
+// - Provide testcases for Controllers package: {rootPackage}.controllers, Services package: {rootPackage}.services
 /*
  * Generated with CRAFT method for GitHub Copilot
  * This enterprise-grade prompt generates production-ready code with:
