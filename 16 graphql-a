@@ -1,0 +1,60 @@
+# GraphQL API to Java POJO Generator Prompt - CRAFT Format
+
+```java
+// You are a world-class GraphQL integration architect and Java expert with 15+ years of experience in enterprise-grade API integration,
+// specializing in GraphQL client development, type-safe API consumption, and modern Java reactive programming patterns.
+//
+// CONTEXT: Generate comprehensive Java GraphQL client implementation to fetch product objects from GraphQL API with type-safe POJO mapping
+//
+// REQUIREMENTS:
+// Functional: GraphQL query generation for product entities, Type-safe Java POJO mapping, Comprehensive error handling for GraphQL responses, Field selection optimization, Query variable management, Response data validation, Nested object mapping support, List and pagination handling, Custom scalar type support, Fragment usage for reusable queries, Subscription support for real-time updates, Mutation operations for data modification
+// Non-Functional: High-performance query execution (<500ms), Memory-efficient response processing, Resilient error handling with retry mechanisms, Comprehensive logging and monitoring, Thread-safe client implementation, Connection pooling optimization, Response caching strategies, Asynchronous processing support, Reactive streams integration, Circuit breaker pattern implementation
+//
+// ARCHITECTURE: GraphQL client architecture patterns, Type-safe code generation, Reactive programming with WebFlux, Clean architecture principles, Dependency injection integration, Configuration-driven client setup, Error handling strategy patterns, Response mapping optimization, Connection management patterns
+//
+// TESTING: Unit tests for POJO mapping, Integration tests for GraphQL queries, Error scenario testing, Performance testing for large datasets, Contract testing with GraphQL schema, Mock server testing, Response validation testing
+//
+// CONSTRAINTS:
+// Quality: Type-safe POJO generation, Comprehensive error handling, Clean code principles (SOLID, DRY), Null-safe operations with Optional, Immutable POJO design patterns, Validation annotations integration, Builder pattern implementation
+// Performance: Query optimization for minimal data fetching, Efficient JSON deserialization, Connection reuse and pooling, Batch query optimization, Response caching implementation, Memory usage optimization
+// Security: Secure authentication integration, Request/response logging with sensitive data masking, Input validation and sanitization, Rate limiting compliance, HTTPS enforcement
+//
+// FRAMEWORKS: Spring WebFlux, Jackson ObjectMapper, GraphQL Java Client, Apache HttpClient, Spring Boot, Lombok, Validation API
+//
+// ORIGINALITY REQUIREMENTS:
+// - Create UNIQUE GraphQL client implementation specific to product domain with comprehensive business validation
+// - Use distinctive POJO design patterns and custom mapping strategies
+// - Implement domain-specific GraphQL query builders and response processors
+// - Add original error handling patterns and custom exception types for GraphQL operations
+// - Include contextual documentation explaining GraphQL integration patterns and business context
+// - Avoid generic GraphQL client patterns - create targeted, business-driven API integration
+// - Use creative query optimization and caching strategies specific to product data requirements
+// - Implement custom GraphQL client extensions and utilities specific to product domain needs
+//
+// Generate comprehensive GraphQL Java client that:
+// - Follows modern GraphQL client best practices with unique domain-focused approach
+// - Includes extensive type-safe POJO mapping with product-specific validation
+// - Implements proper error handling and resilience patterns for production environments
+// - Uses modern Java 17+ features and reactive programming in creative combinations
+// - Includes comprehensive documentation with realistic GraphQL integration scenarios
+// - Handles edge cases specific to product domain requirements and GraphQL specifications
+// - Follows security and performance best practices with custom optimization strategies
+// - Implements proper monitoring and observability with business context explanations
+// - Adheres to specified quality gates with unique GraphQL integration approach
+// - Creates original client architecture that reflects specific product domain requirements
+
+/*
+ * GRAPHQL JAVA CLIENT INTEGRATION METHODOLOGY
+ * This comprehensive GraphQL client generates UNIQUE, enterprise-grade API integration with:
+ * - Custom GraphQL queries tailored to product domain with optimized field selection
+ * - Original POJO mapping strategies and type-safe response processing
+ * - Domain-specific error handling and resilience patterns for production reliability
+ * - Unique GraphQL client patterns based on real product management system requirements
+ * - Creative query optimization approaches that avoid generic GraphQL client implementations
+ * - Contextual API integration with detailed product domain workflow validation
+ * - Advanced GraphQL client strategies specific to e-commerce and product management
+ * - Custom monitoring and metrics relevant to product data synchronization and performance
+ * - Original client architecture focusing on product catalog integration and data consistency
+ * - Innovative GraphQL client frameworks for continuous product data management and optimization
+ */
+
