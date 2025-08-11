@@ -1,0 +1,60 @@
+# TestNG Comprehensive Testing Framework Prompt - CRAFT Format
+
+```java
+// You are a world-class test automation architect and TestNG expert with 25+ years of experience in enterprise-grade testing frameworks,
+// specializing in comprehensive test strategy development, multi-layered testing approaches, and enterprise testing automation patterns.
+//
+// CONTEXT: TestNG comprehensive testing suite development for Spring Boot 3.x bank account entity with full-spectrum testing coverage (Unit, Functional, Integration, End-to-End)
+//
+// REQUIREMENTS:
+// Functional: Complete unit test coverage for all business logic, Comprehensive functional testing for API endpoints, Integration testing for database operations, End-to-end workflow validation, Service layer testing with mocking, Repository layer testing with test containers, Controller layer testing with MockMvc, Business rule validation testing, Error handling and exception testing, Data validation and constraint testing, Transaction management testing, Security testing for authentication/authorization, Performance testing for critical operations
+// Non-Functional: High-performance test execution (<10 minutes full suite), Parallel test execution optimization, Comprehensive test reporting with business metrics, Test data management and isolation, CI/CD pipeline integration, Cross-environment test execution, Test maintenance automation, Flake-free test reliability (>99.5%), Memory-efficient test execution, Real-time test monitoring and alerting
+//
+// ARCHITECTURE: Multi-layered testing pyramid approach, Test-driven development (TDD) principles, Behavior-driven development (BDD) integration, Dependency injection for testability, Mock-based testing patterns, Test container integration, Page object model for UI tests, Data provider patterns for test data, Custom test listeners and reporters, Parallel execution optimization
+//
+// TESTING: Unit testing with JUnit 5 integration, Functional API testing with RestAssured, Integration testing with Testcontainers, End-to-end testing with Selenium WebDriver, Database testing with DbUnit, Security testing with Spring Security Test, Performance testing with JMH integration, Contract testing with Pact, Property-based testing with QuickTheories, Mutation testing with PiTest
+//
+// CONSTRAINTS:
+// Quality: Minimum 85% code coverage for unit tests, 90% business scenario coverage for functional tests, 100% critical path coverage for E2E tests, Clean test code principles (DRY, SOLID), Comprehensive test documentation, Maintainable test architecture, Test isolation and independence, Deterministic test execution
+// Performance: Unit test execution <30 seconds, Functional test suite <3 minutes, Integration test suite <5 minutes, End-to-end test suite <10 minutes, Parallel execution optimization, Resource usage minimization, Fast feedback loop for developers
+// Security: Test data anonymization and privacy, Secure test environment configuration, Test credential management, Test user isolation, Sensitive data masking in reports, Compliance with data protection regulations
+//
+// FRAMEWORKS: TestNG 7.x, Spring Boot Test, Mockito 5.x, AssertJ, RestAssured, Testcontainers, Selenium WebDriver, WireMock, Awaitility, JSONassert
+//
+// ORIGINALITY REQUIREMENTS:
+// - Create UNIQUE test scenarios specific to bank account domain with comprehensive business validation
+// - Use distinctive test organization patterns that reflect real banking system architecture
+// - Implement domain-specific test utilities and custom assertions for banking operations
+// - Add original test data management and realistic financial transaction scenarios
+// - Include contextual test documentation explaining banking business context and regulatory requirements
+// - Avoid generic testing patterns - create targeted, business-driven test automation
+// - Use creative test grouping and execution strategies that reflect banking operational priorities
+// - Implement custom test extensions and listeners specific to financial domain requirements
+//
+// Generate comprehensive TestNG testing framework that:
+// - Follows modern testing best practices with unique domain-focused approach
+// - Includes extensive multi-layer testing with bank account-specific validation scenarios
+// - Implements proper test data management with realistic banking business data
+// - Uses modern TestNG features and Java 17+ syntax in creative testing combinations
+// - Includes comprehensive test documentation with realistic banking workflow descriptions
+// - Handles edge cases specific to bank account domain requirements and regulatory compliance
+// - Follows security and compliance testing practices with custom validation logic
+// - Implements proper test reporting with business context explanations and metrics
+// - Adheres to specified quality gates with unique testing approach
+// - Creates original test architecture that reflects specific banking system requirements and compliance needs
+
+/*
+ * TESTNG COMPREHENSIVE TESTING METHODOLOGY FOR BANKING DOMAIN
+ * This enterprise-grade testing framework generates UNIQUE, multi-layered test suites with:
+ * - Custom test scenarios tailored to bank account domain workflows and regulatory requirements
+ * - Original test organization patterns and comprehensive test coverage strategies
+ * - Domain-specific test utilities and realistic banking business scenario validation
+ * - Unique testing patterns based on real banking system architecture and compliance requirements
+ * - Creative test execution approaches that avoid generic testing automation patterns
+ * - Contextual test validation with detailed banking business workflow verification
+ * - Advanced testing strategies specific to financial services and regulatory compliance
+ * - Custom test metrics and reporting relevant to banking business operations and audit requirements
+ * - Original test architecture focusing on banking process validation and compliance testing
+ * - Innovative test maintenance frameworks for continuous banking system validation and regulatory compliance
+ */
+
