@@ -1,0 +1,57 @@
+
+// You are a world-class enterprise messaging architect and Spring Boot migration expert with 20+ years of experience in messaging system transformations,
+// specializing in large-scale enterprise message broker migrations, event-driven architecture modernization, and high-throughput streaming platform implementations.
+//
+// CONTEXT: Spring Boot 3.x enterprise application migration from Apache ActiveMQ to Apache Kafka for bank account transaction processing system
+//
+// REQUIREMENTS:
+// Functional: Complete dependency migration from ActiveMQ to Kafka, Message producer conversion from JMS to Kafka producers, Message consumer migration from JMS listeners to Kafka consumers, Topic configuration and management, Serialization/deserialization strategy implementation, Dead letter topic handling, Message ordering and partitioning strategy, Transactional messaging support, Error handling and retry mechanisms, Message filtering and routing logic, Schema registry integration for message evolution, Consumer group management and load balancing
+// Non-Functional: Zero-downtime migration strategy, High-throughput message processing (>100K msgs/sec), Low-latency message delivery (<10ms), Horizontal scalability support, Fault tolerance and resilience, Message durability and persistence, Monitoring and observability integration, Security and authentication implementation, Performance optimization for financial transactions, Compliance with banking regulations and audit requirements
+//
+// ARCHITECTURE: Event-driven microservices architecture, Producer-consumer pattern implementation, Topic-based message organization, Partitioning strategy for scalability, Consumer group coordination, Schema evolution management, Dead letter topic handling, Distributed transaction coordination, Saga pattern for complex workflows, CQRS and Event Sourcing integration
+//
+// TESTING: Unit testing for producers and consumers, Integration testing with embedded Kafka, Contract testing for message schemas, Performance testing for throughput and latency, Chaos engineering for resilience testing, End-to-end workflow testing, Message ordering validation, Consumer group rebalancing testing, Schema evolution compatibility testing, Security and authentication testing
+//
+// CONSTRAINTS:
+// Quality: Zero message loss during migration, Exactly-once delivery semantics, Message ordering preservation where required, Backward compatibility during transition, Comprehensive error handling and monitoring, Clean code principles (SOLID, DRY), Extensive documentation for operational teams
+// Performance: Sub-10ms message processing latency, Support for 100K+ messages per second throughput, Minimal memory footprint, Efficient serialization/deserialization, Optimized consumer group coordination, Fast startup and recovery times, Resource usage optimization
+// Security: Message encryption at rest and in transit, Authentication and authorization for producers/consumers, Secure schema registry access, Audit trail for all message operations, Compliance with PCI-DSS and banking regulations, Sensitive data protection in messages
+//
+// FRAMEWORKS: Spring Boot 3.x, Spring Kafka 3.x, Apache Kafka 3.5+, Confluent Schema Registry, Spring Boot Actuator, Micrometer metrics, Spring Security
+//
+// ORIGINALITY REQUIREMENTS:
+// - Create UNIQUE migration strategy specific to bank account transaction processing domain
+// - Use distinctive configuration patterns that reflect real banking system message flows
+// - Implement domain-specific message schemas and serialization strategies for financial transactions
+// - Add original error handling and dead letter processing specific to banking operations
+// - Include contextual migration documentation explaining banking business context and regulatory requirements
+// - Avoid generic migration patterns - create targeted, business-driven messaging transformation
+// - Use creative topic organization and partitioning strategies that reflect banking operational priorities
+// - Implement custom serializers and monitoring solutions specific to financial domain requirements
+//
+// Generate comprehensive Spring Boot ActiveMQ to Kafka migration that:
+// - Follows enterprise messaging best practices with unique domain-focused approach
+// - Includes extensive dependency management with banking-specific message processing requirements
+// - Implements proper configuration management with realistic banking business message flows
+// - Uses modern Spring Kafka features and Java 17+ syntax in creative messaging combinations
+// - Includes comprehensive migration documentation with realistic banking workflow descriptions
+// - Handles edge cases specific to bank account domain requirements and regulatory compliance
+// - Follows security and compliance messaging practices with custom validation logic
+// - Implements proper monitoring and observability with business context explanations and metrics
+// - Adheres to specified quality gates with unique migration approach
+// - Creates original messaging architecture that reflects specific banking system requirements and compliance needs
+
+/*
+ * SPRING BOOT ACTIVEMQ TO KAFKA MIGRATION METHODOLOGY FOR BANKING DOMAIN
+ * This comprehensive migration framework generates UNIQUE, enterprise-grade messaging transformation with:
+ * - Custom migration strategies tailored to bank account transaction processing workflows and regulatory requirements
+ * - Original dependency management patterns and comprehensive configuration transformation strategies
+ * - Domain-specific message handling and realistic banking transaction message validation
+ * - Unique messaging patterns based on real banking system architecture and compliance requirements
+ * - Creative message flow approaches that avoid generic messaging migration patterns
+ * - Contextual message validation with detailed banking business workflow verification
+ * - Advanced messaging strategies specific to financial services and regulatory compliance
+ * - Custom messaging metrics and monitoring relevant to banking business operations and audit requirements
+ * - Original messaging architecture focusing on banking transaction processing and compliance validation
+ * - Innovative message handling frameworks for continuous banking system operation and regulatory compliance
+ */
