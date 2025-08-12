@@ -72,8 +72,9 @@ GENERATION_CONSTRAINTS:
 REQUIREMENTS:
   functional:
     - tell me the npm commands to install karma and its dependencies <karma-jasmine,karma-chrome-launcher> for an angular project to execute tests in real browsers
-    - create a karma.config.js file for an angular project using jasmine as testing framework.
+    - create a karma.config.js file for an angular project using jasmine.
     - configure it to run tests in firefox, watch for changes and report results to the console
+    - generate and save all files in test.js
   non_functional:
     performance: 99.99% uptime SLA
     security: SAST Integration (SonarQube)
