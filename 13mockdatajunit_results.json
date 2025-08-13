@@ -1,0 +1,256 @@
+package io.springforge.commerce.order;
+
+import java.math.BigDecimal;
+import java.util.UUID;
+
+public class ProductEntity {
+    private UUID productId;
+    private String name;
+    private BigDecimal price;
+    private Category category;
+    private int stockLevel;
+    private String sku;
+
+    public enum Category {
+        ELECTRONICS, CLOTHING, BOOKS, HOME, SPORTS
+    }
+
+    // Getters, setters, constructor omitted for brevity
+}
+package io.springforge.commerce.order.mock;
+
+import io.springforge.commerce.order.ProductEntity;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
+
+public class ProductCatalogMocker {
+    private static final String[] NAMES = {
+        "EchoSmart Speaker", "FusionFit Jacket", "QuantumReader", "HomeGlow Lamp", "TrailBlazer Bike",
+        "PixelView Monitor", "ComfyNest Pillow", "Velocity Sneakers", "AeroSound Headphones", "Mindful Journal",
+        "UltraCharge Powerbank", "CrispClean Sheets", "Striker Football", "Gourmet Fryer", "FlexTone Dumbbells",
+        "Visionary VR Headset", "Harmony Blender", "ScribePen Pro", "CloudSoft Blanket", "Summit Backpack",
+        "NovaShine Toothbrush", "VividCookware Set", "SprintWatch", "SolarFlash Lantern", "StoryScape Book",
+        "ZenMat Yoga", "PulseFit Tracker", "RusticFrame Mirror", "BoltX Charger", "SwiftRun Shorts",
+        "SmartHome Plug", "BreezeFan", "EpicNovel", "Cascade Water Bottle", "LiftPro Gloves",
+        "RapidSteam Iron", "MagnetMount Holder", "SportyCap", "CanvasTote", "ClarityGlass Mugs",
+        "FreshBrew Coffee Maker", "PeakPerformance Socks", "Traveler Passport Cover", "StreamDesk Organizer", "ClassicScarf",
+        "RallyRacket", "FlexForm Shirt", "GardenEase Tools", "ActiveWear Leggings", "Lumina Desk Lamp"
+    };
+    private static final ProductEntity.Category[] CATEGORIES = ProductEntity.Category.values();
+    private static final Random RAND = new Random();
+
+    public static List<ProductEntity> generateCatalog() {
+        List<ProductEntity> products = new ArrayList<>();
+        for (int i = 0; i < 50; i++) {
+            ProductEntity.Category cat = CATEGORIES[i % CATEGORIES.length];
+            BigDecimal price = BigDecimal.valueOf(10 + RAND.nextDouble() * (250 - 10))
+                .setScale(2, RoundingMode.HALF_UP);
+            int stock = RAND.nextInt(1001);
+            String sku = String.format("FORGE-%s-%04d", cat.name(), RAND.nextInt(10000));
+            ProductEntity p = new ProductEntity(
+                UUID.randomUUID(),
+                NAMES[i],
+                price,
+                cat,
+                stock,
+                sku
+            );
+            products.add(p);
+        }
+        return products;
+    }
+}
+package io.springforge.commerce.order;
+
+import java.time.Instant;
+import java.util.List;
+import java.util.UUID;
+
+public class OrderEntity {
+    public enum State {
+        PENDING, CONFIRMED, PROCESSING, SHIPPED, DELIVERED
+    }
+    private UUID orderId;
+    private CustomerInfo customer;
+    private List<OrderItem> items;
+    private State state;
+    private Instant createdAt;
+    private Instant updatedAt;
+    private PaymentInfo payment;
+    private ShippingInfo shipping;
+    private String fingerprint;
+
+    // Getters, setters, constructors omitted for brevity
+
+    public static class CustomerInfo {
+        private String name;
+        private String address;
+        private String email;
+        // Getters, setters, etc.
+    }
+
+    public static class OrderItem {
+        private UUID productId;
+        private String productName;
+        private int quantity;
+        private BigDecimal price;
+        // Getters, setters, etc.
+    }
+
+    public static class PaymentInfo {
+        private String paymentToken; // PCI-compliant token, not raw card data
+        private String provider; // Stripe/PayPal/etc
+        // Getters, setters, etc.
+    }
+
+    public static class ShippingInfo {
+        private String trackingNumber;
+        private String provider; // FedEx/UPS/DHL
+        // Getters, setters, etc.
+    }
+}
+package io.springforge.commerce.order.mock;
+
+import io.springforge.commerce.order.OrderEntity;
+import io.springforge.commerce.order.ProductEntity;
+
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.*;
+
+public class OrderMocker {
+    private static final String[] CUSTOMER_NAMES = {
+        "Alice Carter", "Bob Smith", "Charlie Rose", "Diana King", "Ethan Lee",
+        "Fiona Zhang", "Gavin Patel", "Hannah Kim", "Ivan Lopez", "Julia Brown",
+        "Kevin Turner", "Laura White", "Mason Black", "Nina Green", "Oscar Hall",
+        "Paula Wright", "Quentin Adams", "Rachel Evans", "Steve Young", "Tina Brooks"
+    };
+    private static final String[] ADDRESSES = {
+        "123 Main St, Springfield, IL", "456 Oak Ave, Seattle, WA", "789 Pine Rd, Austin, TX",
+        "321 Maple Dr, Boston, MA", "654 Cedar Ln, Denver, CO"
+    };
+    private static final String[] EMAILS = {
+        "alice@example.com", "bob@example.com", "charlie@example.com", "diana@example.com",
+        "ethan@example.com", "fiona@example.com", "gavin@example.com", "hannah@example.com",
+        "ivan@example.com", "julia@example.com", "kevin@example.com", "laura@example.com",
+        "mason@example.com", "nina@example.com", "oscar@example.com", "paula@example.com",
+        "quentin@example.com", "rachel@example.com", "steve@example.com", "tina@example.com"
+    };
+    private static final String[] PAYMENT_PROVIDERS = {"Stripe", "PayPal"};
+    private static final String[] SHIPPING_PROVIDERS = {"FedEx", "UPS", "DHL"};
+
+    private static final Random RAND = new Random();
+
+    public static List<OrderEntity> generateOrders(List<ProductEntity> products) {
+        List<OrderEntity> orders = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            UUID orderId = UUID.randomUUID();
+            int custIdx = RAND.nextInt(CUSTOMER_NAMES.length);
+            OrderEntity.CustomerInfo cust = new OrderEntity.CustomerInfo();
+            cust.setName(CUSTOMER_NAMES[custIdx]);
+            cust.setAddress(ADDRESSES[RAND.nextInt(ADDRESSES.length)]);
+            cust.setEmail(EMAILS[custIdx]);
+
+            int numItems = 1 + RAND.nextInt(4);
+            List<OrderEntity.OrderItem> items = new ArrayList<>();
+            Set<Integer> usedProductIdxs = new HashSet<>();
+            while (items.size() < numItems) {
+                int prodIdx = RAND.nextInt(products.size());
+                if (!usedProductIdxs.add(prodIdx)) continue;
+                ProductEntity prod = products.get(prodIdx);
+                OrderEntity.OrderItem item = new OrderEntity.OrderItem();
+                item.setProductId(prod.getProductId());
+                item.setProductName(prod.getName());
+                item.setQuantity(1 + RAND.nextInt(5));
+                item.setPrice(prod.getPrice());
+                items.add(item);
+            }
+
+            OrderEntity.State state = OrderEntity.State.values()[RAND.nextInt(OrderEntity.State.values().length)];
+
+            LocalDateTime daysAgo = LocalDateTime.now().minusDays(RAND.nextInt(30)).minusHours(RAND.nextInt(24));
+            Instant createdAt = daysAgo.toInstant(ZoneOffset.UTC);
+            Instant updatedAt = createdAt.plusSeconds(RAND.nextInt(3600 * 24));
+
+            OrderEntity.PaymentInfo payment = new OrderEntity.PaymentInfo();
+            payment.setProvider(PAYMENT_PROVIDERS[RAND.nextInt(PAYMENT_PROVIDERS.length)]);
+            payment.setPaymentToken("tok_" + UUID.randomUUID().toString().replace("-", ""));
+
+            OrderEntity.ShippingInfo shipping = new OrderEntity.ShippingInfo();
+            shipping.setProvider(SHIPPING_PROVIDERS[RAND.nextInt(SHIPPING_PROVIDERS.length)]);
+            shipping.setTrackingNumber("TRK-" + String.format("%09d", RAND.nextInt(1000000000)));
+
+            String fingerprint = String.format("FORGE-%s-%d", UUID.randomUUID(), System.currentTimeMillis());
+
+            OrderEntity order = new OrderEntity();
+            order.setOrderId(orderId);
+            order.setCustomer(cust);
+            order.setItems(items);
+            order.setState(state);
+            order.setCreatedAt(createdAt);
+            order.setUpdatedAt(updatedAt);
+            order.setPayment(payment);
+            order.setShipping(shipping);
+            order.setFingerprint(fingerprint);
+
+            orders.add(order);
+        }
+        return orders;
+    }
+}
+package io.springforge.commerce.order.mock;
+
+import io.springforge.commerce.order.ProductEntity;
+import io.springforge.commerce.order.OrderEntity;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+class OrderMockerTest {
+
+    @Test
+    void generateOrders_creates100OrdersWithCorrectProperties() {
+        List<ProductEntity> products = ProductCatalogMocker.generateCatalog();
+        List<OrderEntity> orders = OrderMocker.generateOrders(products);
+
+        assertThat(orders).hasSize(100);
+
+        for (OrderEntity order : orders) {
+            assertThat(order.getCustomer()).isNotNull();
+            assertThat(order.getItems()).isNotEmpty();
+            assertThat(order.getState()).isNotNull();
+            assertThat(order.getCreatedAt()).isNotNull();
+            assertThat(order.getPayment()).isNotNull();
+            assertThat(order.getShipping()).isNotNull();
+            assertThat(order.getFingerprint()).startsWith("FORGE-");
+        }
+    }
+}
+package io.springforge.commerce.order.mock;
+
+import io.springforge.commerce.order.ProductEntity;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+class ProductCatalogMockerTest {
+
+    @Test
+    void generateCatalog_creates50UniqueProducts() {
+        List<ProductEntity> products = ProductCatalogMocker.generateCatalog();
+
+        assertThat(products).hasSize(50);
+        assertThat(products.stream().map(ProductEntity::getProductId).collect(Collectors.toSet())).hasSize(50);
+        assertThat(products.stream().map(ProductEntity::getSku).collect(Collectors.toSet())).hasSize(50);
+        assertThat(products.stream().map(ProductEntity::getPrice)).allMatch(p -> p.compareTo(new java.math.BigDecimal("10.00")) >= 0 && p.compareTo(new java.math.BigDecimal("250.00")) <= 0);
+        assertThat(products.stream().map(ProductEntity::getStockLevel)).allMatch(s -> s >= 0 && s <= 1000);
+    }
+}
