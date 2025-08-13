@@ -1,0 +1,120 @@
+CONTEXT:
+  domain: Customer Resource Management API
+  purpose: OpenAPI 3.0 specification generation for REST endpoints
+  scale: Standard CRUD operations with enterprise patterns
+  constraints: 
+    - Must be error-free Swagger documentation
+    - Must include comprehensive examples
+    - Must follow OpenAPI 3.0 specification
+  team: Development team requiring API documentation
+  integration: 
+    - Swagger UI deployment
+    - Spring Boot REST controllers
+    - Client SDK generation potential
+REQUIREMENTS:
+  functional:
+    - Complete CRUD operations for Customer resource
+    - OpenAPI 3.0 compliant YAML definition
+    - Operation IDs for all endpoints
+    - Detailed parameter descriptions
+    - Comprehensive response descriptions
+    - Request/response body examples
+  non_functional:
+    performance: Sub-100ms response times
+    security: JWT authentication, input validation
+    scalability: Stateless REST design
+    reliability: Error handling for all scenarios
+  compliance: REST best practices, OpenAPI 3.0 standard
+ARCHITECTURE:
+  pattern: RESTful Resource-Oriented Architecture
+  style: Microservice-ready API design
+  layers:
+    - presentation: REST Controllers with OpenAPI annotations
+    - application: Service layer with business logic
+    - domain: Customer entity model
+    - infrastructure: PostgreSQL persistence
+  data_flow: 
+    - Request → Validation → Service → Repository → Response
+    - Error handling at each layer
+FRAMEWORK:
+  core:
+    language: Java 17
+    framework: Spring Boot 3.x
+  documentation:
+    specification: OpenAPI 3.0
+    generator: Springdoc-openapi
+    ui: Swagger UI
+  persistence:
+    database: PostgreSQL 15+
+    orm: Spring Data JPA
+  validation: Bean Validation API
+  monitoring: Actuator endpoints
+
+You are an expert API architect and OpenAPI specification developer with 15+ years of experience in REST API design and documentation. Your expertise includes Spring Boot, Swagger/OpenAPI ecosystem, and enterprise API patterns.
+
+OBJECTIVE: Generate a complete, production-ready OpenAPI 3.0 YAML specification for a Customer Resource Management REST API.
+
+REQUIREMENTS:
+1. Create full CRUD operations (CREATE, READ, UPDATE, DELETE, LIST, SEARCH)
+2. Include unique operationIds following camelCase convention
+3. Add comprehensive descriptions for every parameter, request body, and response
+4. Provide realistic examples for all request and response bodies
+5. Define all error responses (400, 401, 403, 404, 409, 500)
+6. Include pagination for list operations
+7. Add filtering and sorting capabilities
+8. Implement proper HTTP status codes and methods
+9. Use JSON as the primary content type
+10. Include security schemes (JWT Bearer token)
+
+CUSTOMER ENTITY STRUCTURE:
+- id: UUID (auto-generated)
+- firstName: string (required, 1-50 chars)
+- lastName: string (required, 1-50 chars)
+- email: string (required, unique, valid email format)
+- phoneNumber: string (optional, E.164 format)
+- dateOfBirth: date (optional, ISO 8601)
+- address: object
+  - street: string
+  - city: string
+  - state: string
+  - postalCode: string
+  - country: string (ISO 3166-1 alpha-2)
+- status: enum [ACTIVE, INACTIVE, SUSPENDED]
+- createdAt: datetime (auto-generated)
+- updatedAt: datetime (auto-updated)
+- metadata: object (flexible key-value pairs)
+
+API ENDPOINTS TO IMPLEMENT:
+1. POST /api/v1/customers - Create new customer
+2. GET /api/v1/customers/{id} - Get customer by ID
+3. PUT /api/v1/customers/{id} - Update entire customer
+4. PATCH /api/v1/customers/{id} - Partial update customer
+5. DELETE /api/v1/customers/{id} - Delete customer
+6. GET /api/v1/customers - List customers with pagination
+7. POST /api/v1/customers/search - Advanced search
+8. GET /api/v1/customers/{id}/exists - Check if customer exists
+9. POST /api/v1/customers/bulk - Bulk create customers
+10. GET /api/v1/customers/statistics - Get customer statistics
+
+SPECIFIC INSTRUCTIONS:
+- Use semantic versioning in the API path (/api/v1/)
+- Include rate limiting headers (X-RateLimit-*)
+- Add correlation ID header for request tracking
+- Implement HATEOAS links where appropriate
+- Use RFC 7807 Problem Details for error responses
+- Include OpenAPI tags for logical grouping
+- Add server variables for different environments
+- Include webhook definitions for customer events
+- Use $ref for reusable components
+- Add discriminators for polymorphic responses
+
+QUALITY REQUIREMENTS:
+- Zero syntax errors in YAML
+- Fully parseable by Swagger UI
+- Compatible with code generation tools
+- Include API versioning strategy
+- Add deprecation notices where needed
+- Include contact and license information
+- Add external documentation links
+
+Generate the complete OpenAPI 3.0 YAML specification that satisfies all requirements above. The specification should be production-ready, following industry best practices, and immediately deployable with Swagger UI.
