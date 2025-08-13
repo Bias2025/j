@@ -1,0 +1,175 @@
+# SPRING-FORGE OPENAPI-TO-JAVA GENERATION PROMPT
+# Codebase Fingerprint: CB-JPLRPW-1755017299467-1IHT
+# Generation ID: SF-2024-ELITE-001
+
+@SPRING-FORGE execute dual-phase generation:
+
+## PHASE 1: OpenAPI 3.0 YAML Generation
+
+Generate a comprehensive OpenAPI 3.0.3 specification for a Product Management API with:
+
+```yaml
+openapi: 3.0.3
+info:
+  title: Product Management API
+  version: 1.0.0
+  description: Enterprise-grade Product Management System
+  contact:
+    name: SPRING-FORGE Team
+    email: api@springforge.dev
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Development server
+  - url: https://api.production.com/v1
+    description: Production server
+
+paths:
+  /products:
+    get:
+      summary: List all products with pagination
+      operationId: listProducts
+      tags:
+        - Products
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: sort
+          in: query
+          schema:
+            type: string
+            default: "id,asc"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductPage'
+    
+    post:
+      summary: Create new product
+      operationId: createProduct
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        '201':
+          description: Product created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+
+  /products/{productId}:
+    get:
+      summary: Get product by ID
+      operationId: getProductById
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Product found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+    
+    put:
+      summary: Update product
+      operationId: updateProduct
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        '200':
+          description: Product updated
+    
+    delete:
+      summary: Delete product
+      operationId: deleteProduct
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Product deleted
+
+components:
+  schemas:
+    Product:
+      type: object
+      required:
+        - id
+        - name
+        - sku
+        - price
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+        description:
+          type: string
+          maxLength: 2000
+        sku:
+          type: string
+          pattern: '^[A-Z0-9-]+$'
+        price:
+          type: number
+          format: decimal
+          minimum: 0
+        category:
+          type: string
+          enum: [ELECTRONICS, CLOTHING, FOOD, BOOKS, OTHER]
+        inventory:
+          type: integer
+          minimum: 0
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
