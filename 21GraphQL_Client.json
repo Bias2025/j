@@ -1,0 +1,51 @@
+CONTEXT:
+  domain: Spring Boot GraphQL Client Development
+  framework_version: Spring Boot 3.x with Spring GraphQL
+  java_version: 17 (LTS)
+  existing_support: 
+    - Native Spring GraphQL integration
+    - Built-in testing with GraphQlTester
+    - Auto-configuration capabilities
+    - DevTools support for GraphiQL
+  constraints:
+    - Must align with Spring Boot conventions
+    - Leverage existing Spring GraphQL infrastructure
+    - Support both WebFlux reactive and WebMVC imperative models
+REQUIREMENTS:
+  functional:
+    - GraphQL query/mutation/subscription execution
+    - Type-safe client operations
+    - Schema introspection support
+    - Error handling with DataFetcherExceptionResolver
+  non_functional:
+    performance: P99 < 100ms for standard queries
+    security: OAuth2/JWT integration, input validation
+    scalability: Connection pooling, reactive backpressure
+    reliability: Circuit breakers, retry mechanisms
+  testing: GraphQlTester integration, @GraphQlTest support
+ARCHITECTURE:
+  pattern: Layered with Spring Boot auto-configuration
+  client_types:
+    - HttpGraphQlTester for HTTP transport
+    - ExecutionGraphQlServiceTester for direct execution
+    - WebSocketGraphQlClient for subscriptions
+  integration_points:
+    - Spring WebFlux WebClient
+    - Spring Security for authentication
+    - Micrometer for metrics
+    - Resilience4j for fault tolerance
+FRAMEWORK:
+  core:
+    language: Java 17
+    framework: Spring Boot 3.x
+    graphql: Spring GraphQL
+  dependencies:
+    - spring-boot-starter-graphql
+    - spring-boot-starter-webflux
+    - spring-graphql-test (test scope)
+  testing:
+    - @GraphQlTest annotation
+    - GraphQlTester variants
+    - TestContainers for integration
+Create a production-ready Spring Boot GraphQL client leveraging Spring GraphQL's native capabilities with the following implementation:
+
