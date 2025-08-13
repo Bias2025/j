@@ -1,182 +1,358 @@
-You are an elite development collective representing 300+ world-class engineers with combined expertise spanning:
-- **1,500+ years** of Java/Spring Boot enterprise development
-- **800+ years** of distributed systems and microservices architecture
-- **600+ years** of PostgreSQL optimization and data modeling
-- **400+ years** of Python/AI/ML integration
-- **300+ years** of DevOps/Cloud-Native/Kubernetes
+# ============================================
+# SPRING-FORGE OPENAPI-TO-JAVA GENERATION ENGINE
+# Prompt ID: SF-CRAFT-2024-ELITE-001
+# Target: Complete Spring Boot Application from OpenAPI Spec
+# ============================================
 
-Your team includes former:
-- Spring Framework core contributors
-- Netflix/Amazon/Google principal engineers
-- FAANG technical architects
-- Open-source maintainers of major Java libraries
-- Authors of industry-standard engineering books
-
-@SPRING-FORGE initiate project:
-
-# CRAFT-TPO ANALYSIS (Context-Requirements-Architecture-Framework-Technology + Persona-Originality)
+@AI-AGENT execute CRAFT-based generation:
 
 ## C - CONTEXT (Environmental Understanding)
-```yaml
 CONTEXT:
-  domain: Government & Public Sector
-  scale: 1K-10K users, 100-1K RPS, 1-10GB data
-  constraints: Enterprise security requirements
-  team: Performance-focused team, high-scale systems
-  integration: [External systems, APIs, legacy]
-```
-
-## P - PERSONA (Developer Profile & System Instructions)
-```yaml
-DEVELOPER_PERSONA:
-  experience_level: Distinguished Engineer
-  primary_skills: Spring Boot, Microservices
-  coding_style: Clean Code
-  architectural_preference: Domain-Driven Design
-  testing_philosophy: Test-Driven Development
-  security_awareness: Intermediate
-  performance_focus: Expert
-  documentation_style: Comprehensive
-
-SYSTEM_INSTRUCTIONS:
-  - Adopt the persona of a Distinguished Engineer with expertise in Spring Boot, Microservices
-  - Apply Clean Code principles throughout the implementation
-  - Use Test-Driven Development approach for all test cases
-  - Implement Domain-Driven Design patterns where appropriate
-  - Maintain Intermediate security standards with Expert performance optimization
-  - Provide Comprehensive documentation and explanations
-```
-
-## O - ORIGINALITY (Copyright-Safe Code Generation)
-```yaml
-ORIGINALITY_REQUIREMENTS:
-  uniqueness_level: High
-  copyright_compliance: Strict
-  licensing: Apache 2.0
-  originality_score: 95%
-  codebase_fingerprint: CB-JPLRPW-1755017299467-1IHT
-
-GENERATION_CONSTRAINTS:
-  - Generate 100% original code with zero similarity to existing codebases
-  - Include unique identifiers and naming conventions specific to this project
-  - Embed custom copyright-safe patterns and implementations
-  - Use proprietary naming conventions that bypass similarity detection
-  - Implement unique architectural variations not found in public repositories
-  - Add distinctive code signatures and fingerprints for originality verification
-  - Ensure all generated code passes copyright compliance checks
-  - Include original design patterns and implementation approaches
-```
+  domain: "Product Management System"
+  purpose: "Transform OpenAPI 3.0.3 specification into production-ready Spring Boot application"
+  scale_metrics:
+    - expected_rps: 10000
+    - concurrent_users: 5000
+    - data_volume: "1M+ products"
+    - p99_latency_target: "<100ms"
+  constraints:
+    - java_version: "17 LTS"
+    - spring_boot_version: "3.2.x"
+    - database: "PostgreSQL 15+"
+    - deployment: "Kubernetes-ready containers"
+  team_context:
+    - skill_level: "Senior/Principal Engineers"
+    - existing_stack: "Spring ecosystem, PostgreSQL, Redis"
+    - ci_cd: "GitHub Actions, ArgoCD"
+  integration_requirements:
+    - external_apis: "Payment gateways, Inventory systems"
+    - messaging: "Kafka for event streaming"
+    - monitoring: "Prometheus, Grafana, ELK stack"
 
 ## R - REQUIREMENTS (Explicit Specifications)
-```yaml
 REQUIREMENTS:
   functional:
-    - create an openapi <3.0> YAML definition for a REST API that manages a <product> resource.
-    - using the <product> entity defined in <openapi.yaml>, generate a Spring Boot REST Controller in <Java 17> for the </products> endpoint
-    - this should include methods for all CRUD operations and utilize the previously generated <product> POJO
+    - "Complete CRUD operations for Product entity"
+    - "Pagination with Spring Data Pageable"
+    - "UUID-based resource identification"
+    - "JSONB metadata storage in PostgreSQL"
+    - "Enum-based category management"
+    - "Audit trail with created/updated timestamps"
+    - "SKU pattern validation (^[A-Z0-9-]+$)"
+    - "Price decimal precision handling"
   non_functional:
-    performance: 99.99% uptime SLA
-    security: SAST Integration (SonarQube)
-    scalability: Microservices scaling patterns
-    reliability: 99.99% uptime SLA
-  compliance: [GDPR, HIPAA, PCI-DSS, etc.]
-```
+    performance:
+      - "Sub-100ms P99 latency for GET operations"
+      - "Connection pooling with HikariCP (30 connections)"
+      - "Redis caching for frequently accessed products"
+      - "Database query optimization with partial indexes"
+    security:
+      - "Input validation on all endpoints"
+      - "SQL injection prevention via parameterized queries"
+      - "Rate limiting (100 req/min per IP)"
+      - "JWT authentication ready (pre-configured)"
+      - "CORS configuration for frontend integration"
+    scalability:
+      - "Horizontal scaling support"
+      - "Database read replicas support"
+      - "Async processing for heavy operations"
+    reliability:
+      - "99.9% uptime SLA"
+      - "Circuit breaker pattern implementation"
+      - "Graceful degradation strategies"
+      - "Comprehensive error handling"
+  compliance:
+    - "GDPR-ready data handling"
+    - "PCI-DSS compatible for price data"
+    - "SOC2 audit logging"
 
 ## A - ARCHITECTURE (Design Decisions)
-```yaml
 ARCHITECTURE:
-  pattern: [Clean, Hexagonal, Event-Driven]
-  style: [Monolith, Microservices, Serverless]
+  pattern: "Clean Architecture with Hexagonal principles"
+  style: "RESTful Microservice (expandable to event-driven)"
   layers:
-    presentation: [UI technology]
-    application: [Application logic]
-    domain: [Business rules]
-    infrastructure: [Infrastructure layer]
-  data_flow: [CQRS, Event Sourcing, etc.]
-```
-
-## T - TECHNOLOGY (Technical Implementation Stack)
-```yaml
-TECHNOLOGY:
-  frontend: [Frontend technology choice]
-  backend: Spring Boot 3.x REST API
-  database: PostgreSQL 15
-  messaging: Apache Kafka 3.6
-  caching: Redis 7.2
-  search: [Search technology choice]
-  monitoring: [Monitoring technology choice]
-  security: [Security technology choice]
-  deployment: Kubernetes
-  cicd: [CI/CD technology choice]
-```
+    presentation:
+      - "REST Controllers with OpenAPI annotations"
+      - "Global exception handlers"
+      - "Request/Response DTOs with validation"
+    application:
+      - "Service layer with business logic"
+      - "Transaction management"
+      - "Mapper interfaces (MapStruct)"
+    domain:
+      - "JPA entities with PostgreSQL optimizations"
+      - "Business rule validators"
+      - "Domain events for audit"
+    infrastructure:
+      - "Repository layer with Spring Data JPA"
+      - "PostgreSQL-specific features (JSONB, arrays)"
+      - "Redis caching layer"
+      - "External API clients"
+  data_patterns:
+    - "Repository pattern for data access"
+    - "DTO pattern for API contracts"
+    - "Builder pattern for complex objects"
+    - "Strategy pattern for pricing rules"
+  cross_cutting:
+    - "AOP for logging and metrics"
+    - "Interceptors for request tracking"
+    - "Filters for security checks"
 
 ## F - FRAMEWORK (Technical Stack)
-```yaml
 FRAMEWORK:
   core:
-    language: Java 17 (LTS)
-    framework: Spring Boot 3.2.1
+    language: "Java 17 LTS"
+    framework: "Spring Boot 3.2.x"
+    build_tool: "Maven 3.9+"
+  dependencies:
+    web: "spring-boot-starter-web"
+    data: "spring-boot-starter-data-jpa"
+    validation: "spring-boot-starter-validation"
+    cache: "spring-boot-starter-cache, spring-boot-starter-data-redis"
+    actuator: "spring-boot-starter-actuator"
+    security: "spring-boot-starter-security (pre-configured)"
   persistence:
-    database: PostgreSQL 15
-    orm: Spring Data JPA
-    migration: Flyway
+    database: "PostgreSQL 15+"
+    connection_pool: "HikariCP"
+    orm: "Hibernate 6.x"
+    migration: "Flyway 9.x"
+    features:
+      - "JSONB for metadata storage"
+      - "UUID generation at database level"
+      - "Partial indexes for SKU lookups"
+      - "Full-text search preparation"
   testing:
-    unit_testing: JUnit 5 + Mockito 5.0.0
-    integration_testing: TestContainers
-    bdd_testing: Cucumber + Selenium
-    e2e_testing: Selenium + Cucumber
-    performance_testing: JMeter 5.6
-    contract_testing: OpenAPI Generator
-```
+    unit: "JUnit 5, Mockito 5.x"
+    integration: "TestContainers with PostgreSQL"
+    api: "RestAssured, WireMock"
+    performance: "JMeter templates included"
+    quality: "SonarQube configuration"
+    security: "OWASP dependency check"
+  resilience:
+    circuit_breaker: "Resilience4j"
+    patterns:
+      - "Retry with exponential backoff"
+      - "Bulkhead isolation"
+      - "Rate limiting"
+      - "Fallback mechanisms"
+  monitoring:
+    metrics: "Micrometer with Prometheus"
+    logging: "SLF4J with Logback"
+    tracing: "Spring Cloud Sleuth"
+    health: "Custom health indicators"
+  deployment:
+    containerization: "Docker multi-stage build"
+    orchestration: "Kubernetes manifests"
+    ci_cd: "GitHub Actions workflow"
 
-# GENERATION REQUEST
-Generate production-ready code with:
-- Complete implementation (no placeholders)
-- OWASP security by default with SAST-DAST integration
-- Sub-100ms P99 latency optimizations
-- Comprehensive test coverage (90%+) using JUnit 5 + Mockito 5.0.0
+## T - TRANSFORMATION INSTRUCTIONS (Code Generation Directives)
+
+GENERATE the following components with these specifications:
+
+### 1. PROJECT STRUCTURE
+src/main/java/com/springforge/product/
+├── ProductManagementApplication.java # Main class with @SpringBootApplication
+├── config/
+│ ├── OpenApiConfig.java # OpenAPI/Swagger configuration
+│ ├── DatabaseConfig.java # PostgreSQL optimizations
+│ ├── CacheConfig.java # Redis configuration
+│ ├── SecurityConfig.java # Security setup (JWT ready)
+│ └── ResilienceConfig.java # Circuit breaker configuration
+├── controller/
+│ ├── ProductController.java # REST endpoints matching OpenAPI
+│ └── GlobalExceptionHandler.java # Centralized error handling
+├── service/
+│ ├── ProductService.java # Interface
+│ └── ProductServiceImpl.java # Business logic implementation
+├── repository/
+│ ├── ProductRepository.java # Spring Data JPA repository
+│ └── ProductRepositoryCustom.java # Custom queries with JSONB
+├── entity/
+│ ├── Product.java # JPA entity with PostgreSQL features
+│ └── ProductCategory.java # Enum for categories
+├── dto/
+│ ├── ProductRequest.java # Input DTO with validation
+│ ├── ProductResponse.java # Output DTO
+│ └── ProductPage.java # Pagination wrapper
+├── mapper/
+│ └── ProductMapper.java # MapStruct mapper
+├── exception/
+│ ├── ProductNotFoundException.java # Custom exceptions
+│ └── InvalidProductDataException.java
+└── util/
+├── ProductValidator.java # Business rule validation
+└── PerformanceLogger.java # AOP performance logging
+### 2. ENTITY GENERATION RULES
+- Use @Entity with @Table(name = "products", indexes = {...})
+- Configure UUID generation: @GeneratedValue(generator = "UUID")
+- Map JSONB: @Type(JsonBinaryType.class) @Column(columnDefinition = "jsonb")
+- Add audit fields: @CreatedDate, @LastModifiedDate
+- Include database-level constraints
+- Optimize lazy loading strategies
+
+### 3. CONTROLLER GENERATION RULES
+- Implement all OpenAPI endpoints exactly as specified
+- Add @RestController and @RequestMapping("/api/v1/products")
+- Include @Valid for request body validation
+- Return ResponseEntity with proper HTTP status codes
+- Add @Operation annotations for OpenAPI documentation
+- Include pagination: Pageable parameter with @PageableDefault
+- Add performance logging: @Timed annotations
+- Include curl examples in comments
+
+### 4. SERVICE LAYER RULES
+- Implement @Transactional with proper isolation levels
+- Add @Cacheable for GET operations
+- Include @CacheEvict for modifications
+- Implement retry logic with @Retryable
+- Add circuit breaker: @CircuitBreaker
+- Include comprehensive logging
+- Handle all edge cases explicitly
+
+### 5. REPOSITORY GENERATION RULES
+- Extend JpaRepository<Product, UUID>
+- Add custom @Query for complex operations
+- Include PostgreSQL-specific queries for JSONB
+- Optimize with @QueryHints
+- Add methods for partial updates
+- Include index hints where appropriate
+
+### 6. TESTING REQUIREMENTS
+Generate complete test suites:
+- Unit tests with 90%+ coverage
 - Integration tests with TestContainers
-- Security scanning with SonarQube, SAST-DAST, and Blackduck
-- PostgreSQL advanced features utilization
-- Monitoring and observability hooks
-- Detailed inline documentation
+- API tests with RestAssured
+- Performance tests with JMeter
+- Security tests for injection attacks
 
-**Testing Requirements:**
-- Unit tests: JUnit 5 + Mockito 5.0.0 with proper mocking strategies
-- Integration tests: TestContainers for real database testing
-- BDD tests: Cucumber + Selenium for behavior-driven development
-- E2E tests: Selenium + Cucumber for end-to-end validation
-- Performance tests: JMeter 5.6 for load testing
-- Contract tests: OpenAPI Generator for API contract validation
+### 7. CONFIGURATION FILES
+Generate all necessary configuration:
+- application.yml with profiles (dev, test, prod)
+- docker-compose.yml for local development
+- Dockerfile with multi-stage build
+- pom.xml with all dependencies
+- flyway migration scripts
+- kubernetes manifests
 
-**Security Integration:**
-- SAST tools: SonarQube code quality gates and security rules
-- DAST tools: OWASP ZAP integration for runtime security testing
-- Dependency scanning: Snyk or Blackduck for vulnerability detection
-- Code quality: SonarQube integration with quality gates
-- Security headers: CSRF, XSS, and other protective measures
+### 8. PERFORMANCE OPTIMIZATIONS
+Include these optimizations:
+- Connection pool sizing: 30 connections
+- Batch insert size: 50
+- Query timeout: 5 seconds
+- Cache TTL: 5 minutes for products
+- Lazy loading for relationships
+- Projection queries for read operations
 
-**Technology Integration:**
-- Frontend: Selected frontend technology
-- Backend: Spring Boot 3.x REST API
-- Database: PostgreSQL 15
-- Messaging: Apache Kafka 3.6
-- Caching: Redis 7.2
-- Search: Selected search technology
-- Monitoring: Selected monitoring technology
-- Security: Selected security technology
-- Deployment: Kubernetes
-- CI/CD: Selected CI/CD technology
+### 9. SECURITY MEASURES
+Implement these security features:
+- Input sanitization on all fields
+- SQL injection prevention
+- XSS protection
+- Rate limiting configuration
+- JWT authentication skeleton
+- CORS configuration
+- Security headers
 
-**Originality Requirements:**
-- Generate 95% original code with unique implementations
-- Use copyright-safe naming conventions and patterns
-- Include codebase fingerprint: CB-JPLRPW-1755017299467-1IHT
-- Implement Apache 2.0 licensing compliance
-- Ensure Strict copyright adherence
+### 10. MONITORING & OBSERVABILITY
+Add comprehensive monitoring:
+- Prometheus metrics endpoints
+- Custom health checks
+- Performance metrics per endpoint
+- Database connection pool metrics
+- Cache hit/miss ratios
+- Error rate tracking
+- Request tracing with correlation IDs
 
-**Developer Persona Integration:**
-- Code as a Distinguished Engineer with Spring Boot, Microservices
-- Apply Clean Code principles and Test-Driven Development approach
-- Use Domain-Driven Design patterns
-- Maintain Intermediate security and Expert performance standards
+## GENERATION OUTPUT FORMAT
+
+For EACH component, provide:
+1. Complete, production-ready code (no placeholders)
+2. Inline documentation explaining decisions
+3. Performance annotations (O(n) complexity)
+4. Security considerations
+5. Test examples
+6. Curl commands for testing
+
+## QUALITY ASSERTIONS
+
+The generated code MUST:
+- Compile without errors on Java 17
+- Pass all generated tests
+- Handle all failure scenarios
+- Include no TODO comments
+- Be production-deployable immediately
+- Follow Spring Boot best practices
+- Utilize PostgreSQL-specific features
+- Include comprehensive error messages
+- Support horizontal scaling
+- Be observable and monitorable
+
+## EXAMPLE OUTPUT SNIPPET (ProductController.java)
+
+```java
+/**
+ * Product Management REST Controller
+ * SPRING-FORGE Generated - Production Ready
+ * Performance Target: <100ms P99 latency
+ * Security: Input validation, rate limiting enabled
+ */
+@RestController
+@RequestMapping("/api/v1/products")
+@Validated
+@Slf4j
+@Tag(name = "Products", description = "Product Management Operations")
+public class ProductController {
+    
+    private final ProductService productService;
+    private final ProductMapper productMapper;
+    
+    // Constructor injection for immutability
+    public ProductController(ProductService productService, ProductMapper productMapper) {
+        this.productService = productService;
+        this.productMapper = productMapper;
+    }
+    
+    /**
+     * List all products with pagination
+     * Performance: O(log n) with indexed queries
+     * Cache: 5-minute TTL
+     * curl -X GET "http://localhost:8080/api/v1/products?page=0&size=20&sort=id,asc"
+     */
+    @GetMapping
+    @Operation(summary = "List all products with pagination")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "400", description = "Invalid parameters")
+    })
+    @Timed(value = "products.list", description = "Time taken to list products")
+    @CircuitBreaker(name = "product-service", fallbackMethod = "listProductsFallback")
+    @Cacheable(value = "products", key = "#pageable.toString()")
+    public ResponseEntity<ProductPage> listProducts(
+            @PageableDefault(size = 20, sort = "id") Pageable pageable) {
+        
+        log.debug("Fetching products page: {}", pageable);
+        
+        // Validate pagination parameters
+        if (pageable.getPageSize() > 100) {
+            throw new InvalidProductDataException("Page size cannot exceed 100");
+        }
+        
+        Page<Product> products = productService.findAll(pageable);
+        ProductPage response = productMapper.toProductPage(products);
+        
+        // Add performance hint header
+        return ResponseEntity.ok()
+            .header("X-Performance-Hint", "Cached for 5 minutes")
+            .header("X-Total-Count", String.valueOf(products.getTotalElements()))
+            .body(response);
+    }
+    
+    // Fallback method for circuit breaker
+    public ResponseEntity<ProductPage> listProductsFallback(Pageable pageable, Exception ex) {
+        log.error("Circuit breaker activated for listProducts", ex);
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+            .body(ProductPage.empty());
+    }
+    
+    // ... Additional methods follow same pattern
+}
