@@ -1,0 +1,227 @@
+# COMPLETE PROMPT: Enterprise-Grade Spring Boot ActiveMQ Integration with Embedded Testing
+
+## C - CONTEXT
+domain: Microservices Event-Driven Architecture
+services:
+  - VotesService: Accepts votes, stores in MongoDB, publishes events
+  - ElectionsService: Consumes vote events, transforms to entities, stores in PostgreSQL
+scale:
+  expected_tps: 1000-5000 transactions/second
+  message_volume: 100K-500K messages/hour
+  concurrent_consumers: 10-50
+constraints:
+  - Must support concurrent test execution on CI/CD servers
+  - Zero external dependencies during testing
+  - Sub-100ms message processing latency
+team_context:
+  size: 5-10 developers
+  skill_level: Mid to Senior Spring Boot developers
+  existing_stack: Spring Boot 3.x, Java 17, Maven
+integration_points:
+  - MongoDB for VotesService persistence
+  - PostgreSQL for ElectionsService persistence
+  - ActiveMQ for inter-service communication
+
+## R - REQUIREMENTS
+functional:
+  - Publish VoteDTO messages from VotesService to topics
+  - Subscribe and consume messages in ElectionsService
+  - Transform VoteDTO to VoteBO entities
+  - Support both text and object message types
+  - Implement retry logic for failed message processing
+non_functional:
+  performance:
+    - Message processing < 100ms P99
+    - Connection pool size: 10-25 connections
+    - Prefetch limit: 100 messages
+  security:
+    - Message encryption in transit
+    - Authentication for broker connections
+    - Input validation on all DTOs
+  scalability:
+    - Support horizontal scaling of consumers
+    - Concurrent message processing
+  reliability:
+    - Guaranteed message delivery (persistent messages)
+    - Dead letter queue for failed messages
+    - Circuit breaker for broker connectivity
+testing:
+  - 90% code coverage minimum
+  - Embedded broker for unit tests
+  - No external dependencies during testing
+  - Support concurrent test execution
+
+## A - ARCHITECTURE
+pattern: Event-Driven Microservices with Publish-Subscribe
+style: Loosely coupled services via message broker
+layers:
+  presentation:
+    - REST controllers accepting votes
+  application:
+    - VoteService with @Aspect logging
+    - MessageProducer for publishing
+    - MessageConsumer for subscribing
+  domain:
+    - VoteDTO for transport
+    - VoteBO for persistence
+  infrastructure:
+    - ActiveMQ message broker
+    - MongoDB repository (Votes)
+    - PostgreSQL repository (Elections)
+data_flow:
+  1. HTTP POST /api/votes → VotesController
+  2. VotesService → MongoDB persistence
+  3. @Aspect triggers → MessageProducer
+  4. ActiveMQ Topic → broadcast to subscribers
+  5. MessageConsumer → ElectionsService
+  6. Transform VoteDTO → VoteBO
+  7. ElectionsRepository → PostgreSQL
+messaging_patterns:
+  - Topic-based publish-subscribe (not queues)
+  - Durable subscriptions for reliability
+  - Message selectors for filtering
+
+## F - FRAMEWORK
+core:
+  language: Java 17
+  framework: Spring Boot 3.2.x
+  build: Maven 3.9+
+dependencies:
+  messaging:
+    - spring-boot-starter-activemq
+    - spring-boot-starter-aop
+    - activemq-broker (test scope)
+  testing:
+    - spring-boot-starter-test
+    - junit-jupiter 5.10+
+    - mockito-core 5.x
+    - assertj-core 3.24+
+  monitoring:
+    - spring-boot-starter-actuator
+    - micrometer-registry-prometheus
+configuration:
+  profiles:
+    - default: external broker
+    - test: embedded broker
+    - integration: Docker-based broker
+
+## PERSONA/ROLE
+You are an expert Spring Boot developer with 10+ years of experience in:
+- Building distributed microservices architectures
+- Implementing event-driven systems with message brokers
+- Writing comprehensive test suites with embedded infrastructure
+- Optimizing JMS/ActiveMQ performance
+- Following enterprise security best practices
+
+## DELIVERABLES SPECIFICATION
+
+### 1. Complete pom.xml with all dependencies
+Generate a production-ready Maven POM file containing:
+- Parent: spring-boot-starter-parent version 3.2.x
+- Properties section with version management
+- Dependencies:
+  * spring-boot-starter-activemq (with comment explaining JMS integration)
+  * spring-boot-starter-aop (with comment for aspect-oriented event triggers)
+  * activemq-broker in test scope (with comment for embedded testing)
+  * artemis-jms-server as alternative (with selection criteria)
+  * pooled-jms for connection pooling
+  * spring-boot-starter-test with exclusions
+  * junit-jupiter, mockito-core, assertj-core
+  * testcontainers for integration tests
+- Build plugins configuration
+
+### 2. MessageProducer.java Service Implementation
+Create a complete service class with:
+```java
+@Service
+@Slf4j
+public class MessageProducer {
+    // JmsTemplate with topic configuration
+    // Generic message sending with Jackson serialization
+    // Retry logic with @Retryable and exponential backoff
+    // Performance metrics with @Timed
+    // Connection pool configuration
+    // Error handling with DLQ routing
+    // Methods:
+    //   - sendMessage(String topic, Object payload)
+    //   - sendMessageWithHeaders(String topic, Object payload, Map<String,Object> headers)
+    //   - sendBulkMessages(String topic, List<Object> payloads)
+}
+@SpringBootTest
+@ActiveProfiles("test")
+@TestPropertySource(properties = {
+    "spring.activemq.broker-url=vm://embedded?broker.persistent=false",
+    "spring.jms.pub-sub-domain=true"
+})
+class MessageProducerTest {
+    // Test scenarios:
+    // - testSuccessfulMessagePublishing()
+    // - testMultipleSubscribersReceiveSameMessage()
+    // - testMessageSerializationDeserialization()
+    // - testConnectionFailureHandling()
+    // - testRetryMechanismWithBackoff()
+    // - testPerformanceUnderLoad() // 100 msgs/sec
+    // - testConcurrentProducers()
+    // - testMessageOrderingGuarantees()
+    // - testDeadLetterQueueRouting()
+    // - testCircuitBreakerActivation()
+}
+# ActiveMQ Configuration
+spring.activemq.broker-url=tcp://localhost:61616
+spring.activemq.user=admin
+spring.activemq.password=admin
+spring.jms.pub-sub-domain=true
+
+# Connection Pool Configuration
+spring.activemq.pool.enabled=true
+spring.activemq.pool.max-connections=10
+spring.activemq.pool.idle-timeout=30000
+spring.activemq.pool.max-sessions-per-connection=100
+
+# Performance Settings
+spring.jms.cache.session-cache-size=10
+spring.jms.cache.producers=true
+spring.jms.cache.consumers=false
+
+# Retry Configuration
+spring.retry.max-attempts=3
+spring.retry.initial-interval=1000
+spring.retry.multiplier=2.0
+spring.retry.max-interval=10000
+# Embedded Broker for Testing
+spring.activemq.broker-url=vm://embedded?broker.persistent=false
+spring.activemq.in-memory=true
+spring.jms.pub-sub-domain=true
+
+# Test Performance Settings
+spring.activemq.pool.enabled=false
+spring.jms.cache.enabled=false
+
+# Random port for concurrent testing
+server.port=0
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class VoteDTO implements Serializable {
+    @NotNull private String voterId;
+    @NotNull private String candidate;
+    @NotNull private LocalDateTime timestamp;
+    private Map<String, Object> metadata;
+}
+@Component
+@Slf4j
+public class MessageConsumer {
+    @JmsListener(destination = "${app.topic.votes}", containerFactory = "topicListenerFactory")
+    public void receiveVote(VoteDTO vote) {
+        // Processing logic with error handling
+    }
+}
+@Configuration
+@EnableJms
+public class ActiveMQConfig {
+    // Topic connection factory
+    // Message converter configuration
+    // Error handler setup
+    // Container factory for topics
+}
