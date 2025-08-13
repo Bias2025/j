@@ -1,0 +1,185 @@
+# Spring Boot 3.x ActiveMQ to Kafka Migration Strategy for Bank Account Transaction Processing System
+
+## Table of Contents
+- [Overview](#overview)
+- [Domain-Specific Migration Principles](#domain-specific-migration-principles)
+- [Architecture Blueprint](#architecture-blueprint)
+- [Dependency & Configuration Migration](#dependency--configuration-migration)
+- [Message Schema, Serialization, and Schema Registry Integration](#message-schema-serialization-and-schema-registry-integration)
+- [Producer Migration: JMS to Kafka](#producer-migration-jms-to-kafka)
+- [Consumer Migration: JMS Listeners to Kafka Consumers](#consumer-migration-jms-listeners-to-kafka-consumers)
+- [Topic Design, Partitioning, and Ordering](#topic-design-partitioning-and-ordering)
+- [Transactional Messaging and Saga Coordination](#transactional-messaging-and-saga-coordination)
+- [Dead Letter Topic & Banking-Specific Error Handling](#dead-letter-topic--banking-specific-error-handling)
+- [Security, Authentication & Compliance](#security-authentication--compliance)
+- [Monitoring, Observability, and Audit Trail](#monitoring-observability-and-audit-trail)
+- [Testing Strategy](#testing-strategy)
+- [Zero-Downtime Migration Blueprint](#zero-downtime-migration-blueprint)
+- [Migration Documentation Template](#migration-documentation-template)
+
+---
+
+## Overview
+
+This migration strategy transforms a **Spring Boot 3.x** bank account transaction processing system from **ActiveMQ (JMS)** to **Apache Kafka** (with Confluent Schema Registry and Spring Kafka 3.x), ensuring **zero message loss**, **exactly-once delivery**, and **banking-grade compliance**. The approach is uniquely tailored for financial institutions, prioritizing transaction integrity, auditability, and regulatory adherence.
+
+---
+
+## Domain-Specific Migration Principles
+
+- **Transactional Integrity:** Financial transactions must retain atomicity, consistency, isolation, and durability (ACID) properties. Migration must guarantee no duplicate, lost, or reordered transactions.
+- **Auditability:** Every migration step and message flow is traceable for regulatory audits (PCI-DSS, SOX).
+- **Sensitive Data Handling:** Custom encryption and masking for sensitive fields (account numbers, balances).
+- **Resilience:** Fault-tolerant strategies (banking operations must never lose transactions during outages).
+- **Business-Driven Topic Partitioning:** Topics and partitions reflect banking operational priorities (e.g., by account region, customer tier, transaction type).
+
+---
+
+## Architecture Blueprint
+
+- **Event-Driven Microservices:** Producers/consumers organized by business capability (e.g., TransactionService, FraudDetectionService).
+- **CQRS & Event Sourcing:** Write operations emit events; read models subscribe for projections.
+- **Saga Pattern:** Distributed transaction coordination for multi-step transfers, reversals, and settlements.
+- **Custom Topic Organization:** `bank.txn.<region>.<type>` (e.g., `bank.txn.eu.deposit`)
+- **Dead Letter Handling:** Domain-aware dead letter topics (DLTs) per workflow, with custom retry/compensation logic.
+
+---
+
+## Dependency & Configuration Migration
+
+**ActiveMQ Dependency Removal:**
+```xml
+<!-- REMOVE -->
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-activemq</artifactId>
+</dependency>
+<!-- ADD -->
+<dependency>
+  <groupId>org.springframework.kafka</groupId>
+  <artifactId>spring-kafka</artifactId>
+</dependency>
+<dependency>
+  <groupId>io.confluent</groupId>
+  <artifactId>kafka-avro-serializer</artifactId>
+</dependency>
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+<dependency>
+  <groupId>io.micrometer</groupId>
+  <artifactId>micrometer-registry-prometheus</artifactId>
+</dependency>
+<dependency>
+  <groupId>org.springframework.security</groupId>
+  <artifactId>spring-security</artifactId>
+</dependency>
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    properties:
+      security.protocol: SSL
+      ssl.endpoint.identification.algorithm: https
+      schema.registry.url: ${SCHEMA_REGISTRY_URL}
+      basic.auth.credentials.source: USER_INFO
+      basic.auth.user.info: ${SCHEMA_REGISTRY_USER}:${SCHEMA_REGISTRY_PASSWORD}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      acks: all
+      enable-idempotence: true
+      retries: 10
+      transaction-id-prefix: txn-bank-
+      properties:
+        max.in.flight.requests.per.connection: 1 # To preserve ordering
+    consumer:
+      group-id: bank-txn-processing-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      enable-auto-commit: false
+      isolation-level: read_committed
+      properties:
+        session.timeout.ms: 15000
+        max.poll.records: 1000
+        fetch.min.bytes: 50000
+        security.protocol: SSL
+    listener:
+      missing-topics-fatal: false
+{
+  "namespace": "com.bank.txn",
+  "type": "record",
+  "name": "TransactionEvent",
+  "fields": [
+    { "name": "txnId", "type": "string" },
+    { "name": "accountId", "type": "string" },
+    { "name": "amount", "type": "double" },
+    { "name": "currency", "type": "string" },
+    { "name": "txnType", "type": { "type": "enum", "name": "TxnType", "symbols": ["DEPOSIT", "WITHDRAWAL", "TRANSFER"] } },
+    { "name": "timestamp", "type": "long" },
+    { "name": "meta", "type": { "type": "map", "values": "string" }, "default": {} }
+  ]
+}
+public class TransactionSensitiveAvroSerializer extends KafkaAvroSerializer {
+    @Override
+    public byte[] serialize(String topic, Object record) {
+        if (record instanceof TransactionEvent txn) {
+            txn.setAccountId(maskAccountId(txn.getAccountId()));
+        }
+        return super.serialize(topic, record);
+    }
+    private String maskAccountId(String accountId) {
+        // Mask all but last 4 digits for compliance
+        return "****" + accountId.substring(accountId.length() - 4);
+    }
+}
+@JmsTemplate
+public void sendTransaction(TransactionEvent event) {
+    jmsTemplate.convertAndSend("txn.queue", event);
+}
+@Service
+public class BankTransactionProducer {
+    private final KafkaTemplate<String, TransactionEvent> kafkaTemplate;
+    public void publishTransaction(TransactionEvent event) {
+        String topic = "bank.txn." + event.getCurrency().toLowerCase() + "." + event.getTxnType().name().toLowerCase();
+        kafkaTemplate.send(topic, event.getTxnId(), event);
+        // Business metric: increment transaction counter
+        Metrics.incrementTransactionPublished(event.getCurrency(), event.getTxnType());
+    }
+}
+@JmsListener(destination = "txn.queue")
+public void onTransaction(TransactionEvent event) {
+    // process event
+}
+@KafkaListener(topicPattern = "bank.txn.*", groupId = "bank-txn-processing-group", containerFactory = "bankKafkaListenerContainerFactory")
+@Transactional // Spring Kafka transaction support
+public void onTransaction(@Payload TransactionEvent event, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
+    // Validate, authorize, and process event with banking business logic
+    validateEvent(event);
+    authorize(event);
+    processTransaction(event);
+    // Business metric: increment processed counter
+    Metrics.incrementTransactionProcessed(event.getCurrency(), event.getTxnType());
+}
+@Bean
+public ConcurrentKafkaListenerContainerFactory<String, TransactionEvent> bankKafkaListenerContainerFactory(
+        ConsumerFactory<String, TransactionEvent> consumerFactory) {
+    ConcurrentKafkaListenerContainerFactory<String, TransactionEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    factory.setConsumerFactory(consumerFactory);
+    factory.setConcurrency(8); // Domain-driven concurrency
+    factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.RECORD);
+    factory.getContainerProperties().setErrorHandler(new BankDomainErrorHandler());
+    return factory;
+}
+public class BankDomainErrorHandler implements ConsumerAwareListenerErrorHandler {
+    @Override
+    public Object handleError(Message<?> message, ListenerExecutionFailedException exception, Consumer<?, ?> consumer) {
+        // Log, audit, and publish to DLT with business context
+        publishToDLT(message.getPayload(), exception.getMessage());
+        Metrics.incrementDLTCount();
+        return null;
+    }
+    private void publishToDLT(Object payload, String error) {
+        // Custom DLT publishing logic
+    }
+}
