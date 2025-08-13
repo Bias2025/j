@@ -1,11 +1,3 @@
-# ============================================
-# SPRING-FORGE OPENAPI-TO-JAVA GENERATION ENGINE
-# Prompt ID: SF-CRAFT-2024-ELITE-001
-# Target: Complete Spring Boot Application from OpenAPI Spec
-# ============================================
-
-@AI-AGENT execute CRAFT-based generation:
-
 ## C - CONTEXT (Environmental Understanding)
 CONTEXT:
   domain: "Product Management System"
