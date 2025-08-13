@@ -47,5 +47,5 @@ FRAMEWORK:
     - @GraphQlTest annotation
     - GraphQlTester variants
     - TestContainers for integration
-Create a production-ready Spring Boot GraphQL client leveraging Spring GraphQL's native capabilities with the following implementation:
+Create a production-ready Spring Boot GraphQL client leveraging Spring GraphQL's native capabilities 
 
