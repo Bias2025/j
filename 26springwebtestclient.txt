@@ -1,0 +1,39 @@
+CONTEXT:
+  domain: Spring WebFlux Testing & Reactive HTTP Client
+  scale: Unit/Integration testing for reactive endpoints
+  constraints: Non-blocking, reactive streams compliant
+  team: Development teams migrating from Spring MVC to WebFlux
+  integration: Spring Boot test framework, Reactor, Mockito
+
+REQUIREMENTS:
+  functional:
+    - Test reactive WebFlux controllers without full server
+    - Support both @WebFluxTest and @SpringBootTest contexts
+    - Enable non-blocking HTTP client operations
+    - Mock reactive dependencies effectively
+  non_functional:
+    performance: Asynchronous, non-blocking execution
+    security: Test security configurations
+    scalability: Handle backpressure in reactive streams
+    reliability: Deterministic test execution
+
+ARCHITECTURE:
+  pattern: Reactive Testing Pattern
+  style: Non-blocking, event-driven
+  layers:
+    - presentation: WebTestClient API
+    - application: Reactive controllers
+    - domain: Reactive services with Mono/Flux
+    - infrastructure: Netty/Jetty reactive runtime
+
+FRAMEWORK:
+  core:
+    language: Java 17
+    framework: Spring Boot 3.x, Spring WebFlux
+  testing:
+    client: WebTestClient
+    mocking: Mockito with reactive support
+    assertions: StepVerifier for reactive streams
+  reactive:
+    runtime: Reactor Netty (default)
+    alternatives: Jetty RS, Apache HttpClient
