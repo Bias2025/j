@@ -1,0 +1,95 @@
+CONTEXT:
+  domain: Cloud Storage Integration
+  scale: 
+    - Expected file operations: 10,000+ daily
+    - File sizes: 1KB to 5GB range
+    - Concurrent users: 100-1000
+  constraints: 
+    - AWS infrastructure required
+    - Java 17 mandatory
+    - Spring Boot latest stable version
+    - Production-ready from day one
+  team: 
+    - Developers familiar with Spring ecosystem
+    - AWS account with S3 access configured
+  integration: 
+    - AWS S3 service
+    - Spring Boot application server
+    - PostgreSQL for metadata storage
+    REQUIREMENTS:
+  functional:
+    - Upload files to S3 with progress tracking
+    - Download files with presigned URLs
+    - List/search files with metadata
+    - Delete files with soft-delete capability
+    - Multipart upload for large files
+    - Automatic retry with exponential backoff
+  non_functional:
+    performance: 
+      - Upload speed: >50MB/s for large files
+      - Response time: <100ms for metadata operations
+      - Concurrent uploads: 50+ simultaneous
+    security: 
+      - IAM role-based authentication
+      - Encrypted transfer (TLS 1.3)
+      - Server-side encryption (SSE-S3)
+      - Presigned URL expiration control
+    scalability: 
+      - Horizontal scaling ready
+      - Connection pooling optimized
+      - Async operations support
+    reliability: 
+      - 99.9% uptime SLA
+      - Circuit breaker pattern
+      - Graceful degradation
+  compliance: 
+    - GDPR data residency
+    - Audit logging for all operations
+    ARCHITECTURE:
+  pattern: Hexagonal Architecture with Domain-Driven Design
+  style: Microservice-ready monolith
+  layers:
+    - presentation: REST API with OpenAPI documentation
+    - application: Service layer with transaction boundaries
+    - domain: S3 file entities and business rules
+    - infrastructure: AWS SDK v2 integration layer
+  data_flow: 
+    - Async processing for large uploads
+    - Event-driven notifications
+    - CQRS for read/write optimization
+    FRAMEWORK:
+  core:
+    language: Java 17
+    framework: Spring Boot 3.2.x
+  aws:
+    sdk: AWS SDK v2
+    services: S3, STS, CloudWatch
+  persistence:
+    database: PostgreSQL 15
+    orm: Spring Data JPA
+    migration: Flyway
+  messaging: Spring Events (internal)
+  caching: Spring Cache with Caffeine
+  monitoring: Micrometer + CloudWatch
+  deployment: Docker + ECS/EKS ready
+
+  TESTING MODULE
+Comprehensive test suite:
+
+Unit tests with Mockito:
+
+Service layer tests with mocked AWS clients
+Controller tests with MockMvc
+90%+ code coverage
+Integration tests with TestContainers:
+
+LocalStack for S3 simulation
+PostgreSQL container
+End-to-end upload/download scenarios
+Multipart upload testing
+Error recovery testing
+Performance tests:
+
+JMeter test plans for load testing
+Concurrent upload scenarios
+Large file handling tests
