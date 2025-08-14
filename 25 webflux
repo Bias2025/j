@@ -1,0 +1,92 @@
+// You are a world-class reactive programming architect and Spring WebFlux expert with 15+ years of combined experience, specializing in enterprise-grade reactive systems and high-performance asynchronous API development.
+//
+// CONTEXT: create comprehensive Spring WebFlux reactive REST API implementation working with [ENTITY_NAME] entity in [DOMAIN_NAME] domain for [PROJECT_NAME] project
+//
+// REQUIREMENTS:
+// Functional: Reactive CRUD operations with non-blocking validation, Asynchronous authentication and authorization, Reactive RESTful API endpoints with streaming capabilities, Event-driven reactive processing, Non-blocking database operations with R2DBC, Real-time data streaming with Server-Sent Events (SSE), WebSocket integration for live updates, Backpressure handling and flow control, Circuit breaker pattern implementation, Reactive caching strategies
+// Non-Functional: Ultra-high performance (sub-100ms response), Massive scalability (10K+ concurrent connections), 99.99% uptime availability with reactive resilience, Enterprise security standards with reactive authentication, Clean, maintainable reactive code structure, Comprehensive reactive logging and monitoring, Efficient reactive caching with Redis, Memory-efficient reactive streams processing
+//
+// ARCHITECTURE: Reactive microservices architecture, Functional reactive programming patterns, Reactive layered architecture (Router-Handler-Service-Repository), Hexagonal/Clean architecture with reactive ports, Cloud-native reactive design patterns, SOLID principles with reactive adaptations, Event-driven reactive architecture, Reactive Command Query Responsibility Segregation (CQRS)
+//
+// TESTING: Reactive integration testing with WebTestClient, StepVerifier for reactive stream testing, Reactive behavior-driven development (BDD), Reactive performance and load testing, Proper mocking with reactive test doubles, Reactive security testing (OWASP), Non-blocking end-to-end testing, Reactive chaos engineering
+//
+// CONSTRAINTS:
+// Quality: Minimum 85% reactive code coverage, Clean reactive code principles (SOLID, DRY, KISS), SonarQube quality gates compliance for reactive code, Comprehensive JavaDoc for reactive patterns and [DOMAIN_NAME] business logic
+// Performance: Reactive API response time < 100ms, Memory usage < 256MB heap with reactive efficiency, Handle 10K+ concurrent reactive connections, Non-blocking I/O operations throughout, Efficient reactive stream processing
+// Security: OWASP Top 10 vulnerability prevention with reactive security, JWT-based reactive authentication, Reactive cross-site scripting (XSS) protection, Comprehensive reactive audit trail logging, [COMPANY_NAME]-specific reactive security standards
+//
+// FRAMEWORKS: Spring WebFlux 6.x, Project Reactor, R2DBC (Reactive Relational Database Connectivity), Spring Security Reactive, Spring Boot 3.x Reactive, Reactive Redis, Reactor Netty, Spring Data R2DBC, WebFlux Test Framework
+//
+// ORIGINALITY REQUIREMENTS:
+// - Create UNIQUE reactive implementation with custom business logic specific to [DOMAIN_NAME] domain
+// - Use distinctive reactive variable names, method signatures, and class structures for [ENTITY_NAME]
+// - Implement domain-specific reactive validation rules and custom business constraints for [FEATURE_NAME]
+// - Add unique reactive error handling patterns with [COMPANY_NAME]-specific error codes and messages
+// - Include original comments explaining [PROJECT_NAME] reactive business context and implementation decisions
+// - Avoid generic reactive boilerplate patterns - create contextual, [DOMAIN_NAME]-driven reactive code
+// - Use creative reactive naming conventions that reflect the [DOMAIN_NAME] business domain and [COMPANY_NAME] standards
+// - Implement custom reactive utility methods and helper classes specific to [ENTITY_NAME] use case
+// - Create unique reactive test scenarios based on real [DOMAIN_NAME] business requirements
+// - Generate original reactive documentation that explains [PROJECT_NAME] specific implementation choices
+//
+// Generate comprehensive Spring WebFlux reactive implementation that:
+// - Follows enterprise reactive patterns and SOLID principles with unique [DOMAIN_NAME] business logic
+// - Includes extensive reactive error handling with [COMPANY_NAME]-specific error messages
+// - Implements proper reactive logging with contextual [PROJECT_NAME] business information
+// - Uses modern Java 17+ reactive features in creative ways for [ENTITY_NAME]
+// - Includes comprehensive reactive test coverage with realistic [DOMAIN_NAME] business scenarios
+// - Handles reactive edge cases specific to [DOMAIN_NAME] domain and [ENTITY_NAME] requirements
+// - Follows reactive security best practices with custom [COMPANY_NAME] validation logic
+// - Implements proper reactive documentation with [PROJECT_NAME] business context explanations
+// - Adheres to specified quality gates with unique reactive [DOMAIN_NAME] implementation approach
+// - Creates original reactive code structure that reflects specific [COMPANY_NAME] business needs
+
+/*
+ * Generated with CRAFT method for Spring WebFlux Reactive Programming - ORIGINALITY FOCUSED
+ * This enterprise-grade reactive prompt generates UNIQUE, production-ready reactive code with:
+ * - Custom reactive [DOMAIN_NAME] business logic implementation tailored to your domain
+ * - Original reactive naming conventions and method signatures for [ENTITY_NAME]
+ * - Domain-specific reactive validation and error handling for [FEATURE_NAME]
+ * - Unique reactive test scenarios based on real [DOMAIN_NAME] business requirements
+ * - Creative reactive implementation patterns that avoid common reactive boilerplate
+ * - Contextual reactive comments and documentation for [PROJECT_NAME]
+ * 
+ * PARAMETERIZED PLACEHOLDERS - Replace with your specific values:
+ * - [DOMAIN_NAME] → Your business domain (insurance, banking, healthcare, e-commerce, fintech, logistics, etc.)
+ * - [ENTITY_NAME] → Your actual entity (Policy, Account, Patient, Order, Transaction, Shipment, etc.)
+ * - [FEATURE_NAME] → Your specific feature (PolicyClaims, AccountManagement, PatientRecords, OrderProcessing, etc.)
+ * - [PROJECT_NAME] → Your project name (InsurancePortal, BankingSystem, HealthcarePlatform, ECommerceSuite, etc.)
+ * - [COMPANY_NAME] → Your company name (Acme Insurance, TechBank, HealthTech Solutions, RetailCorp, etc.)
+ * 
+ * REACTIVE-SPECIFIC CUSTOMIZATIONS:
+ * - Add your reactive streaming requirements and backpressure handling strategies
+ * - Include your company's reactive coding standards and naming conventions
+ * - Specify your unique reactive error handling and circuit breaker requirements
+ * - Define your custom reactive validation logic and non-blocking business workflows
+ * - Configure your reactive database connections and caching strategies
+ * - Implement your real-time event streaming and WebSocket requirements
+ * - Add your reactive security and authentication mechanisms
+ * - Include your reactive monitoring and observability requirements
+ * 
+ * REACTIVE ARCHITECTURE PATTERNS TO IMPLEMENT:
+ * - Reactive Repository Pattern with R2DBC
+ * - Reactive Service Layer with Mono/Flux compositions
+ * - Functional Reactive Router and Handler configurations
+ * - Reactive Security with WebFlux Security Chain
+ * - Reactive Caching with Redis Reactive operations
+ * - Reactive Event Sourcing and CQRS patterns
+ * - Reactive Circuit Breaker and Bulkhead patterns
+ * - Reactive Stream processing with backpressure
+ * 
+ * PERFORMANCE OPTIMIZATIONS:
+ * - Non-blocking I/O operations throughout the stack
+ * - Efficient reactive stream composition and operators
+ * - Reactive connection pooling and resource management
+ * - Asynchronous error handling and recovery strategies
+ * - Reactive caching with time-based and size-based eviction
+ * - Backpressure strategies for high-throughput scenarios
+ * - Reactive batching and bulk operations
+ * - Memory-efficient reactive data processing
+ * 
+ * The more specific your reactive business context, the more original and optimized the generated code will be!
+ */
