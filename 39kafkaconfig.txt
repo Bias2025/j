@@ -1,0 +1,122 @@
+CONTEXT:
+  domain: Event-Driven Microservices Architecture
+  scale: 
+    - Message throughput: 100K-1M messages/second
+    - Partition count: 50-200 partitions per topic
+    - Consumer groups: 10-50 concurrent consumer groups
+    - Data volume: 1-10TB daily ingestion
+  constraints:
+    - Zero message loss tolerance
+    - Sub-100ms end-to-end latency P99
+    - 99.99% availability SLA
+    - Exactly-once semantics required
+  team:
+    - Size: 15-20 engineers
+    - Skill level: Senior/Principal level
+    - Existing stack: Spring Boot microservices, PostgreSQL, Redis
+  integration:
+    - Schema Registry for Avro/Protobuf
+    - Monitoring: Prometheus, Grafana, Kafka Manager
+    - CDC from PostgreSQL via Debezium
+    - Event sourcing patterns
+    REQUIREMENTS:
+  functional:
+    - Produce messages with transactional guarantees
+    - Consume messages with configurable acknowledgment strategies
+    - Dead letter queue (DLQ) handling with retry mechanisms
+    - Dynamic topic creation and management
+    - Batch processing with configurable size/time windows
+    - Message filtering and routing based on headers/content
+    - Idempotent consumer implementation
+    - Offset management with manual commit strategies
+  non_functional:
+    performance:
+      - Producer throughput: 50K msgs/sec per instance
+      - Consumer throughput: 100K msgs/sec per instance
+      - Latency: < 10ms producer, < 50ms consumer E2E
+      - Memory footprint: < 512MB heap per service
+    security:
+      - SSL/TLS encryption in transit
+      - SASL/SCRAM authentication
+      - ACL-based authorization
+      - Message-level encryption for PII data
+    scalability:
+      - Horizontal scaling with partition-aware routing
+      - Auto-scaling based on lag metrics
+      - Multi-datacenter replication support
+    reliability:
+      - Circuit breaker for producer failures
+      - Exponential backoff with jitter for retries
+      - Health checks and readiness probes
+      - Graceful shutdown with offset commits
+  compliance:
+    - GDPR data retention policies
+    - Audit logging for all message operations
+    - Message tracing with correlation IDs
+    ARCHITECTURE:
+  pattern: Event-Driven Microservices with CQRS
+  style: 
+    - Choreography-based saga pattern
+    - Event sourcing for audit trail
+    - Outbox pattern for transactional guarantees
+  layers:
+    presentation: REST API + WebSocket for real-time updates
+    application:
+      - Command handlers (producers)
+      - Event processors (consumers)
+      - Saga orchestrators
+    domain:
+      - Aggregate roots with domain events
+      - Event store projections
+    infrastructure:
+      - Kafka cluster (3+ brokers)
+      - Schema Registry
+      - PostgreSQL for outbox pattern
+      - Redis for deduplication cache
+  data_flow:
+    - Commands → Kafka → Event Store → Projections
+    - CDC → Kafka → Materialized Views
+    - DLQ → Retry Topics → Alert System
+    FRAMEWORK:
+  core:
+    language: Java 17 (ZGC, Records, Pattern Matching)
+    framework: Spring Boot 3.2.x
+  kafka:
+    client: spring-kafka 3.1.x
+    serialization: Avro with Schema Registry
+    compression: Snappy for high throughput
+  persistence:
+    database: PostgreSQL 15 with JSONB
+    orm: Spring Data JPA with Hibernate 6
+    migration: Liquibase
+  messaging:
+    broker: Apache Kafka 3.6.x
+    schema: Confluent Schema Registry 7.5.x
+  caching: 
+    - Redis 7.x for deduplication
+    - Caffeine for local caching
+  monitoring:
+    - Micrometer with Prometheus
+    - Spring Boot Actuator
+    - OpenTelemetry for distributed tracing
+  deployment:
+    - Kubernetes with StatefulSets
+    - Helm charts for configuration
+    - ArgoCD for GitOps
+    TESTING FRAMEWORK
+    @TestingSpec
+    class KafkaTestingFramework {
+        components = {
+            "@EmbeddedKafka for integration tests",
+            "TestContainers with real Kafka",
+            "MockProducer/MockConsumer for unit tests",
+            "Awaitility for async assertions",
+            "Contract testing with Pact",
+            "Performance testing with JMeter",
+            "Chaos testing with Chaos Monkey",
+            "Load testing scenarios",
+            "Message replay testing",
+            "Failure injection testing"
+        };
+    }
+    
