@@ -1,0 +1,38 @@
+CONTEXT:
+  domain: Enterprise Caching Layer
+  scale: High-throughput applications requiring sub-millisecond cache access
+  constraints: Spring Boot native integration, memory-efficient, distributed capability
+  team: Spring Boot developers needing production-ready caching
+  integration: Spring Cache abstraction, JPA/Hibernate L2 cache, REST APIs
+  REQUIREMENTS:
+  functional:
+    - Multi-tier caching (method-level, entity-level, HTTP response)
+    - TTL/TTI configuration per cache region
+    - Cache statistics and monitoring
+    - Programmatic and declarative cache management
+  non_functional:
+    performance: <1ms cache hit latency, 95% hit ratio target
+    security: Cache key isolation, sensitive data encryption
+    scalability: Support 100K+ entries per cache region
+    reliability: Overflow to disk, persistence options
+  compliance: GDPR-compliant cache eviction
+  ARCHITECTURE:
+  pattern: Layered caching with Spring Cache abstraction
+  style: Embedded cache with optional clustering via Terracotta
+  layers:
+    - presentation: REST controller response caching
+    - application: Service method caching
+    - domain: Entity caching with Hibernate L2
+    - infrastructure: Ehcache 3.x with Spring Boot integration
+  data_flow: Write-through, write-behind patterns
+  FRAMEWORK:
+  core:
+    language: Java 17
+    framework: Spring Boot 3.2.x
+  persistence:
+    cache: Ehcache 3.10.x
+    integration: Spring Cache, JSR-107 (JCache)
+    serialization: Java Serialization / Kryo
+  monitoring: Micrometer metrics
+  deployment: Embedded with optional clustering
+  
