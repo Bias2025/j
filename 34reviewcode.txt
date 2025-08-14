@@ -1,0 +1,59 @@
+CONTEXT:
+  domain: Software Development Lifecycle Optimization
+  scale: 
+    - Team size: 5-50 developers
+    - PRs/day: 10-100
+    - Code base: 100K-10M LOC
+  constraints: 
+    - Must catch issues before human review
+    - Cannot delay CI/CD pipeline >5 minutes
+    - Must integrate with existing Git workflow
+  team: 
+    - Mixed experience levels (junior to principal)
+    - Java 17 + Spring Boot ecosystem
+    - Using GitHub/GitLab/Bitbucket
+  integration: 
+    - Git hooks (pre-commit/pre-push)
+    - CI/CD pipelines (Jenkins/GitHub Actions/GitLab CI)
+    - IDE plugins (IntelliJ IDEA/VS Code)
+    REQUIREMENTS:
+  functional:
+    - Analyze Java 17 syntax and patterns
+    - Validate Spring Boot best practices
+    - Check REST API design consistency
+    - Verify PostgreSQL query optimization
+    - Ensure security patterns compliance
+    - Validate test coverage and quality
+  non_functional:
+    performance: <30 seconds per 1000 LOC
+    security: OWASP Top 10 coverage
+    scalability: Handle concurrent reviews
+    reliability: 99.9% uptime, zero false positives
+  compliance: 
+    - SonarQube quality gates
+    - Corporate coding standards
+    - Spring Boot starter conventions
+    ARCHITECTURE:
+  pattern: Chain-of-Responsibility with Reflexion
+  style: Modular analyzer with self-correction
+  layers:
+    - presentation: CLI/IDE/Web interface
+    - application: Review orchestrator
+    - domain: Code analysis rules engine
+    - infrastructure: AST parser, metrics collector
+  data_flow: 
+    - Parse → Analyze → Report → Reflect → Correct
+    FRAMEWORK:
+  core:
+    language: Java 17
+    framework: Spring Boot 3.2+
+  analysis_tools:
+    - SpotBugs/PMD for static analysis
+    - Checkstyle for formatting
+    - JaCoCo for coverage
+    - Custom Spring Boot validators
+  integration:
+    - Git hooks via Husky
+    - REST API for CI/CD
+    - WebSocket for real-time feedback
+    
