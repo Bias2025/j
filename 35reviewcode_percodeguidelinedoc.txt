@@ -1,0 +1,48 @@
+CONTEXT:
+  domain: Academic/Enterprise Code Review System
+  scale: Course-level submissions (100-500 students)
+  constraints: 
+    - Java 17 strict requirement
+    - Spring Boot 2.x/3.x compatibility
+    - Maven-based build system
+    - Must handle undefined guideline documents dynamically
+  team: Academic graders and students
+  integration: 
+    - Maven build system
+    - JUnit 5 test framework
+    - Potential CI/CD pipelines
+    REQUIREMENTS:
+  functional:
+    - Load and parse guideline documents dynamically
+    - Analyze Java/Spring Boot code against guidelines
+    - Generate compliance reports
+    - Support multiple guideline formats (JSON, YAML, Properties)
+    - Provide actionable feedback
+  non_functional:
+    performance: Sub-second analysis for typical student projects
+    security: Sandboxed code analysis, no code execution
+    scalability: Handle concurrent reviews
+    reliability: 99.9% uptime during submission periods
+  compliance: Academic integrity standards
+  ARCHITECTURE:
+  pattern: Hexagonal Architecture with Plugin System
+  style: Modular Monolith (extensible to microservices)
+  layers:
+    - presentation: REST API + Web UI
+    - application: Review orchestration
+    - domain: Compliance rules engine
+    - infrastructure: File parsing, report generation
+  data_flow: Pipeline pattern for review stages
+  FRAMEWORK:
+  core:
+    language: Java 17
+    framework: Spring Boot 2.7.x/3.x
+  persistence:
+    database: PostgreSQL 14+ (for review history)
+    orm: Spring Data JPA
+    migration: Flyway
+  messaging: Spring Events (internal)
+  caching: Caffeine (in-memory)
+  monitoring: Micrometer + Actuator
+  deployment: Docker/Kubernetes ready
+  
