@@ -1,0 +1,140 @@
+
+# WebFlux Non-Blocking Architecture Pattern
+
+generate reactive-api:
+
+CONTEXT:
+  domain: [SPECIFY_DOMAIN]  # e-commerce/healthcare/finance/social/iot
+  reactive_requirements:
+    expected_concurrent_users: [NUMBER]
+    peak_requests_per_second: [NUMBER]
+    data_stream_volume: [EVENTS_PER_SEC]
+    backpressure_scenarios: [LIST_SCENARIOS]
+  integration_points:
+    upstream_services: [LIST_REACTIVE_SERVICES]
+    message_brokers: [KAFKA/RABBITMQ/REDIS_STREAMS]
+    databases: [R2DBC_POSTGRESQL/MONGODB_REACTIVE]
+
+REQUIREMENTS:
+  functional:
+    - Generate complete WebFlux REST API with Reactor Core
+    - Implement reactive streams with Mono/Flux
+    - Non-blocking I/O for all operations
+    - Backpressure handling with buffer strategies
+    - Server-Sent Events (SSE) for real-time updates
+    - WebSocket support for bidirectional streaming
+  non_functional:
+    latency: P99 < 50ms under 10K concurrent connections
+    throughput: > 50K requests/second per instance
+    memory: < 512MB heap under load
+    resilience: Circuit breakers with reactive retry
+  reactive_patterns:
+    - Hot vs Cold publishers
+    - Error handling with onErrorResume/onErrorMap
+    - Timeout management with timeout() operator
+    - Retry with exponential backoff using retryWhen()
+
+ARCHITECTURE:
+  style: Reactive Microservice
+  patterns:
+    - Functional Endpoints + Annotated Controllers hybrid
+    - Event-driven with reactive streams
+    - CQRS with reactive projections
+    - Non-blocking all the way down (R2DBC)
+  layers:
+    web: WebFlux RouterFunction + @RestController
+    service: Reactive service with Mono/Flux chains
+    repository: R2DBC/MongoDB Reactive repositories
+    integration: WebClient for reactive HTTP calls
+
+FRAMEWORK:
+  core:
+    java: 17
+    spring_boot: 3.2.x
+    reactor: 3.6.x
+  dependencies:
+    - spring-boot-starter-webflux
+    - spring-boot-starter-data-r2dbc
+    - postgresql-r2dbc driver
+    - spring-boot-starter-validation
+    - reactor-test
+    - reactor-tools (debugging)
+  monitoring:
+    - Micrometer with Reactor metrics
+    - Zipkin/Sleuth for distributed tracing
+    - Actuator with custom reactive health checks
+
+GENERATION_SPECIFICATIONS:
+  entities:
+    - name: [PRIMARY_ENTITY]
+      fields: [FIELD_LIST_WITH_TYPES]
+      validations: [REACTIVE_VALIDATORS]
+      relationships: [ONE_TO_MANY/MANY_TO_MANY]
+  
+  endpoints:
+    - GET /api/v1/[entities] - Flux stream with pagination
+    - GET /api/v1/[entities]/{id} - Mono with caching
+    - POST /api/v1/[entities] - Mono with validation
+    - PUT /api/v1/[entities]/{id} - Mono with optimistic locking
+    - DELETE /api/v1/[entities]/{id} - Mono with cascade handling
+    - GET /api/v1/[entities]/stream - SSE infinite stream
+    - WS /api/v1/[entities]/live - WebSocket bidirectional
+  
+  reactive_features:
+    - Parallel processing with parallel() scheduler
+    - Batching with buffer() and window()
+    - Rate limiting with limitRate()
+    - Caching with cache() operator
+    - Metrics collection with tap() and doOnNext()
+    - Context propagation for security/tracing
+
+SPECIAL_REQUIREMENTS:
+  performance_optimizations:
+    - Connection pooling with R2DBC
+    - Reactive caching with Caffeine/Redis
+    - Virtual threads integration (Java 21 preview)
+    - Native compilation with GraalVM
+  
+  security:
+    - JWT validation with reactive security
+    - Rate limiting per user/IP
+    - Reactive CORS configuration
+    - Method-level security with @PreAuthorize
+  
+  testing:
+    - StepVerifier for Flux/Mono testing
+    - WebTestClient for integration tests
+    - Mockito with reactive stubs
+    - TestContainers with R2DBC PostgreSQL
+
+OUTPUT_FORMAT:
+  Generate complete, production-ready code including:
+  1. Entity classes with R2DBC annotations
+  2. Reactive repositories extending R2dbcRepository
+  3. Service layer with complex Flux/Mono chains
+  4. Controllers with both functional and annotated styles
+  5. WebClient configuration for external calls
+  6. Global error handler with reactive context
+  7. Custom reactive validators
+  8. Comprehensive StepVerifier tests
+  9. Performance test scenarios with JMeter
+  10. Docker Compose with PostgreSQL R2DBC setup
+  11. Kubernetes manifests with HPA for auto-scaling
+  12. README with curl examples and WebSocket client code
+
+Example generate reactive-api:
+
+CONTEXT:
+  domain: real-time-trading-platform
+  reactive_requirements:
+    expected_concurrent_users: 100000
+    peak_requests_per_second: 500000
+    data_stream_volume: 10000_events_per_sec
+    backpressure_scenarios: [market_data_surge, order_flood]
+
+REQUIREMENTS:
+  functional:
+    - Real-time price streaming via SSE
+    - Order placement with immediate confirmation
+    - Portfolio updates via WebSocket
+    - Market data aggregation with windowing
