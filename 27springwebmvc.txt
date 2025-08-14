@@ -1,0 +1,145 @@
+# SPRING WEB MVC CODE GENERATION PROMPT
+# Using CRAFT Methodology for Maximum Effectiveness
+
+## C - CONTEXT (Environmental Understanding)
+CONTEXT:
+  domain: Web Application Development
+  scale: Standard enterprise web application
+  constraints: 
+    - Java 17 language features required
+    - Spring Boot 3.x compatibility
+    - RESTful API design principles
+  team: Development team familiar with Spring ecosystem
+  integration: 
+    - PostgreSQL database
+    - JSON API responses
+    - Standard HTTP methods
+
+## R - REQUIREMENTS (Explicit Specifications)
+REQUIREMENTS:
+  functional:
+    - Create a complete Spring Web MVC application structure
+    - Implement CRUD operations for a domain entity
+    - Handle HTTP requests/responses with proper status codes
+    - Validate input data using Bean Validation
+    - Implement exception handling with @ControllerAdvice
+  non_functional:
+    performance: Sub-100ms response time for simple operations
+    security: Input validation, SQL injection prevention
+    scalability: Stateless design, connection pooling
+    reliability: 99.9% uptime target
+  compliance: OWASP Top 10 security practices
+
+## A - ARCHITECTURE (Design Decisions)
+ARCHITECTURE:
+  pattern: Layered Architecture (Controller-Service-Repository)
+  style: RESTful Web Service
+  layers:
+    - presentation: REST Controllers with Spring Web MVC
+    - application: Service layer with business logic
+    - domain: JPA entities with validation
+    - infrastructure: Spring Data JPA repositories
+  data_flow: Request → Controller → Service → Repository → Database
+
+## F - FRAMEWORK (Technical Stack)
+FRAMEWORK:
+  core:
+    language: Java 17
+    framework: Spring Boot 3.2.x
+  dependencies:
+    - spring-boot-starter-web
+    - spring-boot-starter-data-jpa
+    - spring-boot-starter-validation
+    - postgresql driver
+    - lombok (optional)
+  persistence:
+    database: PostgreSQL 15+
+    orm: Spring Data JPA/Hibernate
+    migration: Flyway
+  testing: JUnit 5, Mockito, TestContainers
+  monitoring: Actuator endpoints
+  deployment: Docker containerization ready
+
+## SPECIFIC CODE GENERATION INSTRUCTIONS:
+
+Generate a complete Spring Web MVC application with the following components:
+
+1. **Entity Class** with:
+   - JPA annotations
+   - Bean Validation constraints
+   - Lombok annotations for boilerplate reduction
+   - Audit fields (createdAt, updatedAt)
+
+2. **Repository Interface** with:
+   - Spring Data JPA repository
+   - Custom query methods using @Query
+   - Pagination support
+
+3. **Service Layer** with:
+   - Business logic implementation
+   - Transaction management
+   - DTO mapping
+   - Error handling
+
+4. **REST Controller** with:
+   - All CRUD endpoints (GET, POST, PUT, DELETE)
+   - Request/Response DTOs
+   - Validation using @Valid
+   - Proper HTTP status codes
+   - OpenAPI documentation annotations
+
+5. **Exception Handling** with:
+   - Global exception handler using @ControllerAdvice
+   - Custom exception classes
+   - Standardized error responses
+
+6. **Configuration Classes** with:
+   - Database configuration
+   - CORS configuration
+   - Security configuration (basic)
+
+7. **Application Properties** with:
+   - Database connection settings
+   - JPA/Hibernate settings
+   - Logging configuration
+   - Server port configuration
+
+8. **Test Classes** with:
+   - Unit tests for service layer
+   - Integration tests for controllers
+   - Repository tests with @DataJpaTest
+   - MockMvc for endpoint testing
+
+## PERFORMANCE OPTIMIZATIONS TO INCLUDE:
+- Lazy loading strategies
+- Query optimization with proper indexes
+- Connection pool configuration
+- Response compression
+- Caching annotations where appropriate
+
+## SECURITY MEASURES TO IMPLEMENT:
+- Input validation at all layers
+- SQL injection prevention via parameterized queries
+- XSS prevention in responses
+- Rate limiting annotations
+- Secure headers configuration
+
+## EXAMPLE DOMAIN:
+Use a "Product" entity as the example with fields:
+- id (UUID)
+- name (String, required, max 100 chars)
+- description (String, max 500 chars)
+- price (BigDecimal, positive)
+- quantity (Integer, non-negative)
+- category (Enum)
+- active (Boolean)
+- createdAt (LocalDateTime)
+- updatedAt (LocalDateTime)
+
+## OUTPUT FORMAT:
+Provide complete, runnable code with:
+- No placeholders or TODOs
+- Comprehensive inline documentation
+- curl command examples for each endpoint
+- Performance notes in comments
+- Security considerations documented
