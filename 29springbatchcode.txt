@@ -1,0 +1,143 @@
+# SPRING BATCH ENTERPRISE GENERATOR v3.0
+# Performance Target: Process 10M+ records/hour with sub-second latency
+# Framework: Spring Boot 3.x, Java 17, Spring Batch 5.x
+
+CONTEXT:
+  system_type: "High-Performance Batch Processing System"
+  processing_scale: 
+    - daily_volume: "${SPECIFY_VOLUME}"  # e.g., 50M records
+    - peak_throughput: "${SPECIFY_TPS}"  # e.g., 5000 records/sec
+    - batch_window: "${SPECIFY_WINDOW}"  # e.g., 2-6 AM EST
+  data_characteristics:
+    - source: "${SOURCE_TYPE}"  # Database/File/API/Queue
+    - format: "${DATA_FORMAT}"  # CSV/JSON/XML/Fixed-Width
+    - size_per_record: "${AVG_SIZE}"  # bytes
+  infrastructure:
+    - deployment: "Kubernetes/Docker"
+    - database: "PostgreSQL 15+ with JSONB"
+    - memory_available: "${HEAP_SIZE}"
+    - cpu_cores: "${CORE_COUNT}"
+
+REQUIREMENTS:
+  functional:
+    - "Process ${RECORD_TYPE} records with complex transformations"
+    - "Handle ${ERROR_SCENARIOS} gracefully with retry logic"
+    - "Support parallel processing with ${PARTITION_STRATEGY}"
+    - "Implement checkpoint/restart capability"
+    - "Generate comprehensive audit logs"
+  non_functional:
+    performance:
+      - chunk_size: "${OPTIMAL_CHUNK}"  # e.g., 1000
+      - thread_pool: "${THREAD_COUNT}"  # e.g., 10
+      - commit_interval: "${COMMIT_SIZE}"
+      - p99_latency: "<100ms per chunk"
+    reliability:
+      - error_tolerance: "${SKIP_LIMIT}"
+      - retry_attempts: 3
+      - backoff_strategy: "exponential"
+      - transaction_isolation: "READ_COMMITTED"
+    monitoring:
+      - metrics: "Micrometer/Prometheus"
+      - tracing: "OpenTelemetry"
+      - alerting: "PagerDuty integration"
+
+ARCHITECTURE:
+  pattern: "Multi-Step Pipeline with Conditional Flows"
+  components:
+    readers:
+      - type: "${READER_TYPE}"  # JdbcPagingItemReader/FlatFileItemReader
+      - optimization: "Cursor-based with fetch size ${FETCH_SIZE}"
+      - partitioning: "${PARTITION_KEY}"
+    processors:
+      - chain_pattern: "CompositeItemProcessor"
+      - validation: "JSR-303 Bean Validation"
+      - enrichment: "Async external API calls"
+      - transformation: "Complex business rules"
+    writers:
+      - type: "${WRITER_TYPE}"  # JdbcBatchItemWriter/JpaItemWriter
+      - batch_mode: true
+      - bulk_operations: "PostgreSQL COPY when applicable"
+  error_handling:
+    - skip_policy: "Custom predicate-based"
+    - retry_policy: "Template with backoff"
+    - recovery: "Stateful restart from last checkpoint"
+
+FRAMEWORK:
+  core:
+    java: "17 with records and sealed classes"
+    spring_boot: "3.2.x"
+    spring_batch: "5.1.x"
+  data_access:
+    connection_pool: "HikariCP with optimal sizing"
+    jdbc_template: "NamedParameterJdbcTemplate"
+    jpa: "Hibernate 6.x with batch processing"
+  postgresql_optimizations:
+    - "JSONB for semi-structured data"
+    - "Partial indexes on processing status"
+    - "Table partitioning by date/status"
+    - "COPY command for bulk inserts"
+    - "Advisory locks for job coordination"
+  testing:
+    - "JUnit 5 with @SpringBatchTest"
+    - "Testcontainers for PostgreSQL"
+    - "Mockito for external dependencies"
+    - "AssertJ for fluent assertions"
+
+GENERATION_INSTRUCTIONS:
+  1. "Generate COMPLETE JobConfiguration with @EnableBatchProcessing"
+  2. "Include StepBuilderFactory with optimal chunk sizing"
+  3. "Implement ItemReader with pagination and zero-copy streaming"
+  4. "Create ItemProcessor with async CompletableFuture support"
+  5. "Build ItemWriter with batch inserts and connection pooling"
+  6. "Add JobExecutionListener for metrics and notifications"
+  7. "Include StepExecutionListener for fine-grained monitoring"
+  8. "Implement custom SkipPolicy and RetryPolicy"
+  9. "Create JobParametersValidator for input validation"
+  10. "Generate Tasklet for cleanup/initialization steps"
+  11. "Add conditional flow with JobExecutionDecider"
+  12. "Include partition handler for parallel processing"
+  13. "Generate comprehensive integration tests"
+  14. "Provide performance tuning configuration"
+  15. "Include Docker and Kubernetes deployment specs"
+
+PERFORMANCE_OPTIMIZATIONS:
+  - "Use cursor-based readers over page-based for large datasets"
+  - "Implement custom thread pool with optimal core/max sizes"
+  - "Enable JDBC batch mode with rewriteBatchedStatements=true"
+  - "Use PostgreSQL COPY for writes exceeding 10K records"
+  - "Implement circuit breaker for external API calls"
+  - "Cache frequently accessed reference data in Redis"
+  - "Use CompletableFuture for parallel processing steps"
+  - "Optimize chunk size based on memory and network latency"
+
+SECURITY_REQUIREMENTS:
+  - "Encrypt sensitive data in JobParameters"
+  - "Implement row-level security for multi-tenant processing"
+  - "Audit all data modifications with who/what/when"
+  - "Mask PII in logs using custom converters"
+  - "Implement rate limiting for external API calls"
+  - "Use vault for database credentials"
+
+OUTPUT_FORMAT:
+  Generate the following structure:
+  1. Complete JobConfiguration.java with all beans
+  2. Custom ItemReader implementation
+  3. Composite ItemProcessor with validators
+  4. Optimized ItemWriter with batch operations
+  5. Error handling policies and listeners
+  6. application.yml with tuned parameters
+  7. Integration test suite with Testcontainers
+  8. Performance test with JMeter script
+  9. Dockerfile and K8s deployment manifests
+  10. README with architecture diagram and metrics
+
+EXAMPLE_TRIGGER:
+  "Generate a Spring Batch job that:
+   - Reads 10M customer records from PostgreSQL
+   - Enriches with external API data (with circuit breaker)
+   - Validates using complex business rules
+   - Transforms to new format with JSONB fields
+   - Writes to partitioned PostgreSQL table
+   - Handles failures with exponential backoff
+   - Supports restart from last checkpoint
+   - Processes 5000 records/second minimum"
