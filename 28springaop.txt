@@ -1,0 +1,118 @@
+Generate a complete Spring Boot 3.x application (Java 17) implementing Aspect-Oriented Programming (AOP) with the following specifications using CRAFT methodology:
+
+## C - CONTEXT
+- Application Type: Enterprise microservice requiring cross-cutting concerns
+- Scale: 10K RPS, sub-100ms P99 latency requirement
+- Team Context: Senior developers requiring production-ready code
+- Integration Points: PostgreSQL, Redis cache, REST APIs, Kafka messaging
+- AOT/GraalVM: Must be native-image compatible with proper hint generation
+
+## R - REQUIREMENTS
+Functional Requirements:
+1. Implement comprehensive logging aspect for all service methods
+2. Create performance monitoring aspect tracking method execution times
+3. Build retry mechanism aspect with exponential backoff
+4. Implement transaction management aspect
+5. Create security audit aspect for sensitive operations
+6. Build rate limiting aspect using bucket algorithm
+7. Implement circuit breaker aspect with fallback mechanisms
+
+Non-Functional Requirements:
+- Performance: Method interception overhead < 1ms
+- Security: Audit all data access operations
+- Reliability: 99.99% uptime with graceful degradation
+- Observability: Full tracing with correlation IDs
+- Testing: 95% code coverage with integration tests
+
+## A - ARCHITECTURE
+Pattern: Hexagonal Architecture with AOP cross-cutting layer
+Components Required:
+1. Core business service classes (targets)
+2. Aspect classes with various advice types (@Before, @After, @Around, @AfterReturning, @AfterThrowing)
+3. Custom annotations for aspect triggers
+4. Pointcut expressions library
+5. Dynamic proxy configurations (JDK and CGLIB)
+6. Native image hint configurations
+
+## F - FRAMEWORK
+Stack Specifications:
+- Spring Boot 3.2.x
+- Spring AOP with AspectJ
+- PostgreSQL 15 with JSONB
+- Redis for distributed rate limiting
+- Micrometer for metrics
+- Resilience4j for circuit breaking
+- TestContainers for integration testing
+- Mockito/JUnit 5 for unit testing
+
+## DETAILED CODE REQUIREMENTS:
+
+### 1. Create Custom Annotations:
+- @Auditable (for security auditing)
+- @Retryable (with configurable attempts and delay)
+- @Timed (for performance monitoring)
+- @RateLimited (with configurable limits)
+- @CircuitBreaker (with fallback method reference)
+- @Loggable (with configurable log levels)
+
+### 2. Implement Aspect Classes with:
+- Proper pointcut expressions using @Pointcut
+- Parameter injection using JoinPoint, ProceedingJoinPoint
+- Access to method annotations via reflection
+- Thread-safe execution
+- Proper exception handling and propagation
+- Correlation ID propagation across aspects
+
+### 3. Business Service Implementation:
+Create a complete UserService with:
+- CRUD operations using Spring Data JPA
+- Complex PostgreSQL queries (CTEs, JSONB operations)
+- Methods decorated with custom annotations
+- Proper transaction boundaries
+- DTO mappings and validation
+
+### 4. Configuration Classes:
+- AOP configuration with proxy settings
+- AspectJ autoproxy configuration
+- Native image hints for reflection/proxy generation
+- Connection pool optimization
+- Cache configuration
+
+### 5. Testing Suite:
+- Unit tests for each aspect using Mockito
+- Integration tests using TestContainers
+- Performance tests validating overhead
+- Tests for proxy behavior (JDK vs CGLIB)
+- Tests for pointcut expression matching
+
+### 6. Observability:
+- Structured logging with correlation IDs
+- Metrics collection for each aspect
+- Distributed tracing integration
+- Health indicators for circuit breakers
+
+### 7. Native Image Support:
+- Generate proper GraalVM hints (reflect-config.json, proxy-config.json)
+- AOT processing configurations
+- Runtime hints for dynamic proxies
+- Serialization hints for cached objects
+
+## OUTPUT REQUIREMENTS:
+1. Complete, runnable code with no placeholders
+2. Comprehensive inline documentation explaining AOP concepts
+3. Performance annotations (Big-O complexity, query analysis)
+4. curl examples for testing each endpoint
+5. Docker Compose file for local development
+6. README with architecture diagrams and setup instructions
+
+## SPECIAL INSTRUCTIONS:
+- Use method-level caching where appropriate
+- Implement proper connection pooling with HikariCP
+- Include database migration scripts (Flyway)
+- Add OpenAPI documentation
+- Implement proper error handling with problem details (RFC 7807)
+- Include JMeter test plans
+- Add SonarQube configuration
+- Implement graceful shutdown handling
+
+Generate the complete implementation following Spring Boot best practices, with emphasis on production readiness, performance optimization, and comprehensive testing.
