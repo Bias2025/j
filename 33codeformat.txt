@@ -1,0 +1,51 @@
+CONTEXT:
+  domain: Enterprise Java Development Standards
+  scale: Team-wide code consistency across microservices
+  constraints: 
+    - Java 17 language features
+    - Spring Boot 3.2.x compatibility
+    - Maven/Gradle build systems
+  team: Multi-developer teams requiring consistent formatting
+  integration: 
+    - IDE compatibility (IntelliJ IDEA, Eclipse, VS Code)
+    - CI/CD pipeline integration
+    - SonarQube quality gates
+    REQUIREMENTS:
+  functional:
+    - Enforce consistent code formatting across all Java files
+    - Support Spring Boot annotations formatting
+    - Handle modern Java 17 syntax (records, text blocks, pattern matching)
+    - Format REST controllers, services, repositories, entities
+  non_functional:
+    performance: Format 1000+ files in < 30 seconds
+    security: Preserve security annotations positioning
+    scalability: Handle monorepo with 50+ modules
+    reliability: Zero code corruption, preserve functionality
+  compliance: 
+    - Google Java Style Guide adaptations
+    - Spring Framework conventions
+    - OWASP secure coding standards
+    ARCHITECTURE:
+  pattern: Layered Architecture Formatting Rules
+  style: Domain-Driven Design package structure
+  layers:
+    - presentation: Controllers, DTOs, REST endpoints
+    - application: Services, use cases, orchestration
+    - domain: Entities, value objects, domain events
+    - infrastructure: Repositories, configurations, adapters
+  data_flow: Top-down formatting (API → Service → Repository → Entity)
+  FRAMEWORK:
+  core:
+    language: Java 17
+    framework: Spring Boot 3.2.x
+  formatting_tools:
+    primary: Google Java Format
+    secondary: Spring Java Format
+    ide_plugins: Save Actions, EditorConfig
+  build_integration:
+    maven: fmt-maven-plugin
+    gradle: spotless-plugin
+  validation:
+    checkstyle: Custom Spring Boot rules
+    sonarqube: Quality gate enforcement
+    
