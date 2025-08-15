@@ -1,0 +1,37 @@
+CONTEXT:
+  domain: Enterprise Application Testing
+  scale: Full-stack (Spring Boot + Angular)
+  constraints: 
+    - Internal LegoUX library dependency
+    - Karma/Jasmine test framework
+    - TypeScript/JavaScript frontend
+    - JUnit 5 for backend
+    - Maven build automation
+  team: Mixed skill levels requiring comprehensive test coverage
+  integration: 
+    - Spring Boot REST APIs
+    - Angular 18.2.x frontend
+    - PostgreSQL database
+    - LegoUX component library
+    REQUIREMENTS:
+  functional:
+    - Generate unit tests for Spring Boot services/controllers
+    - Create Angular component/service tests with Karma/Jasmine
+    - Mock LegoUX library components
+    - Achieve 90%+ code coverage
+  non_functional:
+    performance: Test execution < 30 seconds
+    security: Input validation testing
+    scalability: Parallel test execution
+    reliability: Zero flaky tests
+  compliance: OWASP security testing standards
+  ARCHITECTURE:
+  pattern: Test Pyramid (Unit → Integration → E2E)
+  style: BDD with Given-When-Then structure
+  layers:
+    - Unit Tests: Isolated component testing
+    - Integration Tests: API contract testing
+    - Component Tests: Angular UI testing
+    - E2E Tests: Full workflow validation
+  data_flow: Test fixtures → Mocks → Assertions
+  
