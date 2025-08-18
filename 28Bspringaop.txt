@@ -1,0 +1,260 @@
+CONTEXT:
+  domain: Enterprise Microservice with Cross-Cutting Concerns
+  scale: 10K RPS, <100ms P99 latency
+  constraints: GraalVM native-image compatible, production-ready
+  team: Senior developers requiring zero-placeholder code
+  integration: PostgreSQL 15, Redis, Kafka, REST APIs
+
+REQUIREMENTS:
+  functional:
+    - Comprehensive AOP-based logging/monitoring/security
+    - Retry mechanisms with exponential backoff
+    - Circuit breakers with fallbacks
+    - Rate limiting with bucket algorithm
+    - Transaction management aspects
+  non_functional:
+    performance: <1ms AOP overhead
+    security: Full audit trail for sensitive ops
+    reliability: 99.99% uptime
+    observability: Distributed tracing with correlation IDs
+    testing: 95% coverage
+
+ARCHITECTURE:
+  pattern: Hexagonal with AOP Cross-Cutting Layer
+  style: Microservice with Native Image Support
+  layers:
+    - presentation: REST Controllers
+    - application: Service Layer with AOP
+    - domain: Business Entities
+    - infrastructure: PostgreSQL/Redis/Kafka
+  data_flow: CQRS with Event Sourcing capabilities
+
+FRAMEWORK:
+  core:
+    language: Java 17
+    framework: Spring Boot 3.2.x
+  persistence:
+    database: PostgreSQL 15 (JSONB, CTEs)
+    orm: Spring Data JPA
+    migration: Flyway
+  messaging: Apache Kafka
+  caching: Redis with Lettuce
+  monitoring: Micrometer + Prometheus
+  deployment: Docker/Kubernetes with GraalVM
+
+TECHNOLOGY:
+  aop: Spring AOP + AspectJ
+  resilience: Resilience4j
+  testing: JUnit 5 + Mockito + TestContainers
+  observability: OpenTelemetry + Zipkin
+  
+TESTING_REQUIREMENTS:
+  unit: Mockito-based aspect isolation
+  integration: TestContainers for PostgreSQL/Redis
+  performance: JMeter load tests
+  coverage: 95% minimum
+  
+PERSONA:
+  target: Senior enterprise developers
+  style: Production-grade, no shortcuts
+  documentation: Comprehensive inline + README
+  
+ORIGINALITY:
+  innovations: Native image optimization, advanced PostgreSQL features
+  patterns: Hexagonal + AOP hybrid architecture
+  optimizations: Sub-millisecond aspect overhead
+
+spring-aop-microservice/
+├── src/main/java/com/springforge/aop/
+│   ├── annotation/           # Custom annotations
+│   ├── aspect/              # Aspect implementations
+│   ├── config/              # Configuration classes
+│   ├── controller/          # REST controllers
+│   ├── dto/                 # Data transfer objects
+│   ├── entity/              # JPA entities
+│   ├── exception/           # Custom exceptions
+│   ├── repository/          # Data repositories
+│   ├── service/             # Business services
+│   └── util/                # Utility classes
+├── src/main/resources/
+│   ├── db/migration/        # Flyway migrations
+│   ├── META-INF/native-image/  # GraalVM hints
+│   └── application.yml
+├── src/test/
+├── docker-compose.yml
+├── pom.xml
+└── README.md
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.0</version>
+        <relativePath/>
+    </parent>
+    
+    <groupId>com.springforge</groupId>
+    <artifactId>aop-microservice</artifactId>
+    <version>1.0.0</version>
+    <name>Spring AOP Microservice</name>
+    
+    <properties>
+        <java.version>17</java.version>
+        <spring-native.version>0.12.1</spring-native.version>
+        <testcontainers.version>1.19.3</testcontainers.version>
+        <resilience4j.version>2.1.0</resilience4j.version>
+    </properties>
+    
+    <dependencies>
+        <!-- Spring Boot Starters -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        
+        <!-- Kafka -->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+        
+        <!-- Database -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+        
+        <!-- Resilience4j -->
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-spring-boot3</artifactId>
+            <version>${resilience4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-circuitbreaker</artifactId>
+            <version>${resilience4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-ratelimiter</artifactId>
+            <version>${resilience4j.version}</version>
+        </dependency>
+        
+        <!-- Observability -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-bridge-otel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-exporter-zipkin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+        
+        <!-- OpenAPI -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+        
+        <!-- Utilities -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>1.5.5.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>1.5.5.Final</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <!-- Testing -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>kafka</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.graalvm.buildtools</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
