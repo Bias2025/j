@@ -1,0 +1,195 @@
+# META-PROMPT: Enterprise Spring Boot Testing Suite Generator v3.0
+# Pattern: Hierarchical Prompt Engineering with CRAFT-TPO Framework
+# Optimization Level: Maximum (Production-Grade)
+
+## PROMPT STRUCTURE [Meta-Specifications Layer]
+
+### P-1: PERSONA INITIALIZATION
+### P-2: CONTEXT AMPLIFICATION [Enhanced CRAFT-C]
+```yaml
+CONTEXT:
+  domain: 
+    sector: Financial Services (Tier-1 Bank)
+    criticality: CRITICAL (Sarbanes-Oxley compliant)
+    regulatory: SOC2, PCI-DSS, GDPR, Basel III
+    
+  system_characteristics:
+    service_name: employee_microservice_asset_id
+    transaction_volume: 1M+ daily operations
+    data_volume: 10K+ employee records, 100K+ assets
+    availability_sla: 99.99% (52 minutes downtime/year)
+    latency_p99: <500ms
+    concurrent_users: 5,000+
+    
+  technical_debt:
+    legacy_systems: 3 mainframe integrations
+    migration_state: Hybrid cloud (30% migrated)
+    test_coverage_current: 45%
+    test_coverage_target: 100% (mutation score >85%)
+    
+  team_context:
+    size: 12 engineers
+    test_maturity: Level 3 (Defined)
+    ci_cd_pipeline: Jenkins/GitLab CI
+    deployment_frequency: 2x daily
+    REQUIREMENTS:
+  functional_testing:
+    crud_operations:
+      - CREATE: Batch creation (1000+ records), idempotency
+      - READ: Pagination (10/page), sorting (name ASC/DESC), filtering (15 fields)
+      - UPDATE: Optimistic locking, partial updates, audit trail
+      - DELETE: Soft delete, cascade rules, retention policies
+      
+    business_rules:
+      - Asset assignment: Max 5 assets/employee, approval workflow
+      - Lifecycle: Draft→Pending→Active→Archived→Purged
+      - Validation: 47 business rules, 23 cross-field validations
+      - Temporal: Effective dating, retroactive changes
+      
+    edge_cases:
+      - Empty result sets with proper 204 responses
+      - Single record operations with caching
+      - Maximum pagination (10K records)
+      - Null handling in 15 sortable fields
+      - Unicode/emoji in text fields
+      - Time zone handling (35 zones)
+      
+  non_functional_testing:
+    performance:
+      - Response time: p50<200ms, p95<400ms, p99<500ms
+      - Throughput: 1000 TPS sustained
+      - Resource usage: <512MB heap, <2% CPU idle
+      
+    reliability:
+      - Memory leaks: Zero tolerance (72-hour soak test)
+      - Connection pools: Proper cleanup validation
+      - Thread safety: 100 concurrent operations
+      - Circuit breaker: Open at 50% failure rate
+      
+    observability:
+      - Structured logging: JSON format, correlation IDs
+      - Metrics: 25 custom metrics, RED method
+      - Tracing: Distributed traces, span annotations
+      - Alerting: PagerDuty integration, runbook links
+      ARCHITECTURE:
+  patterns:
+    structural:
+      - Hexagonal Architecture with ports/adapters
+      - CQRS with event sourcing for audit
+      - Saga pattern for distributed transactions
+      
+    behavioral:
+      - Repository pattern with specification
+      - Strategy pattern for validation rules
+      - Observer pattern for domain events
+      
+    enterprise:
+      - API Gateway pattern (Kong/Zuul)
+      - Service mesh (Istio sidecar)
+      - Bulkhead isolation
+      - Cache-aside with Redis
+      
+  testing_architecture:
+    pyramid:
+      - Unit: 70% (isolated, fast, deterministic)
+      - Integration: 20% (database, messaging)
+      - E2E: 8% (critical paths only)
+      - Contract: 2% (consumer-driven)
+      
+    test_doubles:
+      - Mocks: External services, time, randomness
+      - Stubs: Database responses, message queues
+      - Fakes: In-memory implementations
+      - Spies: Audit logging, metrics collection
+      FRAMEWORK:
+  core_stack:
+    language: Java 17 (Records, Sealed Classes, Pattern Matching)
+    framework: Spring Boot 3.2.x
+    build: Maven 3.9+/Gradle 8+
+    
+  testing_stack:
+    unit:
+      - JUnit 5.10+ (Jupiter, Vintage bridge)
+      - Mockito 5.x with strict stubs
+      - AssertJ 3.24+ with custom assertions
+      
+    integration:
+      - TestContainers 1.19+ (PostgreSQL, Redis, Kafka)
+      - WireMock 3.x for external services
+      - REST Assured 5.x for API testing
+      
+    specialized:
+      - ArchUnit 1.x for architecture tests
+      - PIT for mutation testing
+      - JMH for microbenchmarks
+      - Gatling for load testing
+      
+  quality_tools:
+    static_analysis:
+      - SonarQube (Quality Gate: A)
+      - SpotBugs with security plugins
+      - PMD with custom rulesets
+      
+    coverage:
+      - JaCoCo (Line: 100%, Branch: 95%, Mutation: 85%)
+      - Codecov integration
+      - Coverage trend analysis
+      TESTING_REQUIREMENTS:
+  test_design:
+    patterns:
+      - AAA (Arrange-Act-Assert)
+      - Given-When-Then for BDD
+      - Object Mother for test data
+      - Test Data Builder with fluent API
+      
+    organization:
+      - @Nested classes by feature
+      - @Tag for categorization
+      - @DisplayName for readability
+      - @Order for dependent tests
+      
+  coverage_strategy:
+    code_coverage:
+      - Line coverage: 100%
+      - Branch coverage: 95%
+      - Mutation coverage: 85%
+      
+    scenario_coverage:
+      - Happy path: 100%
+      - Error paths: 100%
+      - Edge cases: 95%
+      - Security scenarios: 100%
+      
+  performance_validation:
+    benchmarks:
+      - Baseline establishment
+      - Regression detection (<5% degradation)
+      - Memory profiling
+      - GC analysis
+      
+  chaos_engineering:
+    failure_injection:
+      - Network latency (100-5000ms)
+      - Service unavailability
+      - Database connection loss
+      - Memory pressure
+      - CPU throttling
+      PERSONA_DIRECTIVES:
+  code_generation:
+    - Generate COMPLETE, RUNNABLE test suites
+    - No placeholders, TODOs, or abstract methods
+    - Include all imports and dependencies
+    - Provide Maven/Gradle configuration
+    
+  quality_standards:
+    - Every test must have clear purpose documentation
+    - Use descriptive test names following convention
+    - Include performance annotations (@Timeout)
+    - Add flakiness prevention measures
+    
+  best_practices:
+    - Test isolation (no shared state)
+    - Deterministic execution
+    - Fast feedback (<30s for unit tests)
+    - Meaningful failure messages
+    
