@@ -1,0 +1,872 @@
+CONTEXT:
+  domain: Enterprise Web Application Development
+  scale_metrics:
+    concurrent_users: 10000
+    requests_per_second: 1000
+    data_volume: 1M+ records
+  constraints:
+    language_version: Java 17 (LTS)
+    framework_version: Spring Boot 3.2.x
+    build_tool: Maven 3.9+
+    deployment: Docker/Kubernetes ready
+  team_context:
+    skill_level: Mid-to-Senior Spring developers
+    existing_stack: Spring ecosystem familiarity
+  integration_points:
+    database: PostgreSQL 15+
+    api_format: RESTful JSON
+    authentication: JWT/OAuth2 ready
+    monitoring: Prometheus/Grafana compatible
+    REQUIREMENTS:
+  functional:
+    - Complete CRUD REST API with pagination and sorting
+    - Bean Validation with custom validators
+    - Global exception handling with detailed error responses
+    - Audit trail with created/modified timestamps
+    - Search and filter capabilities
+    - Bulk operations support
+  non_functional:
+    performance:
+      p99_latency: <100ms
+      throughput: 1000 RPS minimum
+      connection_pool: HikariCP optimized
+    security:
+      - OWASP Top 10 compliance
+      - Input sanitization
+      - SQL injection prevention
+      - XSS protection
+      - CSRF tokens
+    scalability:
+      - Stateless architecture
+      - Horizontal scaling ready
+      - Database connection pooling
+    reliability:
+      sla: 99.9% uptime
+      error_rate: <0.1%
+  compliance:
+    - GDPR data handling
+    - PCI-DSS for payment data
+    - HIPAA for health data
+    ARCHITECTURE:
+  pattern: Clean Architecture with Hexagonal principles
+  style: RESTful Microservice-ready Monolith
+  layers:
+    presentation:
+      - REST Controllers with OpenAPI 3.0
+      - Request/Response DTOs with validation
+      - Exception mappers
+    application:
+      - Service interfaces and implementations
+      - Use case orchestration
+      - Transaction boundaries
+    domain:
+      - JPA entities with business rules
+      - Value objects
+      - Domain events
+    infrastructure:
+      - Spring Data JPA repositories
+      - External service adapters
+      - Configuration classes
+  data_flow:
+    - Client → Controller → Service → Repository → Database
+    - Response ← Mapper ← Service ← Repository ← Database
+  cross_cutting:
+    - AOP for logging/metrics
+    - Interceptors for audit
+    - Filters for security
+    FRAMEWORK:
+  core:
+    language: Java 17
+    framework: Spring Boot 3.2.x
+    build: Maven 3.9+
+  dependencies:
+    web:
+      - spring-boot-starter-web
+      - spring-boot-starter-validation
+      - springdoc-openapi-starter-webmvc-ui:2.3.0
+    persistence:
+      - spring-boot-starter-data-jpa
+      - postgresql:42.7.1
+      - flyway-core
+      - hibernate-jpamodelgen
+    utilities:
+      - lombok:1.18.30
+      - mapstruct:1.5.5.Final
+      - commons-lang3:3.14.0
+    testing:
+      - spring-boot-starter-test
+      - testcontainers:1.19.3
+      - rest-assured:5.4.0
+      - mockito-inline:5.2.0
+    monitoring:
+      - spring-boot-starter-actuator
+      - micrometer-registry-prometheus
+  configuration:
+    database: PostgreSQL 15+
+    caching: Spring Cache with Caffeine
+    messaging: Spring Events (internal)
+    deployment: Docker multi-stage build
+    TECHNOLOGY:
+  persistence_optimization:
+    - Connection pool: HikariCP with 20 connections
+    - Query hints: @QueryHints for read-only
+    - Batch processing: @BatchSize(25)
+    - Lazy loading: FetchType.LAZY default
+    - Second-level cache: Hibernate L2 cache
+  api_standards:
+    - REST maturity: Level 2 (HTTP verbs + resources)
+    - Content negotiation: JSON default, XML optional
+    - HATEOAS: Links for resource navigation
+    - Versioning: URI path versioning (/api/v1)
+  security_stack:
+    - Authentication: Spring Security with JWT
+    - Authorization: Method-level with @PreAuthorize
+    - Encryption: BCrypt for passwords
+    - Headers: Security headers via filter
+    PERSONA:
+  identity: SPRING-FORGE Elite Development Collective
+  expertise:
+    - 1500+ years combined Spring Boot experience
+    - Former Spring Framework contributors
+    - FAANG principal engineers
+    - PostgreSQL optimization specialists
+  approach:
+    - Zero-tolerance for compilation errors
+    - Production-first mindset
+    - Performance-obsessed
+    - Security-paranoid
+
+
+    package com.springforge.domain.entity;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.GenericGenerator;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+@Entity
+@Table(name = "products", indexes = {
+    @Index(name = "idx_product_name", columnList = "name"),
+    @Index(name = "idx_product_category", columnList = "category"),
+    @Index(name = "idx_product_active", columnList = "active")
+})
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class Product {
+    
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(updatable = false, nullable = false)
+    @EqualsAndHashCode.Include
+    private UUID id;
+    
+    @NotBlank(message = "Product name is required")
+    @Size(min = 3, max = 100, message = "Product name must be between 3 and 100 characters")
+    @Column(nullable = false, length = 100)
+    private String name;
+    
+    @Size(max = 500, message = "Description cannot exceed 500 characters")
+    @Column(length = 500)
+    private String description;
+    
+    @NotNull(message = "Price is required")
+    @DecimalMin(value = "0.01", message = "Price must be greater than 0")
+    @Digits(integer = 10, fraction = 2, message = "Price format is invalid")
+    @Column(nullable = false, precision = 12, scale = 2)
+    private BigDecimal price;
+    
+    @NotNull(message = "Quantity is required")
+    @Min(value = 0, message = "Quantity cannot be negative")
+    @Column(nullable = false)
+    private Integer quantity;
+    
+    @NotNull(message = "Category is required")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 50)
+    private ProductCategory category;
+    
+    @Column(nullable = false)
+    @Builder.Default
+    private Boolean active = true;
+    
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+    
+    @UpdateTimestamp
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+    
+    @Version
+    private Long version;
+    
+    public enum ProductCategory {
+        ELECTRONICS, CLOTHING, FOOD, BOOKS, TOYS, SPORTS, HOME, BEAUTY, AUTOMOTIVE, OTHER
+    }
+}
+
+package com.springforge.infrastructure.repository;
+
+import com.springforge.domain.entity.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+@Repository
+public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpecificationExecutor<Product> {
+    
+    @Query("SELECT p FROM Product p WHERE p.active = true AND p.id = :id")
+    Optional<Product> findActiveById(@Param("id") UUID id);
+    
+    @Query("SELECT p FROM Product p WHERE p.active = true")
+    Page<Product> findAllActive(Pageable pageable);
+    
+    @Query("SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%')) AND p.active = true")
+    Page<Product> searchByName(@Param("name") String name, Pageable pageable);
+    
+    @Query("SELECT p FROM Product p WHERE p.category = :category AND p.active = true")
+    Page<Product> findByCategory(@Param("category") Product.ProductCategory category, Pageable pageable);
+    
+    @Query("SELECT p FROM Product p WHERE p.price BETWEEN :minPrice AND :maxPrice AND p.active = true")
+    Page<Product> findByPriceRange(@Param("minPrice") BigDecimal minPrice, 
+                                   @Param("maxPrice") BigDecimal maxPrice, 
+                                   Pageable pageable);
+    
+    @Modifying
+    @Query("UPDATE Product p SET p.active = false WHERE p.id = :id")
+    void softDelete(@Param("id") UUID id);
+    
+    @Query(value = "SELECT * FROM products WHERE quantity < :threshold AND active = true", nativeQuery = true)
+    List<Product> findLowStockProducts(@Param("threshold") Integer threshold);
+    
+    @EntityGraph(attributePaths = {"category"})
+    @Query("SELECT p FROM Product p WHERE p.quantity > 0 AND p.active = true")
+    List<Product> findAvailableProducts();
+}
+
+package com.springforge.application.service;
+
+import com.springforge.application.dto.*;
+import com.springforge.application.mapper.ProductMapper;
+import com.springforge.domain.entity.Product;
+import com.springforge.domain.exception.*;
+import com.springforge.infrastructure.repository.ProductRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+@Transactional(readOnly = true)
+public class ProductService {
+    
+    private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
+    
+    // Performance: Cached, O(1) after first call
+    @Cacheable(value = "products", key = "#id")
+    public ProductResponseDto findById(UUID id) {
+        log.debug("Fetching product with id: {}", id);
+        return productRepository.findActiveById(id)
+            .map(productMapper::toResponseDto)
+            .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
+    }
+    
+    // Performance: Paginated query, O(n) where n = page size
+    public Page<ProductResponseDto> findAll(Pageable pageable) {
+        log.debug("Fetching all products with pagination: {}", pageable);
+        return productRepository.findAllActive(pageable)
+            .map(productMapper::toResponseDto);
+    }
+    
+    @Transactional
+    @CacheEvict(value = "products", allEntries = true)
+    public ProductResponseDto create(CreateProductDto createDto) {
+        log.info("Creating new product: {}", createDto.getName());
+        
+        // Business rule: Check for duplicate names
+        if (productRepository.existsByNameAndActive(createDto.getName(), true)) {
+            throw new DuplicateResourceException("Product with name already exists: " + createDto.getName());
+        }
+        
+        Product product = productMapper.toEntity(createDto);
+        Product savedProduct = productRepository.save(product);
+        
+        log.info("Product created successfully with id: {}", savedProduct.getId());
+        return productMapper.toResponseDto(savedProduct);
+    }
+    
+    @Transactional
+    @CacheEvict(value = "products", key = "#id")
+    public ProductResponseDto update(UUID id, UpdateProductDto updateDto) {
+        log.info("Updating product with id: {}", id);
+        
+        Product product = productRepository.findActiveById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
+        
+        productMapper.updateEntity(updateDto, product);
+        Product updatedProduct = productRepository.save(product);
+        
+        log.info("Product updated successfully: {}", id);
+        return productMapper.toResponseDto(updatedProduct);
+    }
+    
+    @Transactional
+    @CacheEvict(value = "products", key = "#id")
+    public void delete(UUID id) {
+        log.info("Deleting product with id: {}", id);
+        
+        if (!productRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Product not found with id: " + id);
+        }
+        
+        productRepository.softDelete(id);
+        log.info("Product deleted successfully: {}", id);
+    }
+    
+    // Performance: Indexed query on category column
+    public Page<ProductResponseDto> findByCategory(Product.ProductCategory category, Pageable pageable) {
+        log.debug("Finding products by category: {}", category);
+        return productRepository.findByCategory(category, pageable)
+            .map(productMapper::toResponseDto);
+    }
+    
+    // Performance: Range query with BETWEEN clause
+    public Page<ProductResponseDto> findByPriceRange(BigDecimal minPrice, BigDecimal maxPrice, Pageable pageable) {
+        log.debug("Finding products in price range: {} - {}", minPrice, maxPrice);
+        
+        if (minPrice.compareTo(maxPrice) > 0) {
+            throw new InvalidRequestException("Minimum price cannot be greater than maximum price");
+        }
+        
+        return productRepository.findByPriceRange(minPrice, maxPrice, pageable)
+            .map(productMapper::toResponseDto);
+    }
+    
+    @Transactional
+    public void adjustInventory(UUID id, Integer quantityChange) {
+        log.info("Adjusting inventory for product: {}, change: {}", id, quantityChange);
+        
+        Product product = productRepository.findActiveById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
+        
+        int newQuantity = product.getQuantity() + quantityChange;
+        if (newQuantity < 0) {
+            throw new InsufficientInventoryException("Insufficient inventory for product: " + id);
+        }
+        
+        product.setQuantity(newQuantity);
+        productRepository.save(product);
+        
+        log.info("Inventory adjusted successfully for product: {}", id);
+    }
+}
+
+package com.springforge.presentation.controller;
+
+import com.springforge.application.dto.*;
+import com.springforge.application.service.ProductService;
+import com.springforge.domain.entity.Product;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/api/v1/products")
+@RequiredArgsConstructor
+@Slf4j
+@Tag(name = "Product Management", description = "Endpoints for managing products")
+public class ProductController {
+    
+    private final ProductService productService;
+    
+    @GetMapping("/{id}")
+    @Operation(summary = "Get product by ID", description = "Retrieves a single product by its unique identifier")
+    @ApiResponse(responseCode = "200", description = "Product found successfully")
+    @ApiResponse(responseCode = "404", description = "Product not found")
+    public ResponseEntity<ProductResponseDto> getProduct(
+            @Parameter(description = "Product ID", required = true)
+            @PathVariable UUID id) {
+        log.info("GET /api/v1/products/{}", id);
+        return ResponseEntity.ok(productService.findById(id));
+    }
+    
+    @GetMapping
+    @Operation(summary = "Get all products", description = "Retrieves a paginated list of all active products")
+    @ApiResponse(responseCode = "200", description = "Products retrieved successfully")
+    public ResponseEntity<Page<ProductResponseDto>> getAllProducts(
+            @PageableDefault(size = 20, sort = "name", direction = Sort.Direction.ASC) Pageable pageable) {
+        log.info("GET /api/v1/products - page: {}, size: {}", pageable.getPageNumber(), pageable.getPageSize());
+        return ResponseEntity.ok(productService.findAll(pageable));
+    }
+    
+    @PostMapping
+    @Operation(summary = "Create new product", description = "Creates a new product in the system")
+    @ApiResponse(responseCode = "201", description = "Product created successfully")
+    @ApiResponse(responseCode = "400", description = "Invalid input data")
+    @ApiResponse(responseCode = "409", description = "Product with same name already exists")
+    public ResponseEntity<ProductResponseDto> createProduct(
+            @Valid @RequestBody CreateProductDto createDto) {
+        log.info("POST /api/v1/products - Creating product: {}", createDto.getName());
+        ProductResponseDto created = productService.create(createDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
+    
+    @PutMapping("/{id}")
+    @Operation(summary = "Update product", description = "Updates an existing product")
+    @ApiResponse(responseCode = "200", description = "Product updated successfully")
+    @ApiResponse(responseCode = "404", description = "Product not found")
+    @ApiResponse(responseCode = "400", description = "Invalid input data")
+    public ResponseEntity<ProductResponseDto> updateProduct(
+            @PathVariable UUID id,
+            @Valid @RequestBody UpdateProductDto updateDto) {
+        log.info("PUT /api/v1/products/{}", id);
+        return ResponseEntity.ok(productService.update(id, updateDto));
+    }
+    
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete product", description = "Soft deletes a product from the system")
+    @ApiResponse(responseCode = "204", description = "Product deleted successfully")
+    @ApiResponse(responseCode = "404", description = "Product not found")
+    public ResponseEntity<Void> deleteProduct(@PathVariable UUID id) {
+        log.info("DELETE /api/v1/products/{}", id);
+        productService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+    
+    @GetMapping("/category/{category}")
+    @Operation(summary = "Get products by category", description = "Retrieves products filtered by category")
+    public ResponseEntity<Page<ProductResponseDto>> getProductsByCategory(
+            @PathVariable Product.ProductCategory category,
+            @PageableDefault(size = 20) Pageable pageable) {
+        log.info("GET /api/v1/products/category/{}", category);
+        return ResponseEntity.ok(productService.findByCategory(category, pageable));
+    }
+    
+    @GetMapping("/price-range")
+    @Operation(summary = "Get products by price range", description = "Retrieves products within a price range")
+    public ResponseEntity<Page<ProductResponseDto>> getProductsByPriceRange(
+            @RequestParam BigDecimal minPrice,
+            @RequestParam BigDecimal maxPrice,
+            @PageableDefault(size = 20) Pageable pageable) {
+        log.info("GET /api/v1/products/price-range - min: {}, max: {}", minPrice, maxPrice);
+        return ResponseEntity.ok(productService.findByPriceRange(minPrice, maxPrice, pageable));
+    }
+    
+    @PatchMapping("/{id}/inventory")
+    @Operation(summary = "Adjust product inventory", description = "Adjusts the inventory quantity of a product")
+    public ResponseEntity<Void> adjustInventory(
+            @PathVariable UUID id,
+            @RequestParam Integer quantityChange) {
+        log.info("PATCH /api/v1/products/{}/inventory - change: {}", id, quantityChange);
+        productService.adjustInventory(id, quantityChange);
+        return ResponseEntity.noContent().build();
+    }
+}
+
+// curl examples:
+// GET:    curl -X GET "http://localhost:8080/api/v1/products?page=0&size=10&sort=name,asc"
+// GET:    curl -X GET "http://localhost:8080/api/v1/products/550e8400-e29b-41d4-a716-446655440000"
+// POST:   curl -X POST "http://localhost:8080/api/v1/products" -H "Content-Type: application/json" -d '{"name":"Laptop","description":"High-performance laptop","price":999.99,"quantity":50,"category":"ELECTRONICS"}'
+// PUT:    curl -X PUT "http://localhost:8080/api/v1/products/550e8400-e29b-41d4-a716-446655440000" -H "Content-Type: application/json" -d '{"name":"Updated Laptop","price":899.99}'
+// DELETE: curl -X DELETE "http://localhost:8080/api/v1/products/550e8400-e29b-41d4-a716-446655440000"
+// PATCH:  curl -X PATCH "http://localhost:8080/api/v1/products/550e8400-e29b-41d4-a716-446655440000/inventory?quantityChange=-5"
+
+package com.springforge.presentation.exception;
+
+import com.springforge.domain.exception.*;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
+
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
+@RestControllerAdvice
+@Slf4j
+public class GlobalExceptionHandler {
+    
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ProblemDetail> handleResourceNotFound(
+            ResourceNotFoundException ex, WebRequest request) {
+        log.error("Resource not found: {}", ex.getMessage());
+        
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+            HttpStatus.NOT_FOUND, ex.getMessage());
+        problemDetail.setTitle("Resource Not Found");
+        problemDetail.setProperty("timestamp", LocalDateTime.now());
+        problemDetail.setProperty("path", request.getDescription(false));
+        
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problemDetail);
+    }
+    
+    @ExceptionHandler(DuplicateResourceException.class)
+    public ResponseEntity<ProblemDetail> handleDuplicateResource(
+            DuplicateResourceException ex, WebRequest request) {
+        log.error("Duplicate resource: {}", ex.getMessage());
+        
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+            HttpStatus.CONFLICT, ex.getMessage());
+        problemDetail.setTitle("Duplicate Resource");
+        problemDetail.setProperty("timestamp", LocalDateTime.now());
+        
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(problemDetail);
+    }
+    
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ProblemDetail> handleValidationExceptions(
+            MethodArgumentNotValidException ex) {
+        log.error("Validation failed: {}", ex.getMessage());
+        
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+            HttpStatus.BAD_REQUEST, "Validation failed");
+        problemDetail.setTitle("Validation Error");
+        problemDetail.setProperty("errors", errors);
+        problemDetail.setProperty("timestamp", LocalDateTime.now());
+        
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
+    }
+    
+    @ExceptionHandler(InvalidRequestException.class)
+    public ResponseEntity<ProblemDetail> handleInvalidRequest(
+            InvalidRequestException ex, WebRequest request) {
+        log.error("Invalid request: {}", ex.getMessage());
+        
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+            HttpStatus.BAD_REQUEST, ex.getMessage());
+        problemDetail.setTitle("Invalid Request");
+        problemDetail.setProperty("timestamp", LocalDateTime.now());
+        
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
+    }
+    
+    @ExceptionHandler(InsufficientInventoryException.class)
+    public ResponseEntity<ProblemDetail> handleInsufficientInventory(
+            InsufficientInventoryException ex) {
+        log.error("Insufficient inventory: {}", ex.getMessage());
+        
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+            HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
+        problemDetail.setTitle("Insufficient Inventory");
+        problemDetail.setProperty("timestamp", LocalDateTime.now());
+        
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(problemDetail);
+    }
+    
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ProblemDetail> handleGlobalException(
+            Exception ex, WebRequest request) {
+        log.error("Unexpected error occurred", ex);
+        
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+            HttpStatus.INTERNAL_SERVER_ERROR, 
+            "An unexpected error occurred. Please try again later.");
+        problemDetail.setTitle("Internal Server Error");
+        problemDetail.setProperty("timestamp", LocalDateTime.now());
+        problemDetail.setProperty("error_id", java.util.UUID.randomUUID().toString());
+        
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(problemDetail);
+    }
+}
+
+# application.yml
+spring:
+  application:
+    name: spring-forge-product-service
+  
+  datasource:
+    url: jdbc:postgresql://localhost:5432/productdb
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      idle-timeout: 300000
+      connection-timeout: 20000
+      leak-detection-threshold: 60000
+  
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        jdbc:
+          batch_size: 25
+        order_inserts: true
+        order_updates: true
+        query:
+          in_clause_parameter_padding: true
+        generate_statistics: false
+        cache:
+          use_second_level_cache: true
+          region:
+            factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
+    show-sql: false
+    open-in-view: false
+  
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+  
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=1000,expireAfterWrite=5m
+  
+server:
+  port: 8080
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain
+  
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  
+logging:
+  level:
+    com.springforge: DEBUG
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql: TRACE
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/application.log
+    
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+    package com.springforge.presentation.controller;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.springforge.application.dto.*;
+import com.springforge.application.service.ProductService;
+import com.springforge.domain.entity.Product;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@WebMvcTest(ProductController.class)
+class ProductControllerTest {
+    
+    @Autowired
+    private MockMvc mockMvc;
+    
+    @Autowired
+    private ObjectMapper objectMapper;
+    
+    @MockBean
+    private ProductService productService;
+    
+    private ProductResponseDto sampleProduct;
+    private CreateProductDto createDto;
+    private UUID productId;
+    
+    @BeforeEach
+    void setUp() {
+        productId = UUID.randomUUID();
+        sampleProduct = ProductResponseDto.builder()
+            .id(productId)
+            .name("Test Product")
+            .description("Test Description")
+            .price(new BigDecimal("99.99"))
+            .quantity(100)
+            .category(Product.ProductCategory.ELECTRONICS)
+            .active(true)
+            .createdAt(LocalDateTime.now())
+            .updatedAt(LocalDateTime.now())
+            .build();
+            
+        createDto = CreateProductDto.builder()
+            .name("New Product")
+            .description("New Description")
+            .price(new BigDecimal("149.99"))
+            .quantity(50)
+            .category(Product.ProductCategory.ELECTRONICS)
+            .build();
+    }
+    
+    @Test
+    void getProduct_ShouldReturnProduct_WhenProductExists() throws Exception {
+        when(productService.findById(productId)).thenReturn(sampleProduct);
+        
+        mockMvc.perform(get("/api/v1/products/{id}", productId))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(productId.toString()))
+            .andExpect(jsonPath("$.name").value("Test Product"))
+            .andExpect(jsonPath("$.price").value(99.99));
+        
+        verify(productService).findById(productId);
+    }
+    
+    @Test
+    void getAllProducts_ShouldReturnPagedProducts() throws Exception {
+        PageRequest pageable = PageRequest.of(0, 20);
+        when(productService.findAll(any())).thenReturn(
+            new PageImpl<>(List.of(sampleProduct), pageable, 1));
+        
+        mockMvc.perform(get("/api/v1/products")
+                .param("page", "0")
+                .param("size", "20"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content[0].name").value("Test Product"))
+            .andExpect(jsonPath("$.totalElements").value(1));
+        
+        verify(productService).findAll(any());
+    }
+    
+    @Test
+    void createProduct_ShouldReturnCreatedProduct() throws Exception {
+        when(productService.create(any(CreateProductDto.class))).thenReturn(sampleProduct);
+        
+        mockMvc.perform(post("/api/v1/products")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(createDto)))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.name").value("Test Product"));
+        
+        verify(productService).create(any(CreateProductDto.class));
+    }
+    
+    @Test
+    void createProduct_ShouldReturnBadRequest_WhenValidationFails() throws Exception {
+        CreateProductDto invalidDto = CreateProductDto.builder()
+            .name("") // Invalid: empty name
+            .price(new BigDecimal("-10")) // Invalid: negative price
+            .build();
+        
+        mockMvc.perform(post("/api/v1/products")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(invalidDto)))
+            .andExpect(status().isBadRequest());
+        
+        verify(productService, never()).create(any());
+    }
+    
+    @Test
+    void updateProduct_ShouldReturnUpdatedProduct() throws Exception {
+        UpdateProductDto updateDto = UpdateProductDto.builder()
+            .name("Updated Product")
+            .price(new BigDecimal("199.99"))
+            .build();
+        
+        when(productService.update(eq(productId), any(UpdateProductDto.class)))
+            .thenReturn(sampleProduct);
+        
+        mockMvc.perform(put("/api/v1/products/{id}", productId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateDto)))
+            .andExpect(status().isOk());
+        
+        verify(productService).update(eq(productId), any(UpdateProductDto.class));
+    }
+    
+    @Test
+    void deleteProduct_ShouldReturnNoContent() throws Exception {
+        doNothing().when(productService).delete(productId);
+        
+        mockMvc.perform(delete("/api/v1/products/{id}", productId))
+            .andExpect(status().isNoContent());
+        
+        verify(productService).delete(productId);
+    }
+    
+    @Test
+    void adjustInventory_ShouldReturnNoContent() throws Exception {
+        doNothing().when(productService).adjustInventory(productId, -5);
+        
+        mockMvc.perform(patch("/api/v1/products/{id}/inventory", productId)
+                .param("quantityChange", "-5"))
+            .andExpect(status().isNoContent());
+        
+        verify(productService).adjustInventory(productId, -5);
+    }
+}
