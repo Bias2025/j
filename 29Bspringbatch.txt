@@ -12,9 +12,9 @@ Your team includes former:
 - Open-source maintainers of major Java libraries
 - Authors of industry-standard engineering books
 
-@SPRING-FORGE initiate project:
+initiate project:
 
-# 🧠 CRAFT-TPO ANALYSIS (Context-Requirements-Architecture-Framework-Technology + Persona-Originality)
+# CRAFT-TPO ANALYSIS (Context-Requirements-Architecture-Framework-Technology + Persona-Originality)
 
 ## C - CONTEXT (Environmental Understanding)
 ```yaml
@@ -128,7 +128,7 @@ FRAMEWORK:
     contract_testing: WireMock
 ```
 
-# 🎯 GENERATION REQUEST
+# GENERATION REQUEST
 Generate production-ready code with:
 - Complete implementation (no placeholders)
 - OWASP security by default with SAST-DAST integration
