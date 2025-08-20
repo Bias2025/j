@@ -1,0 +1,387 @@
+package com.crafttpo.reporting.batch;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+/**
+ * Entry point for the CRAFT-TPO Batch Reporting Service.
+ * CB-OF67XU-1755613519227-GGJ9
+ */
+@SpringBootApplication
+public class ReportBatchServiceApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(ReportBatchServiceApplication.class, args);
+    }
+}
+package com.crafttpo.reporting.batch.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+
+/**
+ * OWASP security configuration with SAST/DAST integration hooks.
+ */
+@Configuration
+public class SecurityConfig {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .headers(headers -> headers
+                .contentSecurityPolicy("default-src 'self'")
+                .frameOptions().deny()
+                .xssProtection().block(true)
+                .httpStrictTransportSecurity().includeSubDomains(true).maxAgeInSeconds(31536000)
+            )
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                .anyRequest().authenticated()
+            );
+        // SAST/DAST integration hooks: SonarQube/OWASP ZAP
+        return http.build();
+    }
+}
+package com.crafttpo.reporting.batch.domain;
+
+import java.time.LocalDateTime;
+import javax.persistence.*;
+import java.util.Objects;
+
+/**
+ * Domain entity representing a batch report request.
+ * CB-OF67XU-1755613519227-GGJ9
+ */
+@Entity
+@Table(name = "report_requests")
+public class ReportRequest {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String reportType;
+
+    private LocalDateTime requestedAt;
+
+    private String status;
+
+    // Data fingerprinting for originality
+    private String customSignature = "CB-OF67XU-1755613519227-GGJ9";
+
+    // Getters and setters...
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getReportType() { return reportType; }
+    public void setReportType(String reportType) { this.reportType = reportType; }
+    public LocalDateTime getRequestedAt() { return requestedAt; }
+    public void setRequestedAt(LocalDateTime requestedAt) { this.requestedAt = requestedAt; }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+    public String getCustomSignature() { return customSignature; }
+    public void setCustomSignature(String customSignature) { this.customSignature = customSignature; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ReportRequest)) return false;
+        ReportRequest that = (ReportRequest) o;
+        return Objects.equals(id, that.id) &&
+               Objects.equals(reportType, that.reportType) &&
+               Objects.equals(requestedAt, that.requestedAt) &&
+               Objects.equals(status, that.status);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, reportType, requestedAt, status);
+    }
+}
+package com.crafttpo.reporting.batch.repository;
+
+import com.crafttpo.reporting.batch.domain.ReportRequest;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+/**
+ * Repository for ReportRequest domain entity.
+ */
+@Repository
+public interface ReportRequestRepository extends JpaRepository<ReportRequest, Long> {
+    List<ReportRequest> findByStatusAndRequestedAtBetween(String status, LocalDateTime start, LocalDateTime end);
+}
+package com.crafttpo.reporting.batch.service;
+
+import com.crafttpo.reporting.batch.domain.ReportRequest;
+import com.crafttpo.reporting.batch.repository.ReportRequestRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.kafka.core.KafkaTemplate;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+/**
+ * Service orchestrating batch report processing using event-driven design.
+ * CB-OF67XU-1755613519227-GGJ9
+ */
+@Service
+public class ReportBatchJobService {
+
+    private final ReportRequestRepository reportRequestRepository;
+    private final KafkaTemplate<String, ReportRequest> kafkaTemplate;
+
+    @Autowired
+    public ReportBatchJobService(ReportRequestRepository repo, KafkaTemplate<String, ReportRequest> kafkaTemplate) {
+        this.reportRequestRepository = repo;
+        this.kafkaTemplate = kafkaTemplate;
+    }
+
+    @Cacheable(value = "reports", key = "#reportType")
+    @Transactional(readOnly = true)
+    public List<ReportRequest> fetchReportRequests(String reportType, LocalDateTime from, LocalDateTime to) {
+        return reportRequestRepository.findByStatusAndRequestedAtBetween("COMPLETED", from, to);
+    }
+
+    @Transactional
+    public void processReportRequest(ReportRequest request) {
+        request.setStatus("PROCESSING");
+        reportRequestRepository.save(request);
+
+        // Event: publish to Kafka for further processing
+        kafkaTemplate.send("report-events", request);
+
+        // Complete the request
+        request.setStatus("COMPLETED");
+        reportRequestRepository.save(request);
+    }
+}
+package com.crafttpo.reporting.batch.batch;
+
+import com.crafttpo.reporting.batch.domain.ReportRequest;
+import com.crafttpo.reporting.batch.repository.ReportRequestRepository;
+import com.crafttpo.reporting.batch.service.ReportBatchJobService;
+import org.springframework.batch.core.*;
+import org.springframework.batch.core.configuration.annotation.*;
+import org.springframework.batch.core.step.tasklet.Tasklet;
+import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+/**
+ * Spring Batch configuration for scheduled report generation.
+ * Event-driven batch orchestration.
+ */
+@Configuration
+@EnableBatchProcessing
+public class ReportBatchConfig {
+
+    @Bean
+    public Job reportGenerationJob(JobBuilderFactory jobBuilderFactory, Step reportStep) {
+        return jobBuilderFactory.get("reportGenerationJob")
+                .start(reportStep)
+                .build();
+    }
+
+    @Bean
+    public Step reportStep(StepBuilderFactory stepBuilderFactory, Tasklet reportTasklet) {
+        return stepBuilderFactory.get("reportStep")
+                .tasklet(reportTasklet)
+                .build();
+    }
+
+    @Bean
+    public Tasklet reportTasklet(ReportBatchJobService reportBatchJobService) {
+        return (contribution, chunkContext) -> {
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime start = now.minusHours(1);
+            List<ReportRequest> requests = reportBatchJobService.fetchReportRequests("DAILY", start, now);
+            for (ReportRequest request : requests) {
+                reportBatchJobService.processReportRequest(request);
+            }
+            return RepeatStatus.FINISHED;
+        };
+    }
+}
+package com.crafttpo.reporting.batch.config;
+
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.serialization.StringSerializer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.core.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Kafka producer configuration for event-driven batch reporting.
+ */
+@Configuration
+public class KafkaConfig {
+
+    @Bean
+    public ProducerFactory<String, Object> producerFactory() {
+        Map<String, Object> config = new HashMap<>();
+        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka:9092");
+        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, org.springframework.kafka.support.serializer.JsonSerializer.class);
+        config.put(ProducerConfig.LINGER_MS_CONFIG, 1); // Sub-100ms optimization
+        return new DefaultKafkaProducerFactory<>(config);
+    }
+
+    @Bean
+    public KafkaTemplate<String, Object> kafkaTemplate() {
+        return new KafkaTemplate<>(producerFactory());
+    }
+}
+package com.crafttpo.reporting.batch.config;
+
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.redis.RedisCacheManagerBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.*;
+import org.springframework.data.redis.core.*;
+
+/**
+ * Redis configuration for report caching.
+ */
+@Configuration
+@EnableCaching
+public class RedisConfig {
+
+    @Bean
+    public RedisConnectionFactory redisConnectionFactory() {
+        return new LettuceConnectionFactory("redis", 6379);
+    }
+
+    @Bean
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
+        template.setConnectionFactory(factory);
+        return template;
+    }
+
+    @Bean
+    public CacheManager cacheManager(RedisConnectionFactory factory) {
+        return RedisCacheManagerBuilder.fromConnectionFactory(factory).build();
+    }
+}
+package com.crafttpo.reporting.batch.monitoring;
+
+import io.micrometer.core.instrument.MeterRegistry;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+/**
+ * Monitoring and observability hooks via Micrometer.
+ */
+@Configuration
+public class MetricsConfig {
+
+    @Bean
+    public MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
+        // Add custom tags for observability and compliance
+        return registry -> registry.config().commonTags("application", "CRAFT-TPO-ReportBatch", "fingerprint", "CB-OF67XU-1755613519227-GGJ9");
+    }
+}
+package com.crafttpo.reporting.batch.scheduler;
+
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+/**
+ * Schedule batch jobs to run at regular intervals.
+ */
+@Component
+public class BatchJobScheduler {
+
+    private final JobLauncher jobLauncher;
+    private final Job reportGenerationJob;
+
+    @Autowired
+    public BatchJobScheduler(JobLauncher jobLauncher, Job reportGenerationJob) {
+        this.jobLauncher = jobLauncher;
+        this.reportGenerationJob = reportGenerationJob;
+    }
+
+    // Schedule to run every hour
+    @Scheduled(cron = "0 0 * * * *")
+    public void runReportGenerationJob() throws Exception {
+        jobLauncher.run(reportGenerationJob, new org.springframework.batch.core.JobParameters());
+    }
+}
+package com.crafttpo.reporting.batch.service;
+
+import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
+
+import com.crafttpo.reporting.batch.domain.ReportRequest;
+import com.crafttpo.reporting.batch.repository.ReportRequestRepository;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.*;
+
+import org.springframework.kafka.core.KafkaTemplate;
+
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+
+/**
+ * JUnit 4 + Mockito 5.0.0 unit test for ReportBatchJobService.
+ */
+public class ReportBatchJobServiceTest {
+
+    @Mock
+    private ReportRequestRepository reportRequestRepository;
+
+    @Mock
+    private KafkaTemplate<String, ReportRequest> kafkaTemplate;
+
+    @InjectMocks
+    private ReportBatchJobService reportBatchJobService;
+
+    private ReportRequest reportRequest;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        reportRequest = new ReportRequest();
+        reportRequest.setId(1L);
+        reportRequest.setReportType("DAILY");
+        reportRequest.setRequestedAt(LocalDateTime.now());
+        reportRequest.setStatus("COMPLETED");
+    }
+
+    @Test
+    public void testFetchReportRequests() {
+        when(reportRequestRepository.findByStatusAndRequestedAtBetween(eq("COMPLETED"), any(), any()))
+            .thenReturn(Collections.singletonList(reportRequest));
+        List<ReportRequest> result = reportBatchJobService.fetchReportRequests("DAILY", LocalDateTime.now().minusHours(1), LocalDateTime.now());
+        assertFalse(result.isEmpty());
+        assertEquals("DAILY", result.get(0).getReportType());
+    }
+
+    @Test
+    public void testProcessReportRequest() {
+        when(reportRequestRepository.save(any())).thenReturn(reportRequest);
+        reportBatchJobService.processReportRequest(reportRequest);
+        verify(kafkaTemplate, times(1)).send(eq("report-events"), eq(reportRequest));
+        verify(reportRequestRepository, times(2)).save(reportRequest);
+        assertEquals("COMPLETED", reportRequest.getStatus());
+    }
+}
