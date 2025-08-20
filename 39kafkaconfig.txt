@@ -13,7 +13,7 @@ CONTEXT:
   team:
     - Size: 15-20 engineers
     - Skill level: Senior/Principal level
-    - Existing stack: Spring Boot microservices, PostgreSQL, Redis
+    - Existing stack:  microservices, PostgreSQL, Redis
   integration:
     - Schema Registry for Avro/Protobuf
     - Monitoring: Prometheus, Grafana, Kafka Manager
@@ -21,6 +21,7 @@ CONTEXT:
     - Event sourcing patterns
     REQUIREMENTS:
   functional:
+     -Generate a Kafka Configuration file that allows Kafka consumer to connect to Kafka producer 
     - Produce messages with transactional guarantees
     - Consume messages with configurable acknowledgment strategies
     - Dead letter queue (DLQ) handling with retry mechanisms
@@ -79,8 +80,8 @@ CONTEXT:
     - DLQ → Retry Topics → Alert System
     FRAMEWORK:
   core:
-    language: Java 17 (ZGC, Records, Pattern Matching)
-    framework: Spring Boot 3.2.x
+    language: Kafka
+    framework: Kafka
   kafka:
     client: spring-kafka 3.1.x
     serialization: Avro with Schema Registry
@@ -119,4 +120,3 @@ CONTEXT:
             "Failure injection testing"
         };
     }
-    
