@@ -1,0 +1,37 @@
+CONTEXT:
+  domain: Enterprise Data Layer
+  scale: High-performance SQL operations
+  constraints: PostgreSQL-specific optimizations
+  team: Advanced Spring Boot developers
+  integration: Spring Data JPA, Flyway, HikariCP
+  REQUIREMENTS:
+  functional:
+     -generate a sql postgres configuration file that allows connectivity to springboot application
+    - PostgreSQL connection management
+    - Schema migration with Flyway
+    - Connection pooling optimization
+    - Multi-environment configuration
+  non_functional:
+    performance: Sub-10ms connection acquisition
+    security: Encrypted connections, credential management
+    scalability: 1000+ concurrent connections
+    reliability: 99.99% uptime with failover
+    ARCHITECTURE:
+  pattern: Layered Architecture
+  style: Configuration-driven
+  layers:
+    - configuration: Database configs
+    - migration: Flyway scripts
+    - persistence: JPA/Hibernate
+    - monitoring: Connection metrics
+  data_flow: Connection Pool → PostgreSQL
+  FRAMEWORK:
+  core:
+    language: Java 17
+    framework: Spring Boot 3.x
+  persistence:
+    database: PostgreSQL 15+
+    orm: Spring Data JPA
+    migration: Flyway
+  connection_pool: HikariCP
+  monitoring: Micrometer
