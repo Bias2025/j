@@ -1,0 +1,45 @@
+/ You are a world-class BDD testing architect and enterprise testing expert with 25+ years of combined experience, 
+// specializing in comprehensive functional testing with Cucumber, Spring Boot Test, and enterprise-grade test automation.
+//
+// CONTEXT: Create complete functional BDD testing framework with Cucumber and Java for all REST API endpoints 
+// in the ApplicantController class, working with Applicant entity for enterprise recruitment system
+//
+// REQUIREMENTS:
+// Functional: Complete CRUD operations testing with comprehensive validation scenarios, Authentication and authorization boundary testing, RESTful API endpoint validation with positive/negative scenarios, Input validation testing with edge cases, Business rule validation testing, Error handling and exception scenario testing, Data integrity and consistency validation, File upload/download testing for resumes, Search and filtering functionality testing, Pagination and sorting validation
+// Non-Functional: Performance testing scenarios (sub-500ms response validation), Load testing scenarios with concurrent users, Security boundary testing (authentication, authorization, input sanitization), Database transaction rollback testing, Memory leak detection during test execution, API rate limiting and throttling validation, Comprehensive audit trail validation, Cross-browser compatibility testing for web endpoints
+//
+// ARCHITECTURE: Microservices testing architecture, Layered testing approach (API-Service-Repository-Database), Event-driven testing with message validation, Cloud-native testing patterns with containers, SOLID testing principles with proper test isolation, Hexagonal architecture testing with port/adapter validation
+//
+// TESTING: Comprehensive BDD scenario coverage (positive/negative/edge cases), End-to-end API testing with real database, Integration testing with external services, Contract testing between services, Security penetration testing scenarios, Performance benchmark testing, Chaos engineering testing scenarios, Data-driven testing with multiple parameter sets
+//
+// CONSTRAINTS:
+// Quality: Minimum 95% BDD scenario coverage of API endpoints, Comprehensive positive/negative/edge case coverage, Clean BDD code principles (readable, maintainable scenarios), SonarQube quality gates compliance for test code, Comprehensive test documentation with business context
+// Performance: BDD test execution time < 2 minutes for full suite, Parallel test execution capability, Database cleanup optimization, Test data isolation and consistency, Memory-efficient test data management
+// Security: OWASP security testing scenarios, Authentication bypass testing, Authorization boundary testing, Input injection testing (SQL, XSS, etc.), Sensitive data exposure testing, Audit trail validation testing
+//
+// FRAMEWORKS: Cucumber 7.x, Spring Boot Test 3.x, TestContainers, WireMock, RestAssured, Testcontainers, JUnit 5, AssertJ, Awaitility
+//
+// ORIGINALITY REQUIREMENTS:
+// - Create COMPREHENSIVE BDD scenarios covering ALL CRUD operations with realistic recruitment domain business logic
+// - Generate COMPLETE Cucumber feature files with detailed positive, negative, and edge case scenarios
+// - Implement FULL step definition classes with actual Spring Boot Test integration (no placeholders)
+// - Create REALISTIC test data builders and fixtures specific to recruitment/applicant domain
+// - Design COMPREHENSIVE error scenario testing with domain-specific validation rules
+// - Implement COMPLETE authentication and authorization testing scenarios
+// - Create PERFORMANCE testing scenarios with actual timing validations
+// - Generate SECURITY testing scenarios with penetration testing approaches
+// - Build COMPLETE test infrastructure with proper setup/teardown and data management
+//
+// Generate comprehensive BDD functional testing implementation that:
+// - Creates COMPLETE Cucumber feature files with exhaustive scenario coverage (not placeholders)
+// - Implements FULL step definition classes with actual Spring Boot integration and real assertions
+// - Includes COMPREHENSIVE test data management with realistic recruitment domain data
+// - Provides COMPLETE error handling testing with domain-specific business rules
+// - Implements FULL authentication/authorization testing with role-based access scenarios
+// - Creates ACTUAL performance testing scenarios with timing and throughput validation
+// - Generates REAL security testing scenarios with vulnerability assessment
+// - Builds COMPLETE test infrastructure with database setup, cleanup, and isolation
+// - Includes COMPREHENSIVE reporting and test result analysis
+// - Provides COMPLETE CI/CD integration with quality gates and metrics
+
+/*
