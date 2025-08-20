@@ -1,0 +1,270 @@
+# AWS EKS Microservices Platform Configuration for Spring Boot Services
+# Covers blue-green deploys, service mesh, API gateway, autoscaling, security, logging, and compliance.
+
+---
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: enterprise-microservices
+  region: us-east-1
+  version: "1.28"
+managedNodeGroups:
+  - name: general-ng
+    instanceTypes: ["m5.large", "t3.large", "m6g.large"] # Spot & Graviton mix
+    minSize: 2
+    maxSize: 20
+    desiredCapacity: 4
+    spot: true
+    labels: { role: general }
+    availabilityZones: ["us-east-1a", "us-east-1b", "us-east-1c"]
+    volumeSize: 50
+    tags:
+      karpenter.sh/capacity-type: "spot"
+      karpenter.sh/provisioner-name: "default"
+fargateProfiles:
+  - name: app-fargate
+    selectors:
+      - namespace: app
+vpc:
+  subnets:
+    private:
+      us-east-1a: { id: subnet-xxxx }
+      us-east-1b: { id: subnet-yyyy }
+      us-east-1c: { id: subnet-zzzz }
+  clusterEndpoints:
+    publicAccess: true
+    privateAccess: true
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: app
+  labels:
+    istio-injection: enabled # If using Istio/App Mesh
+    mesh: aws-app-mesh
+
+---
+# External Secrets Operator - AWS Secrets Manager Integration
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: db-secrets
+  namespace: app
+spec:
+  refreshInterval: "1h"
+  secretStoreRef:
+    name: aws-secrets
+    kind: SecretStore
+  target:
+    name: db-credentials
+    creationPolicy: Owner
+  data:
+    - secretKey: username
+      remoteRef:
+        key: prod/db/username
+    - secretKey: password
+      remoteRef:
+        key: prod/db/password
+
+---
+# Spring Boot Microservice Deployment with Blue-Green Support
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service-blue
+  namespace: app
+  labels:
+    app: user-service
+    version: blue
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: user-service
+      version: blue
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: user-service
+        version: blue
+        mesh: aws-app-mesh
+    spec:
+      containers:
+        - name: user-service
+          image: <AWS_ECR>/user-service:latest
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
+          envFrom:
+            - secretRef:
+                name: db-credentials
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          volumeMounts:
+            - name: cds-cache
+              mountPath: /opt/cds
+      volumes:
+        - name: cds-cache
+          emptyDir: {}
+      nodeSelector:
+        role: general
+      tolerations:
+        - key: "spotInstance"
+          operator: "Exists"
+          effect: "NoSchedule"
+      securityContext:
+        runAsNonRoot: true
+        fsGroup: 1000
+      terminationGracePeriodSeconds: 30
+      imagePullSecrets:
+        - name: ecr-creds
+
+---
+# Horizontal Pod Autoscaler (HPA) - Predictive Scaling Example
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: user-service-hpa
+  namespace: app
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: user-service-blue
+  minReplicas: 3
+  maxReplicas: 30
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 60
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Pods
+      pods:
+        metric:
+          name: custom_app_latency_p99
+        target:
+          type: AverageValue
+          averageValue: "100ms"
+
+---
+# Service Mesh (AWS App Mesh or Istio)
+apiVersion: appmesh.k8s.aws/v1beta2
+kind: VirtualNode
+metadata:
+  name: user-service-blue-vn
+  namespace: app
+spec:
+  meshRef:
+    name: enterprise-mesh
+  listeners:
+    - portMapping:
+        port: 8080
+        protocol: http
+  serviceDiscovery:
+    dns:
+      hostname: user-service-blue.app.svc.cluster.local
+  backends:
+    - virtualService:
+        name: kafka-service.app.svc.cluster.local
+  logging:
+    accessLog:
+      file:
+        path: /dev/stdout
+
+---
+# API Gateway - AWS Load Balancer Controller ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: user-api-ingress
+  namespace: app
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
+    alb.ingress.kubernetes.io/certificate-arn: <ACM_CERT_ARN>
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/waf-acl-id: <WAF_ACL_ID>
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=<S3_LOG_BUCKET>
+spec:
+  rules:
+    - host: user-api.<yourdomain>.com
+      http:
+        paths:
+          - path: /*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: user-service-blue
+                port:
+                  number: 8080
+
+---
+# Prometheus Monitoring
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: user-service-monitor
+  namespace: app
+spec:
+  selector:
+    matchLabels:
+      app: user-service
+  endpoints:
+    - port: 8080
+      path: /actuator/prometheus
+      interval: 15s
+
+---
+# Fluent Bit Logging to CloudWatch
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config
+  namespace: logging
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush        1
+        Log_Level    info
+    [INPUT]
+        Name         tail
+        Path         /var/log/containers/*.log
+    [OUTPUT]
+        Name         cloudwatch
+        Match        *
+        region       us-east-1
+        log_group_name  eks-microservices-logs
+
+# Further manifests: ArgoCD Application, Velero Backup, RDS Proxy, etc. can be provided as needed.
