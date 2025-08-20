@@ -1,0 +1,150 @@
+# Kafka Client Configuration for Exactly-Once, High-Throughput, Secure Event-Driven Microservices
+spring:
+  kafka:
+    bootstrap-servers: "kafka-broker1:9093,kafka-broker2:9093,kafka-broker3:9093"
+    client-id: "microservice-xyz-${HOSTNAME}"
+    security:
+      protocol: SASL_SSL
+    ssl:
+      endpoint-identification-algorithm: https
+      trust-store-location: "file:/etc/kafka/secrets/kafka.truststore.jks"
+      trust-store-password: "${KAFKA_TRUSTSTORE_PASSWORD}"
+      key-store-location: "file:/etc/kafka/secrets/kafka.keystore.jks"
+      key-store-password: "${KAFKA_KEYSTORE_PASSWORD}"
+    sasl:
+      mechanism: SCRAM-SHA-512
+      jaas:
+        config: >
+          org.apache.kafka.common.security.scram.ScramLoginModule required
+          username="${KAFKA_USERNAME}"
+          password="${KAFKA_PASSWORD}";
+    properties:
+      # Transactional Guarantees
+      transactional.id: "microservice-xyz-tx-${HOSTNAME}-${UUID}"
+      enable.idempotence: true
+      acks: all
+      retries: 10
+      retry.backoff.ms: 100
+      delivery.timeout.ms: 120000
+      max.in.flight.requests.per.connection: 5
+      # Compression for High Throughput
+      compression.type: snappy
+      # Message Filtering/Headers
+      interceptor.classes: "com.example.kafka.CorrelationIdInterceptor,com.example.kafka.MessageEncryptionInterceptor"
+      # Schema Registry
+      schema.registry.url: "https://schema-registry:8081"
+      # Audit Logging & Message Tracing
+      audit.logger.class: "com.example.kafka.AuditLogger"
+      tracing.interceptor.class: "io.opentelemetry.instrumentation.kafka.KafkaTelemetry"
+    producer:
+      batch-size: 32768
+      linger-ms: 10
+      buffer-memory: 67108864
+      key-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      transaction.timeout.ms: 60000
+      # Circuit Breaker
+      interceptor.classes: "com.example.kafka.ProducerCircuitBreakerInterceptor"
+    consumer:
+      group-id: "microservice-xyz-cg"
+      enable-auto-commit: false
+      auto-offset-reset: earliest
+      max-poll-records: 1000
+      max-poll-interval-ms: 600000
+      isolation.level: read_committed
+      key-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      # DLQ, Retry, Idempotency
+      interceptor.classes: "com.example.kafka.DLQInterceptor,com.example.kafka.IdempotencyInterceptor"
+      # Manual Commit, Graceful Shutdown
+      commit:
+        sync: true
+      # Exponential Backoff with Jitter
+      retry.backoff.ms: 100
+      reconnect.backoff.max.ms: 10000
+    listener:
+      type: batch
+      ack-mode: manual_immediate
+      concurrency: 10
+      poll-timeout: 50
+    # Dynamic Topic Management
+    admin:
+      auto-create: true
+      properties:
+        default.replication.factor: 3
+        min.insync.replicas: 2
+        num.partitions: 50
+    # Monitoring & Health Checks
+    metrics:
+      enabled: true
+    health:
+      readiness:
+        enabled: true
+      liveness:
+        enabled: true
+
+# Dead Letter Queue (DLQ) & Retry Mechanism
+kafka:
+  dlq:
+    topic: "microservice-xyz.dlq"
+    max-retries: 5
+    backoff:
+      initial: 200
+      max: 10000
+      jitter: true
+  retry:
+    topic: "microservice-xyz.retry"
+    delay: 3000
+
+# Message Encryption for PII
+message:
+  encryption:
+    enabled: true
+    algorithm: "AES/GCM/NoPadding"
+    key-store: "file:/etc/kafka/secrets/message.keystore"
+    key-alias: "pii-key"
+    key-password: "${PII_KEY_PASSWORD}"
+
+# GDPR Data Retention and Audit Logging
+gdpr:
+  retention-days: 7
+  delete-on-expiry: true
+
+audit:
+  logging:
+    enabled: true
+    topic: "audit.logs"
+    fields: "timestamp,producer,consumer,topic,partition,offset,correlationId,operation"
+
+# Topic Creation Template (for dynamic topics)
+topic:
+  template:
+    default:
+      partitions: 50
+      replication-factor: 3
+      cleanup.policy: compact
+      min.insync.replicas: 2
+
+# Correlation ID for Tracing
+tracing:
+  correlation-id-header: "X-Correlation-ID"
+  enabled: true
+
+# Kubernetes Probes
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  health:
+    kafka:
+      enabled: true
+      timeout: 5s
+
+# Example for Spring Boot application.properties integration
+# spring.kafka.bootstrap-servers=kafka-broker1:9093,kafka-broker2:9093,kafka-broker3:9093
+# spring.kafka.security.protocol=SASL_SSL
+# spring.kafka.ssl.trust-store-location=file:/etc/kafka/secrets/kafka.truststore.jks
+# spring.kafka.ssl.trust-store-password=${KAFKA_TRUSTSTORE_PASSWORD}
+# spring.kafka.sasl.mechanism=SCRAM-SHA-512
+# spring.kafka.sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required username="${KAFKA_USERNAME}" password="${KAFKA_PASSWORD}";
