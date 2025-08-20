@@ -6,18 +6,16 @@ CONTEXT:
     - Concurrent users: 100-1000
   constraints: 
     - AWS infrastructure required
-    - Java 17 mandatory
-    - Spring Boot latest stable version
-    - Production-ready from day one
+        - Production-ready from day one
   team: 
-    - Developers familiar with Spring ecosystem
+    - Developers familiar with ecosystem
     - AWS account with S3 access configured
   integration: 
     - AWS S3 service
-    - Spring Boot application server
-    - PostgreSQL for metadata storage
+       - PostgreSQL for metadata storage
     REQUIREMENTS:
   functional:
+    -Generate a AWS S3 Configuration file that allows AWS native services to connect to S3 
     - Upload files to S3 with progress tracking
     - Download files with presigned URLs
     - List/search files with metadata
@@ -26,7 +24,7 @@ CONTEXT:
     - Automatic retry with exponential backoff
   non_functional:
     performance: 
-      - Upload speed: >50MB/s for large files
+      - Upload speed: >500MB/s for large files
       - Response time: <100ms for metadata operations
       - Concurrent uploads: 50+ simultaneous
     security: 
@@ -47,7 +45,7 @@ CONTEXT:
     - Audit logging for all operations
     ARCHITECTURE:
   pattern: Hexagonal Architecture with Domain-Driven Design
-  style: Microservice-ready monolith
+  style: Microservice-ready
   layers:
     - presentation: REST API with OpenAPI documentation
     - application: Service layer with transaction boundaries
@@ -59,14 +57,14 @@ CONTEXT:
     - CQRS for read/write optimization
     FRAMEWORK:
   core:
-    language: Java 17
-    framework: Spring Boot 3.2.x
+    language: YAML
+    framework: AWS
   aws:
     sdk: AWS SDK v2
     services: S3, STS, CloudWatch
   persistence:
     database: PostgreSQL 15
-    orm: Spring Data JPA
+    orm: []
     migration: Flyway
   messaging: Spring Events (internal)
   caching: Spring Cache with Caffeine
