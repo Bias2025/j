@@ -28,7 +28,7 @@ Non-Functional Requirements:
 Pattern: Hexagonal Architecture with AOP cross-cutting layer
 Components Required:
 1. Core business service classes (targets)
-2. Aspect classes with various advice types (@Before, @After, @Around, @AfterReturning, @AfterThrowing)
+2. Aspect classes with various advice types (@Before, @After, @Around, @AfterReturning, @AfterThrowing, CORE AOP Annotations : @Aspect, @Pointcut, @EnableAspectJAutoProxy)
 3. Custom annotations for aspect triggers
 4. Pointcut expressions library
 5. Dynamic proxy configurations (JDK and CGLIB)
