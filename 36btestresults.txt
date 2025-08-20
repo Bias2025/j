@@ -1,0 +1,63 @@
+# PostgreSQL High-Performance Configuration for Spring Boot Integration
+# Domain: Enterprise Data Layer
+# Optimized for connectivity, performance, scalability, and reliability
+
+# CONNECTION MANAGEMENT
+listen_addresses = '*'                # Accept connections from all hosts
+port = 5432                           # Default PostgreSQL port
+
+max_connections = 1200                # Support 1000+ concurrent connections (with buffer)
+superuser_reserved_connections = 10   # Reserved for maintenance/failover
+tcp_keepalives_idle = 60              # TCP keepalive for reliability
+
+# PERFORMANCE OPTIMIZATIONS
+shared_buffers = 8GB                  # Tune for high-throughput (adjust to server RAM)
+work_mem = 32MB                       # Per-query memory for sorting/join
+maintenance_work_mem = 256MB          # For maintenance operations (Flyway migrations)
+effective_cache_size = 24GB           # For query planner, ~3x shared_buffers
+synchronous_commit = on               # Reliability: ensure commit durability
+wal_level = replica                   # Enable streaming replication/failover
+max_wal_senders = 10                  # For replicas/failover
+
+# CONNECTION POOLING (for HikariCP)
+# HikariCP manages pool on Spring side, but tune backend for bursts
+idle_in_transaction_session_timeout = 30s
+statement_timeout = 30s
+lock_timeout = 5s
+
+# SECURITY
+ssl = on                              # Encrypted connections required
+ssl_cert_file = '/etc/ssl/certs/pgserver.crt'
+ssl_key_file = '/etc/ssl/private/pgserver.key'
+ssl_ca_file = '/etc/ssl/certs/pgroot.crt'
+password_encryption = scram-sha-256   # Strong password encryption
+
+# SCHEMA MIGRATION (Flyway)
+# No direct config needed, but optimize for fast DDL
+max_locks_per_transaction = 128
+autovacuum = on
+autovacuum_naptime = 10s              # Aggressive vacuuming for schema changes
+
+# MONITORING
+track_activity_query_size = 4096
+pg_stat_statements.max = 10000
+pg_stat_statements.track = all
+
+# RELIABILITY/FAILOVER
+hot_standby = on                      # Allow read replicas
+wal_keep_size = 2GB                   # Buffer WAL for replicas
+archive_mode = on
+archive_command = 'cp %p /var/lib/postgresql/wal_archive/%f'
+
+# MULTI-ENVIRONMENT CONFIGURATION
+# Use ENV variables or Spring Boot profiles for dynamic properties (see application.yml)
+# Example: production, staging, dev
+# This file should be referenced in each environment with environment-specific overrides
+
+# LOGGING
+log_min_duration_statement = 500      # Log queries slower than 500ms
+log_connections = on
+log_disconnections = on
+log_statement = 'ddl'                 # Log DDL for auditing
+
+# END
