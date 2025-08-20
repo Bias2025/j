@@ -19,7 +19,7 @@ CONTEXT:
     - CloudWatch + Prometheus
     REQUIREMENTS:
   functional:
-    - Deploy containerized Spring Boot microservices
+    -Create AWS EKS configuration YAML file needed to Deploy containerized Spring Boot microservices
     - Support blue-green deployments
     - Enable service mesh capabilities
     - Provide API gateway functionality
