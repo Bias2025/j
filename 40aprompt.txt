@@ -1,0 +1,128 @@
+CONTEXT:
+  domain: Enterprise Microservices Platform
+  scale: 
+    - Initial: 100-1000 RPS
+    - Target: 10,000 RPS with auto-scaling
+    - Data Volume: 1TB PostgreSQL, 500GB S3 objects
+  constraints: 
+    - Budget: Optimize for $500-1500/month AWS spend
+    - Timeline: Production-ready in 2 sprints
+    - Compliance: SOC2, GDPR-ready infrastructure
+  team: 
+    - Size: 5-10 developers
+    - Skills: Intermediate AWS, Basic Kubernetes
+    - Stack: Java 17, Spring Boot 3.2+, PostgreSQL
+  integration:
+    - AWS RDS PostgreSQL
+    - AWS Secrets Manager
+    - AWS ALB with SSL termination
+    - CloudWatch + Prometheus
+    REQUIREMENTS:
+  functional:
+    - Deploy containerized Spring Boot microservices
+    - Support blue-green deployments
+    - Enable service mesh capabilities
+    - Provide API gateway functionality
+  non_functional:
+    performance: 
+      - P99 latency < 100ms
+      - Pod startup < 30s with JVM optimization
+    security: 
+      - Zero-trust networking
+      - Secrets rotation every 30 days
+      - OWASP Top 10 protection
+    scalability: 
+      - HPA based on CPU/Memory/Custom metrics
+      - Cluster autoscaling 2-20 nodes
+    reliability: 
+      - 99.95% SLA
+      - Multi-AZ deployment
+      - Automated failover
+  compliance: 
+    - GDPR data residency
+    - SOC2 audit logging
+    - PCI-DSS network isolation
+    ARCHITECTURE:
+  pattern: Hexagonal Architecture with Event-Driven communication
+  style: Microservices with Service Mesh (AWS App Mesh optional)
+  layers:
+    presentation: 
+      - AWS ALB with WAF
+      - Route53 for DNS
+    application: 
+      - Spring Boot 3.2 containers
+      - Horizontal Pod Autoscaler
+      - ConfigMaps for environment config
+    domain: 
+      - Domain-Driven Design boundaries
+      - Event sourcing with Kafka/Kinesis
+    infrastructure:
+      - AWS EKS 1.28+
+      - Managed node groups with Spot instances
+      - AWS RDS PostgreSQL Multi-AZ
+  data_flow: 
+    - CQRS for read/write separation
+    - CDC with Debezium for event streaming
+    FRAMEWORK:
+  core:
+    language: Java 17 (Temurin/Corretto)
+    framework: Spring Boot 3.2.x
+    build: Maven 3.9+ with multi-stage Docker
+  persistence:
+    database: AWS RDS PostgreSQL 15
+    orm: Spring Data JPA with Hibernate 6
+    migration: Flyway 9.x
+    caching: ElastiCache Redis 7
+  messaging: 
+    - AWS MSK (Kafka) or Kinesis
+    - Spring Cloud Stream
+  observability:
+    metrics: Prometheus + Grafana
+    logging: Fluent Bit → CloudWatch
+    tracing: AWS X-Ray with OpenTelemetry
+  deployment: 
+    - AWS EKS with Fargate/EC2
+    - ArgoCD for GitOps
+    - Helm 3 for package management
+    TECHNOLOGY:
+  container:
+    runtime: containerd
+    registry: AWS ECR with vulnerability scanning
+    base_image: amazoncorretto:17-alpine
+  kubernetes:
+    version: 1.28+
+    ingress: AWS Load Balancer Controller
+    service_mesh: AWS App Mesh (optional)
+    secrets: External Secrets Operator + AWS Secrets Manager
+  networking:
+    cni: AWS VPC CNI
+    dns: CoreDNS with Route53 integration
+    ssl: AWS Certificate Manager
+  storage:
+    persistent: AWS EBS CSI Driver
+    object: S3 with IRSA
+    backup: AWS Backup or Velero
+    PERSONA:
+  developers:
+    - Self-service deployment via GitOps
+    - Local development with Skaffold/Telepresence
+    - Automated PR environments
+  operators:
+    - Single pane of glass monitoring
+    - Automated incident response
+    - Cost optimization dashboards
+  end_users:
+    - Sub-second response times
+    - 99.95% availability
+    - Seamless updates with zero downtime
+    ORIGINALITY:
+  innovations:
+    - JVM-optimized container images with CDS
+    - Predictive autoscaling using ML
+    - Chaos engineering with AWS FIS
+    - Cost optimization with Karpenter
+  differentiators:
+    - Native GraalVM support ready
+    - Multi-region active-active capability
+    - Automated security patching
+    - Green computing with Spot/Graviton
