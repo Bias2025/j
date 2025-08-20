@@ -1,0 +1,91 @@
+# AWS S3 Configuration file for Cloud Storage Integration
+# Production-ready, secure, and optimized for native AWS service connectivity
+
+s3:
+  bucket: my-cloud-storage-bucket
+  region: eu-west-1 # Change to your GDPR-compliant region
+  endpoint: https://s3.eu-west-1.amazonaws.com
+  transfer_acceleration: true
+  multipart_threshold: 100MB
+  multipart_chunksize: 100MB
+  max_concurrent_uploads: 50
+  server_side_encryption: "AES256" # SSE-S3
+  presigned_url_expiry_seconds: 600 # Default, configurable per operation
+  retry:
+    max_attempts: 5
+    mode: "exponential"
+    base_delay_millis: 200
+    max_delay_millis: 5000
+  tls_version: "TLSv1.3"
+  audit_logging_enabled: true
+  event_notifications:
+    enabled: true
+    sns_topic_arn: "arn:aws:sns:eu-west-1:123456789012:s3-events"
+  iam_role_arn: "arn:aws:iam::123456789012:role/s3-access-role" # Attach to ECS/EKS nodes or Lambda
+  circuit_breaker:
+    failure_threshold: 5
+    recovery_timeout_seconds: 60
+  data_residency:
+    enforce_gdpr: true
+  connection_pool:
+    max_connections: 100
+    connection_timeout_millis: 1000
+    idle_timeout_millis: 30000
+  async_enabled: true
+  monitoring:
+    cloudwatch_metrics: true
+    request_tracing: true
+  audit:
+    log_group: "/aws/cloud-storage/audit"
+    log_stream: "s3-operations"
+  compliance:
+    gdpr: true
+
+postgresql:
+  url: jdbc:postgresql://dbhost:5432/cloudstorage
+  username: clouduser
+  password: changeme
+  schema: public
+  pool:
+    max_connections: 50
+    min_connections: 5
+    connection_timeout_millis: 1000
+  migration:
+    tool: flyway
+    baselineOnMigrate: true
+
+spring:
+  cache:
+    provider: caffeine
+    specs:
+      maximumSize: 10000
+      expireAfterWrite: 10m
+  events:
+    enabled: true
+
+docker:
+  enabled: true
+  ecs_ready: true
+  eks_ready: true
+
+testing:
+  unit:
+    framework: mockito
+    coverage: "90%+"
+    targets:
+      - service layer (mocked AWS SDK v2)
+      - controller (mockmvc)
+  integration:
+    tools:
+      - testcontainers
+      - localstack (S3)
+      - postgresql
+    scenarios:
+      - upload/download
+      - multipart upload
+      - error recovery
+  performance:
+    tool: jmeter
+    scenarios:
+      - concurrent uploads
+      - large file handling
