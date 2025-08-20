@@ -1,0 +1,20 @@
+Category	Prompt / Test Case	Prompt Tag	Validated (Y/N)	Rank
+Testing	BDD Testing with Cucumber	TC-BDD-UC1	Y	3
+Testing	Unit Testing with JUnit	TC-JUNIT-UC2	Y	1
+Testing	Integration Testing with JUnit & Mockito	TC-JUNIT-UC3	N	2
+Testing	Karma Test Runner Setup	TC-KARMA-UC4	Y	
+Security	Spring Security	SEC-CORE-UC5	Y	
+Security	Security Vulnerability Fix	SEC-FIX-UC6	N	7
+Security	Endpoint Group-based Access Config	SEC-ENDPOINT-UC7	Y	
+Backend	Spring Boot REST API CRUD	BE-RESTAPI-UC8	Y	
+Backend	Spring Data JPA	BE-DJPA-UC9	N	
+Backend	Spring Redis Cache	BE-REDIS-UC10	Y	
+Backend	GraphQL API Integration	BE-GQL-UC11	N	
+DB	Optimize DB Query	DB-OPT-UC12	Y	10
+DB	Optimize DB Query Plan	DB-PLAN-UC13	N	
+DB	Generate Swagger Documentation	DB-SWAG-UC14	Y	
+Upgrade	Spring Boot Version Upgrade	UPG-SBOOT-UC15	Y	9
+Upgrade	Fix Spring Version Compatibility	UPG-FIX-UC16	N	11
+Frontend	Design Frontend using Angular / LegoUX	FRONT-ANG-UC17	Y	8
+Pattern	Java Core Design Pattern	PAT-JAVA-UC18	Y	
+Pattern	SOLID/DRY/KISS Additional Principles	PAT-PRINC-UC19	N	
