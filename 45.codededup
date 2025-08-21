@@ -1,0 +1,785 @@
+# Duplicate Code Detection and Refactoring Prompt - CRAFT Format
+
+```java
+// You are a world-class code quality architect and refactoring expert with 25+ years of experience in enterprise-grade code optimization,
+// specializing in duplicate code detection, advanced refactoring patterns, and Spring Boot application modernization.
+//
+// CONTEXT: Analyze [PROJECT_NAME] Spring Boot application to identify and eliminate ALL duplicate code patterns across [DOMAIN_NAME] domain,
+// working with [ENTITY_NAME] entity and related components for [BUSINESS_PURPOSE] optimization
+//
+// REQUIREMENTS:
+// Functional: Comprehensive duplicate code detection across all layers (Controller-Service-Repository-Utility), Advanced pattern recognition for similar logic blocks, Automated refactoring with extract method/class patterns, Template method pattern implementation for common workflows, Strategy pattern implementation for varying algorithms, Factory pattern creation for object instantiation duplicates, Builder pattern extraction for complex object creation, Utility class consolidation for repeated helper methods, Configuration consolidation for repeated setup patterns, Exception handling standardization across duplicated error patterns, Validation logic centralization for repeated business rules, Data transformation logic unification across similar mappings
+// Non-Functional: Maintainable code structure with DRY principle enforcement, Improved code readability with reduced cognitive complexity, Enhanced testability with centralized logic testing, Performance optimization through efficient code reuse, Memory usage reduction by eliminating redundant code paths, Reduced technical debt and improved code quality metrics, Faster development cycles with reusable components, Lower maintenance costs through unified implementations
+//
+// ARCHITECTURE: Clean architecture principles with shared abstraction layers, Domain-driven design with common domain services, Layered architecture with cross-cutting concern extraction, Microservices patterns with shared utility libraries, SOLID principles enforcement through proper abstraction, Design pattern implementation for code reuse, Aspect-oriented programming for cross-cutting concerns, Dependency injection optimization for shared components
+//
+// TESTING: Comprehensive testing of refactored components, Unit testing for extracted common methods, Integration testing for consolidated services, Regression testing to ensure functionality preservation, Code coverage analysis for refactored components, Performance testing for optimized implementations, Mutation testing for extracted utility methods, Contract testing for shared interfaces
+//
+// CONSTRAINTS:
+// Quality: Zero functional regression during refactoring process, Minimum 95% code coverage maintenance after refactoring, SonarQube quality gates compliance with reduced duplication metrics, Clean code principles with improved maintainability scores, Comprehensive documentation for all extracted components, Design pattern adherence with proper abstraction levels
+// Performance: No performance degradation during refactoring process, Memory usage optimization through efficient code reuse, Execution time improvement through optimized implementations, Database query optimization through consolidated data access patterns, Caching strategy implementation for frequently used components
+// Security: Security pattern consolidation without introducing vulnerabilities, Authentication/authorization logic centralization, Input validation standardization across all endpoints, Audit logging consistency through unified logging components, Error handling security through standardized exception responses
+//
+// FRAMEWORKS: Spring Boot 3.x, Spring AOP, Spring Data JPA, SonarQube, PMD, Checkstyle, JaCoCo, Lombok, MapStruct, Refactoring tools
+//
+// ORIGINALITY REQUIREMENTS:
+// - Identify UNIQUE duplicate patterns specific to [DOMAIN_NAME] business logic and [ENTITY_NAME] operations
+// - Create SOPHISTICATED refactoring strategies tailored to [PROJECT_NAME] architecture and [BUSINESS_PURPOSE] requirements
+// - Implement ADVANCED design patterns specific to [DOMAIN_NAME] domain workflows and business rules
+// - Generate COMPREHENSIVE utility classes and shared components for [ENTITY_NAME] related operations
+// - Design ENTERPRISE-GRADE abstraction layers for [PROJECT_NAME] cross-cutting concerns
+// - Create PRODUCTION-READY shared services for [DOMAIN_NAME] common business operations
+// - Implement ADVANCED factory and builder patterns for [ENTITY_NAME] object creation scenarios
+// - Generate SOPHISTICATED template methods for [PROJECT_NAME] workflow standardization
+// - Create COMPREHENSIVE configuration consolidation for [DOMAIN_NAME] setup patterns
+// - Design ENTERPRISE error handling and validation frameworks for [PROJECT_NAME] consistency
+//
+// Generate comprehensive duplicate code detection and refactoring solution that:
+// - Performs SYSTEMATIC analysis of [PROJECT_NAME] codebase to identify all duplication patterns
+// - Creates DETAILED refactoring plan with prioritized duplicate code elimination strategies
+// - Implements COMPREHENSIVE extraction of common methods, classes, and utility components
+// - Develops ADVANCED design pattern implementations for [DOMAIN_NAME] specific scenarios
+// - Generates PRODUCTION-READY shared libraries and reusable components for [ENTITY_NAME] operations
+// - Creates SOPHISTICATED abstraction layers for [PROJECT_NAME] cross-cutting concerns
+// - Implements ENTERPRISE-GRADE factory, builder, and template patterns for code consolidation
+// - Develops COMPREHENSIVE testing strategy to ensure refactoring quality and regression prevention
+// - Generates DETAILED documentation explaining refactoring decisions and architectural improvements
+// - Creates MAINTAINABLE code structure with clear separation of concerns and improved readability
+
+/*
+ * ENHANCED CRAFT METHOD FOR COMPREHENSIVE DUPLICATE CODE DETECTION AND REFACTORING
+ * This enterprise-grade prompt generates COMPLETE, production-ready refactoring solution with:
+ * 
+ * COMPREHENSIVE DUPLICATE DETECTION:
+ * - Systematic analysis of all code layers and components
+ * - Pattern recognition for similar logic blocks and workflows
+ * - Business logic duplication identification across [DOMAIN_NAME] operations
+ * - Configuration and setup pattern duplication detection
+ * - Data access pattern duplication across repository layers
+ * - Validation and error handling duplication identification
+ * - Utility method duplication across different classes
+ * - Object creation and transformation pattern duplicates
+ * 
+ * ADVANCED REFACTORING STRATEGIES:
+ * - Extract method refactoring for repeated code blocks
+ * - Extract class refactoring for common functionality groups
+ * - Template method pattern for standardized workflows
+ * - Strategy pattern for varying algorithm implementations
+ * - Factory pattern for object creation consolidation
+ * - Builder pattern for complex object construction
+ * - Utility class creation for helper method consolidation
+ * - Configuration class consolidation for setup patterns
+ * 
+ * ENTERPRISE DESIGN PATTERNS:
+ * - Abstract factory for [ENTITY_NAME] object creation families
+ * - Command pattern for [DOMAIN_NAME] operation encapsulation
+ * - Observer pattern for [PROJECT_NAME] event handling
+ * - Decorator pattern for [ENTITY_NAME] behavior enhancement
+ * - Facade pattern for [DOMAIN_NAME] service simplification
+ * - Proxy pattern for [PROJECT_NAME] cross-cutting concerns
+ * - Chain of responsibility for [ENTITY_NAME] processing workflows
+ * - Visitor pattern for [DOMAIN_NAME] operation variations
+ * 
+ * PRODUCTION-READY IMPLEMENTATIONS:
+ * - Complete shared utility libraries with comprehensive documentation
+ * - Enterprise-grade configuration management with environment-specific settings
+ * - Advanced exception handling framework with consistent error responses
+ * - Comprehensive validation framework with reusable validation rules
+ * - Sophisticated logging and monitoring integration across refactored components
+ * - Performance-optimized implementations with caching and optimization strategies
+ * - Security-enhanced shared components with proper access control
+ * - Maintainable code structure with clear architectural boundaries
+ * 
+ * PARAMETERIZED PLACEHOLDERS - Replace with your specific values:
+ * - [PROJECT_NAME] → Your project name (ECommerceAPI, HealthcarePortal, FinanceSystem, etc.)
+ * - [DOMAIN_NAME] → Your business domain (ecommerce, healthcare, finance, logistics, etc.)
+ * - [ENTITY_NAME] → Your core entity (Product, Patient, Account, Order, etc.)
+ * - [BUSINESS_PURPOSE] → Your business purpose (online retail, patient care, financial services, etc.)
+ * - [COMPANY_NAME] → Your company name (TechCorp, HealthTech, FinanceInc, etc.)
+ * - [MODULE_NAME] → Your module name (inventory, billing, user-management, etc.)
+ * 
+ * REFACTORING CUSTOMIZATIONS:
+ * - Define your specific duplication tolerance levels and quality thresholds
+ * - Specify your architectural patterns and design principles to maintain
+ * - Configure your testing requirements and regression prevention strategies
+ * - Set up your performance optimization goals and measurement criteria
+ * - Define your security requirements and compliance standards to maintain
+ * - Configure your documentation standards and architectural decision records
+ * - Specify your deployment and rollback strategies for refactoring changes
+ * - Define your code review and quality assurance processes for refactored code
+ * 
+ * The more specific your [DOMAIN_NAME] and [PROJECT_NAME] context, the more targeted and effective the duplicate detection and refactoring will be!
+ */
+
+## COMPREHENSIVE DUPLICATE CODE DETECTION AND REFACTORING FRAMEWORK
+
+### Phase 1: Systematic Duplicate Code Analysis
+**Enterprise [DOMAIN_NAME] Codebase Duplication Assessment**
+
+#### Duplicate Code Detection Strategy
+```java
+/**
+ * Comprehensive Duplicate Code Analysis for [PROJECT_NAME]
+ * Enterprise-grade detection and classification of code duplication patterns
+ * 
+ * This analysis covers all layers of the [DOMAIN_NAME] application:
+ * - Controller layer duplication patterns
+ * - Service layer business logic duplicates
+ * - Repository layer data access duplicates
+ * - Utility and helper method duplicates
+ * - Configuration and setup duplicates
+ * - Validation and error handling duplicates
+ */
+
+// DETECTED DUPLICATION PATTERNS IN [PROJECT_NAME]
+
+// 1. CONTROLLER LAYER DUPLICATION - REST Endpoint Patterns
+// PROBLEM: Repeated REST controller patterns across [ENTITY_NAME] operations
+
+// BEFORE: Duplicated controller methods across multiple controllers
+@RestController
+@RequestMapping("/api/v1/products")
+public class ProductController {
+    
+    @Autowired
+    private ProductService productService;
+    
+    // DUPLICATE PATTERN #1: Standard CRUD endpoint structure
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDTO> getProduct(@PathVariable Long id) {
+        try {
+            ProductDTO product = productService.findById(id);
+            return ResponseEntity.ok(product);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            log.error("Error retrieving product: {}", e.getMessage());
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+    
+    // DUPLICATE PATTERN #2: Pagination endpoint structure
+    @GetMapping
+    public ResponseEntity<Page<ProductDTO>> getAllProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy) {
+        try {
+            Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+            Page<ProductDTO> products = productService.findAll(pageable);
+            return ResponseEntity.ok(products);
+        } catch (Exception e) {
+            log.error("Error retrieving products: {}", e.getMessage());
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+}
+
+@RestController
+@RequestMapping("/api/v1/orders")
+public class OrderController {
+    
+    @Autowired
+    private OrderService orderService;
+    
+    // DUPLICATE: Same pattern repeated for Order entity
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderDTO> getOrder(@PathVariable Long id) {
+        try {
+            OrderDTO order = orderService.findById(id);
+            return ResponseEntity.ok(order);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            log.error("Error retrieving order: {}", e.getMessage());
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+    
+    // DUPLICATE: Same pagination pattern for Order entity
+    @GetMapping
+    public ResponseEntity<Page<OrderDTO>> getAllOrders(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy) {
+        try {
+            Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+            Page<OrderDTO> orders = orderService.findAll(pageable);
+            return ResponseEntity.ok(orders);
+        } catch (Exception e) {
+            log.error("Error retrieving orders: {}", e.getMessage());
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+}
+
+// 2. SERVICE LAYER DUPLICATION - Business Logic Patterns
+// PROBLEM: Repeated service method patterns and validation logic
+
+// BEFORE: Duplicated service patterns across multiple services
+@Service
+@Transactional
+public class ProductService {
+    
+    @Autowired
+    private ProductRepository productRepository;
+    
+    @Autowired
+    private ProductMapper productMapper;
+    
+    // DUPLICATE PATTERN #3: Standard findById with validation
+    public ProductDTO findById(Long id) {
+        validateId(id);
+        Product product = productRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + id));
+        return productMapper.toDTO(product);
+    }
+    
+    // DUPLICATE PATTERN #4: Standard save with validation
+    @Transactional
+    public ProductDTO save(CreateProductRequest request) {
+        validateCreateRequest(request);
+        Product product = productMapper.toEntity(request);
+        product.setCreatedAt(Instant.now());
+        product.setUpdatedAt(Instant.now());
+        product.setStatus(EntityStatus.ACTIVE);
+        Product savedProduct = productRepository.save(product);
+        return productMapper.toDTO(savedProduct);
+    }
+    
+    // DUPLICATE PATTERN #5: Standard validation methods
+    private void validateId(Long id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("Invalid ID provided");
+        }
+    }
+    
+    private void validateCreateRequest(CreateProductRequest request) {
+        if (request == null) {
+            throw new IllegalArgumentException("Create request cannot be null");
+        }
+        if (StringUtils.isBlank(request.getName())) {
+            throw new IllegalArgumentException("Product name is required");
+        }
+        if (request.getPrice() == null || request.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Product price must be positive");
+        }
+    }
+}
+
+@Service
+@Transactional
+public class OrderService {
+    
+    @Autowired
+    private OrderRepository orderRepository;
+    
+    @Autowired
+    private OrderMapper orderMapper;
+    
+    // DUPLICATE: Same pattern for Order entity
+    public OrderDTO findById(Long id) {
+        validateId(id);
+        Order order = orderRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Order not found with id: " + id));
+        return orderMapper.toDTO(order);
+    }
+    
+    // DUPLICATE: Same save pattern for Order entity
+    @Transactional
+    public OrderDTO save(CreateOrderRequest request) {
+        validateCreateRequest(request);
+        Order order = orderMapper.toEntity(request);
+        order.setCreatedAt(Instant.now());
+        order.setUpdatedAt(Instant.now());
+        order.setStatus(EntityStatus.ACTIVE);
+        Order savedOrder = orderRepository.save(order);
+        return orderMapper.toDTO(savedOrder);
+    }
+    
+    // DUPLICATE: Same validation methods
+    private void validateId(Long id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("Invalid ID provided");
+        }
+    }
+    
+    private void validateCreateRequest(CreateOrderRequest request) {
+        if (request == null) {
+            throw new IllegalArgumentException("Create request cannot be null");
+        }
+        // Different validation rules but same pattern structure
+    }
+}
+
+// 3. REPOSITORY LAYER DUPLICATION - Data Access Patterns
+// PROBLEM: Repeated custom query methods and specifications
+
+// BEFORE: Duplicated repository methods across multiple repositories
+@Repository
+public interface ProductRepository extends JpaRepository<Product, Long> {
+    
+    // DUPLICATE PATTERN #6: Standard active entity queries
+    @Query("SELECT p FROM Product p WHERE p.status = 'ACTIVE'")
+    List<Product> findAllActive();
+    
+    @Query("SELECT p FROM Product p WHERE p.status = 'ACTIVE' AND p.name LIKE %:name%")
+    List<Product> findActiveByNameContaining(@Param("name") String name);
+    
+    @Query("SELECT p FROM Product p WHERE p.status = 'ACTIVE' AND p.category = :category")
+    List<Product> findActiveByCategory(@Param("category") String category);
+}
+
+@Repository
+public interface OrderRepository extends JpaRepository<Order, Long> {
+    
+    // DUPLICATE: Same active entity query patterns
+    @Query("SELECT o FROM Order o WHERE o.status = 'ACTIVE'")
+    List<Order> findAllActive();
+    
+    @Query("SELECT o FROM Order o WHERE o.status = 'ACTIVE' AND o.customerName LIKE %:name%")
+    List<Order> findActiveByCustomerNameContaining(@Param("name") String name);
+    
+    @Query("SELECT o FROM Order o WHERE o.status = 'ACTIVE' AND o.orderDate >= :date")
+    List<Order> findActiveByOrderDateAfter(@Param("date") LocalDate date);
+}
+
+// 4. UTILITY AND HELPER DUPLICATION - Common Operations
+// PROBLEM: Repeated utility methods across different classes
+
+// BEFORE: Duplicated utility methods in multiple classes
+public class ProductUtils {
+    
+    // DUPLICATE PATTERN #7: Common validation utilities
+    public static boolean isValidEmail(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            return false;
+        }
+        return email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
+    }
+    
+    public static boolean isValidPhoneNumber(String phoneNumber) {
+        if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
+            return false;
+        }
+        return phoneNumber.matches("^\\+?[1-9]\\d{1,14}$");
+    }
+    
+    public static String generateUniqueCode() {
+        return "PROD-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+    }
+}
+
+public class OrderUtils {
+    
+    // DUPLICATE: Same validation methods
+    public static boolean isValidEmail(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            return false;
+        }
+        return email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
+    }
+    
+    public static boolean isValidPhoneNumber(String phoneNumber) {
+        if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
+            return false;
+        }
+        return phoneNumber.matches("^\\+?[1-9]\\d{1,14}$");
+    }
+    
+    public static String generateUniqueCode() {
+        return "ORD-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+    }
+}
+```
+
+### Phase 2: Comprehensive Refactoring Solution
+**Enterprise [DOMAIN_NAME] Code Consolidation and Pattern Implementation**
+
+#### Advanced Refactoring Implementation
+```java
+/**
+ * COMPREHENSIVE REFACTORING SOLUTION FOR [PROJECT_NAME]
+ * Enterprise-grade elimination of duplicate code with design pattern implementation
+ */
+
+// SOLUTION 1: Abstract Base Controller Pattern
+// Eliminates controller layer duplication with generic CRUD operations
+
+/**
+ * Abstract base controller providing common CRUD operations for [PROJECT_NAME]
+ * Eliminates duplication across all [DOMAIN_NAME] entity controllers
+ */
+@Slf4j
+public abstract class BaseController<T, D, ID, C, U> {
+    
+    protected abstract BaseService<T, D, ID, C, U> getService();
+    protected abstract String getEntityName();
+    
+    /**
+     * Generic GET by ID endpoint - eliminates duplicate pattern #1
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<D> getById(@PathVariable ID id) {
+        return executeWithErrorHandling(
+            () -> getService().findById(id),
+            () -> String.format("Error retrieving %s with id: %s", getEntityName(), id)
+        );
+    }
+    
+    /**
+     * Generic pagination endpoint - eliminates duplicate pattern #2
+     */
+    @GetMapping
+    public ResponseEntity<Page<D>> getAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDirection) {
+        
+        return executeWithErrorHandling(
+            () -> {
+                Sort.Direction direction = Sort.Direction.fromString(sortDirection);
+                Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+                return getService().findAll(pageable);
+            },
+            () -> String.format("Error retrieving paginated %s list", getEntityName())
+        );
+    }
+    
+    /**
+     * Generic POST endpoint for entity creation
+     */
+    @PostMapping
+    public ResponseEntity<D> create(@Valid @RequestBody C createRequest) {
+        return executeWithErrorHandling(
+            () -> getService().create(createRequest),
+            () -> String.format("Error creating %s", getEntityName()),
+            HttpStatus.CREATED
+        );
+    }
+    
+    /**
+     * Generic PUT endpoint for entity update
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<D> update(@PathVariable ID id, @Valid @RequestBody U updateRequest) {
+        return executeWithErrorHandling(
+            () -> getService().update(id, updateRequest),
+            () -> String.format("Error updating %s with id: %s", getEntityName(), id)
+        );
+    }
+    
+    /**
+     * Generic DELETE endpoint
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable ID id) {
+        return executeWithErrorHandling(
+            () -> {
+                getService().delete(id);
+                return null;
+            },
+            () -> String.format("Error deleting %s with id: %s", getEntityName(), id),
+            HttpStatus.NO_CONTENT
+        );
+    }
+    
+    /**
+     * Centralized error handling for all controller operations
+     * Eliminates repeated try-catch blocks across controllers
+     */
+    protected <R> ResponseEntity<R> executeWithErrorHandling(
+            Supplier<R> operation, 
+            Supplier<String> errorMessage) {
+        return executeWithErrorHandling(operation, errorMessage, HttpStatus.OK);
+    }
+    
+    protected <R> ResponseEntity<R> executeWithErrorHandling(
+            Supplier<R> operation, 
+            Supplier<String> errorMessage,
+            HttpStatus successStatus) {
+        try {
+            R result = operation.get();
+            return new ResponseEntity<>(result, successStatus);
+        } catch (EntityNotFoundException e) {
+            log.warn("Entity not found: {}", e.getMessage());
+            return ResponseEntity.notFound().build();
+        } catch (IllegalArgumentException e) {
+            log.warn("Invalid request: {}", e.getMessage());
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            log.error(errorMessage.get(), e);
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+}
+
+// REFACTORED: Specific controllers now extend base controller
+@RestController
+@RequestMapping("/api/v1/products")
+@Tag(name = "Products", description = "Product management operations for [PROJECT_NAME]")
+public class ProductController extends BaseController<Product, ProductDTO, Long, CreateProductRequest, UpdateProductRequest> {
+    
+    private final ProductService productService;
+    
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
+    
+    @Override
+    protected BaseService<Product, ProductDTO, Long, CreateProductRequest, UpdateProductRequest> getService() {
+        return productService;
+    }
+    
+    @Override
+    protected String getEntityName() {
+        return "Product";
+    }
+    
+    // Only domain-specific endpoints need to be implemented here
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<ProductDTO>> getByCategory(@PathVariable String category) {
+        return executeWithErrorHandling(
+            () -> productService.findByCategory(category),
+            () -> "Error retrieving products by category: " + category
+        );
+    }
+}
+
+@RestController
+@RequestMapping("/api/v1/orders")
+@Tag(name = "Orders", description = "Order management operations for [PROJECT_NAME]")
+public class OrderController extends BaseController<Order, OrderDTO, Long, CreateOrderRequest, UpdateOrderRequest> {
+    
+    private final OrderService orderService;
+    
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
+    
+    @Override
+    protected BaseService<Order, OrderDTO, Long, CreateOrderRequest, UpdateOrderRequest> getService() {
+        return orderService;
+    }
+    
+    @Override
+    protected String getEntityName() {
+        return "Order";
+    }
+    
+    // Only domain-specific endpoints
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<List<OrderDTO>> getByCustomer(@PathVariable Long customerId) {
+        return executeWithErrorHandling(
+            () -> orderService.findByCustomerId(customerId),
+            () -> "Error retrieving orders for customer: " + customerId
+        );
+    }
+}
+
+// SOLUTION 2: Abstract Base Service Pattern
+// Eliminates service layer duplication with template method pattern
+
+/**
+ * Abstract base service providing common business operations for [PROJECT_NAME]
+ * Implements template method pattern to eliminate service layer duplication
+ */
+@Slf4j
+@Transactional
+public abstract class BaseService<T, D, ID, C, U> {
+    
+    protected abstract JpaRepository<T, ID> getRepository();
+    protected abstract EntityMapper<T, D, C, U> getMapper();
+    protected abstract String getEntityName();
+    protected abstract void validateCreateRequest(C request);
+    protected abstract void validateUpdateRequest(U request);
+    protected abstract void setAuditFields(T entity, boolean isNew);
+    
+    /**
+     * Generic findById implementation - eliminates duplicate pattern #3
+     */
+    @Transactional(readOnly = true)
+    public D findById(ID id) {
+        validateId(id);
+        T entity = getRepository().findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(
+                String.format("%s not found with id: %s", getEntityName(), id)));
+        return getMapper().toDTO(entity);
+    }
+    
+    /**
+     * Generic findAll with pagination - eliminates pagination duplication
+     */
+    @Transactional(readOnly = true)
+    public Page<D> findAll(Pageable pageable) {
+        Page<T> entities = getRepository().findAll(pageable);
+        return entities.map(getMapper()::toDTO);
+    }
+    
+    /**
+     * Generic create implementation - eliminates duplicate pattern #4
+     */
+    @Transactional
+    public D create(C createRequest) {
+        validateCreateRequest(createRequest);
+        
+        T entity = getMapper().toEntity(createRequest);
+        setAuditFields(entity, true);
+        
+        T savedEntity = getRepository().save(entity);
+        log.info("Created {} with id: {}", getEntityName(), getId(savedEntity));
+        
+        return getMapper().toDTO(savedEntity);
+    }
+    
+    /**
+     * Generic update implementation
+     */
+    @Transactional
+    public D update(ID id, U updateRequest) {
+        validateId(id);
+        validateUpdateRequest(updateRequest);
+        
+        T existingEntity = getRepository().findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(
+                String.format("%s not found with id: %s", getEntityName(), id)));
+        
+        T updatedEntity = getMapper().updateEntity(updateRequest, existingEntity);
+        setAuditFields(updatedEntity, false);
+        
+        T savedEntity = getRepository().save(updatedEntity);
+        log.info("Updated {} with id: {}", getEntityName(), id);
+        
+        return getMapper().toDTO(savedEntity);
+    }
+    
+    /**
+     * Generic delete implementation
+     */
+    @Transactional
+    public void delete(ID id) {
+        validateId(id);
+        
+        if (!getRepository().existsById(id)) {
+            throw new EntityNotFoundException(
+                String.format("%s not found with id: %s", getEntityName(), id));
+        }
+        
+        getRepository().deleteById(id);
+        log.info("Deleted {} with id: {}", getEntityName(), id);
+    }
+    
+    /**
+     * Common validation logic - eliminates duplicate pattern #5
+     */
+    protected void validateId(ID id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID cannot be null");
+        }
+        if (id instanceof Number && ((Number) id).longValue() <= 0) {
+            throw new IllegalArgumentException("ID must be positive");
+        }
+        if (id instanceof String && ((String) id).trim().isEmpty()) {
+            throw new IllegalArgumentException("ID cannot be empty");
+        }
+    }
+    
+    /**
+     * Abstract method to get entity ID - implemented by concrete services
+     */
+    protected abstract ID getId(T entity);
+}
+
+// REFACTORED: Specific services now extend base service
+@Service
+public class ProductService extends BaseService<Product, ProductDTO, Long, CreateProductRequest, UpdateProductRequest> {
+    
+    private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
+    private final [DOMAIN_NAME]ValidationService validationService;
+    
+    public ProductService(ProductRepository productRepository, 
+                         ProductMapper productMapper,
+                         [DOMAIN_NAME]ValidationService validationService) {
+        this.productRepository = productRepository;
+        this.productMapper = productMapper;
+        this.validationService = validationService;
+    }
+    
+    @Override
+    protected JpaRepository<Product, Long> getRepository() {
+        return productRepository;
+    }
+    
+    @Override
+    protected EntityMapper<Product, ProductDTO, CreateProductRequest, UpdateProductRequest> getMapper() {
+        return productMapper;
+    }
+    
+    @Override
+    protected String getEntityName() {
+        return "Product";
+    }
+    
+    @Override
+    protected void validateCreateRequest(CreateProductRequest request) {
+        validationService.validateProductCreateRequest(request);
+    }
+    
+    @Override
+    protected void validateUpdateRequest(UpdateProductRequest request) {
+        validationService.validateProductUpdateRequest(request);
+    }
+    
+    @Override
+    protected void setAuditFields(Product entity, boolean isNew) {
+        Instant now = Instant.now();
+        if (isNew) {
+            entity.setCreatedAt(now);
+            entity.setStatus(EntityStatus.ACTIVE);
+        }
+        entity.setUpdatedAt(now);
+    }
+    
+    @Override
+    protected Long getId(Product entity) {
+        return entity.getId();
+    }
+    
+    // Domain-specific methods only
+    @Transactional(readOnly = true)
+    public List<ProductDTO> findByCategory(String category) {
+        List<Product> products = productRepository.findActiveByCategory(category);
+        return products.stream()
+            .map(productMapper::toDTO)
+            .collect(Collectors.toList());
+    }
+}
+
+// SOLUTION 3: Generic Repository Pattern with Specifications
+// Eliminates repository layer duplication with specification pattern
+
+/**
+ * Generic repository interface with common query methods
+ * Eliminates duplicate pattern #6 across all repositories
+ */
+@NoRepositoryBean
+public interface BaseRepository<T, ID> extends JpaRepository<T, ID>, JpaSpecificationExecutor<T> {
+    
+    /**
+     * Generic method to find all active entities
+     */
+    @Query("SELECT e FROM #{#entityName} e WHERE e.status = 'ACTIVE'")
+    List<T> findAllActive();
+    
+    /**
+     * Generic method to find active entities with pagination
+     */
+    @Query("SELECT e FROM #{#entityName} e WHERE e.status = 'ACTIVE'")
+    Page<T> findAllActive(Pageable pageable);
+    
+    /**
+     * Generic method to count active entities
+     */
+    @Query("SELECT COUNT(
