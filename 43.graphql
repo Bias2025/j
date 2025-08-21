@@ -1,0 +1,513 @@
+# Complete GraphQL SpringBoot Project Generation Prompt - CRAFT Format
+
+```java
+// You are a world-class GraphQL architect and Spring Boot expert with 20+ years of combined experience, 
+// specializing in enterprise-grade GraphQL API development, modern Spring Boot applications, and production-ready microservices architecture.
+//
+// CONTEXT: Generate a COMPLETE GraphQL SpringBoot project codebase for [DOMAIN_NAME] domain working with [ENTITY_NAME] entity 
+// for [PROJECT_NAME] enterprise application serving [BUSINESS_PURPOSE]
+//
+// REQUIREMENTS:
+// Functional: Complete GraphQL schema definition with queries, mutations, and subscriptions, Advanced GraphQL resolvers with field-level security, Comprehensive CRUD operations with GraphQL best practices, Real-time subscriptions with WebSocket support, GraphQL federation support for microservices, Advanced filtering, sorting, and pagination with GraphQL arguments, File upload/download through GraphQL multipart, Batch operations and DataLoader optimization, GraphQL playground and introspection, Custom scalar types and directives, Error handling with GraphQL-specific error responses, Caching strategies with GraphQL query complexity analysis
+// Non-Functional: Ultra-high performance with DataLoader and N+1 query prevention, Massive scalability supporting 50K+ concurrent GraphQL operations, Enterprise security with GraphQL-specific authentication and authorization, Memory-efficient GraphQL execution with query complexity limits, Comprehensive GraphQL monitoring and observability, Advanced caching with Redis and query result caching, Production-ready logging with GraphQL query tracing, High availability with circuit breakers and fallback mechanisms
+//
+// ARCHITECTURE: GraphQL-first microservices architecture, Domain-driven design with GraphQL schema stitching, Layered GraphQL architecture (Schema-Resolver-Service-Repository), Event-driven architecture with GraphQL subscriptions, Clean architecture with GraphQL adapters and ports, CQRS pattern with GraphQL query and mutation separation, Hexagonal architecture with GraphQL boundary adapters, Cloud-native design with GraphQL gateway patterns
+//
+// TESTING: Complete GraphQL testing suite with schema validation, GraphQL integration testing with test containers, Query complexity and performance testing, Security testing for GraphQL-specific vulnerabilities, Subscription testing with WebSocket test clients, Schema evolution and breaking change detection, Load testing with GraphQL query variations, Contract testing for federated GraphQL services, Mutation testing with transactional rollback, Error scenario testing with GraphQL error extensions
+//
+// CONSTRAINTS:
+// Quality: Minimum 90% code coverage including GraphQL resolvers and schema, GraphQL schema-first development with strict type safety, Clean code principles with GraphQL best practices, SonarQube quality gates for GraphQL-specific patterns, Comprehensive documentation with GraphQL schema documentation, GraphQL query complexity analysis and depth limiting, Schema versioning and evolution strategies
+// Performance: GraphQL query execution time < 200ms for simple queries, DataLoader batch loading with < 50ms latency, Query complexity scoring and limiting, Memory usage < 512MB heap with efficient GraphQL execution, Database query optimization with GraphQL field selection, Caching with Redis and GraphQL response caching, Connection pooling optimized for GraphQL workloads
+// Security: GraphQL-specific security with query depth limiting and complexity analysis, Authentication and authorization at field level, Input validation for GraphQL variables and arguments, Rate limiting for GraphQL operations, OWASP GraphQL security best practices, Audit logging for GraphQL operations, Data privacy compliance with field-level permissions
+//
+// FRAMEWORKS: Spring Boot 3.x, Spring GraphQL 6.x, GraphQL Java 20.x, DataLoader, GraphQL SPQR, Spring Data JPA, Spring Security, Spring Boot Actuator, Micrometer, Redis, WebSocket, Jackson, Validation API
+//
+// ORIGINALITY REQUIREMENTS:
+// - Create COMPLETE GraphQL project structure with enterprise-grade [DOMAIN_NAME] business logic
+// - Generate COMPREHENSIVE GraphQL schema definition specific to [ENTITY_NAME] domain model
+// - Implement FULL resolver classes with [BUSINESS_PURPOSE]-specific business operations
+// - Create REALISTIC [DOMAIN_NAME] service layer with complex business workflows
+// - Design ADVANCED GraphQL security with [ENTITY_NAME]-specific authorization rules
+// - Build COMPLETE data access layer with [DOMAIN_NAME]-optimized repository patterns
+// - Generate COMPREHENSIVE testing suite covering all GraphQL operations
+// - Create PRODUCTION-READY configuration with [PROJECT_NAME]-specific optimizations
+// - Implement ADVANCED monitoring and observability for [DOMAIN_NAME] operations
+// - Generate COMPLETE documentation with [BUSINESS_PURPOSE] context and examples
+//
+// Generate comprehensive SpringBoot GraphQL project that:
+// - Creates COMPLETE project structure with all necessary packages and configurations
+// - Implements FULL GraphQL schema with [DOMAIN_NAME]-specific types, queries, mutations, and subscriptions
+// - Builds COMPREHENSIVE resolver classes with [ENTITY_NAME] business logic and field-level security
+// - Develops COMPLETE service layer with [BUSINESS_PURPOSE] workflows and transaction management
+// - Creates FULL data access layer with repository patterns optimized for GraphQL operations
+// - Implements ADVANCED security with authentication, authorization, and GraphQL-specific protections
+// - Generates COMPREHENSIVE configuration classes for production deployment
+// - Creates COMPLETE testing infrastructure with GraphQL-specific test utilities
+// - Builds ADVANCED monitoring and observability with GraphQL metrics and tracing
+// - Develops PRODUCTION-READY error handling with GraphQL error extensions and proper responses
+
+/*
+ * ENHANCED CRAFT METHOD FOR COMPLETE GRAPHQL SPRINGBOOT PROJECT GENERATION
+ * This enterprise-grade prompt generates COMPLETE, production-ready GraphQL project with:
+ * 
+ * COMPLETE PROJECT STRUCTURE:
+ * - Full Maven/Gradle project configuration with GraphQL dependencies
+ * - Comprehensive package structure following GraphQL and Spring Boot best practices
+ * - Production-ready application properties with GraphQL-specific configurations
+ * - Complete Docker setup with multi-stage builds and GraphQL optimization
+ * - Full CI/CD pipeline configuration with GraphQL schema validation
+ * 
+ * COMPREHENSIVE GRAPHQL SCHEMA:
+ * - Complete schema definition with types, queries, mutations, and subscriptions
+ * - Advanced scalar types and custom directives for [DOMAIN_NAME]
+ * - Complex input types and return types for [ENTITY_NAME] operations
+ * - Federation support with @key and @external directives
+ * - Schema documentation with detailed descriptions and examples
+ * 
+ * FULL RESOLVER IMPLEMENTATION:
+ * - Complete query resolvers with field-level data fetching
+ * - Comprehensive mutation resolvers with transaction management
+ * - Real-time subscription resolvers with WebSocket support
+ * - DataLoader implementation for N+1 query prevention
+ * - Field-level security with @PreAuthorize annotations
+ * 
+ * ENTERPRISE SERVICE LAYER:
+ * - Complete business logic implementation for [BUSINESS_PURPOSE]
+ * - Transaction management with @Transactional annotations
+ * - Event publishing with Spring ApplicationEventPublisher
+ * - Caching strategies with @Cacheable annotations
+ * - Error handling with custom exceptions and GraphQL error responses
+ * 
+ * PRODUCTION-READY INFRASTRUCTURE:
+ * - Complete database configuration with connection pooling
+ * - Redis integration for caching and session management
+ * - Security configuration with JWT and OAuth2 support
+ * - Monitoring setup with Micrometer and Prometheus
+ * - Logging configuration with structured JSON logging
+ * 
+ * COMPREHENSIVE TESTING SUITE:
+ * - Complete GraphQL integration tests with @GraphQlTest
+ * - Resolver unit tests with MockMvc and WebTestClient
+ * - Subscription testing with WebSocket test clients
+ * - Performance testing with JMeter GraphQL test plans
+ * - Security testing with unauthorized access scenarios
+ * 
+ * PARAMETERIZED PLACEHOLDERS - Replace with your specific values:
+ * - [DOMAIN_NAME] → Your business domain (ecommerce, healthcare, finance, logistics, insurance, etc.)
+ * - [ENTITY_NAME] → Your core entity (Product, Patient, Account, Shipment, Policy, etc.)
+ * - [PROJECT_NAME] → Your project name (ECommerceAPI, HealthcarePortal, FinanceSystem, etc.)
+ * - [BUSINESS_PURPOSE] → Your business purpose (online retail, patient management, financial services, etc.)
+ * - [COMPANY_NAME] → Your company name (TechCorp, HealthTech, FinanceInc, etc.)
+ * - [SERVICE_PREFIX] → Your service prefix (ecom, health, finance, logistics, etc.)
+ * 
+ * GRAPHQL-SPECIFIC CUSTOMIZATIONS:
+ * - Define your GraphQL schema complexity requirements and query depth limits
+ * - Specify your real-time subscription requirements and WebSocket configuration
+ * - Configure your DataLoader patterns and batch loading strategies
+ * - Set up your federation requirements and service boundaries
+ * - Define your security model with field-level permissions
+ * - Configure your caching strategies and TTL policies
+ * - Set up your monitoring and observability requirements
+ * - Define your error handling and custom error types
+ * 
+ * PERFORMANCE OPTIMIZATIONS:
+ * - DataLoader configuration for batch loading and caching
+ * - Query complexity analysis and depth limiting
+ * - Database query optimization with GraphQL field selection
+ * - Connection pooling configuration for GraphQL workloads
+ * - Redis caching for GraphQL responses and data
+ * - Memory management for large GraphQL operations
+ * - Asynchronous processing for long-running mutations
+ * - Subscription optimization for real-time updates
+ * 
+ * The more specific your [DOMAIN_NAME] business context, the more tailored and production-ready the generated GraphQL project will be!
+ */
+
+## COMPLETE SPRINGBOOT GRAPHQL PROJECT GENERATION FRAMEWORK
+
+### Phase 1: Complete Project Structure and Configuration
+**Enterprise [DOMAIN_NAME] GraphQL Application Setup**
+
+#### Project Root Structure
+```
+[PROJECT_NAME]-graphql/
+├── pom.xml                                 # Maven configuration with GraphQL dependencies
+├── Dockerfile                             # Multi-stage Docker build for GraphQL optimization
+├── docker-compose.yml                     # Complete development environment setup
+├── .github/workflows/ci-cd.yml           # CI/CD pipeline with GraphQL schema validation
+├── README.md                              # Comprehensive project documentation
+├── src/
+│   ├── main/
+│   │   ├── java/com/[COMPANY_NAME]/[SERVICE_PREFIX]/
+│   │   │   ├── [PROJECT_NAME]Application.java
+│   │   │   ├── config/                    # Configuration classes
+│   │   │   │   ├── GraphQLConfig.java
+│   │   │   │   ├── SecurityConfig.java
+│   │   │   │   ├── CacheConfig.java
+│   │   │   │   ├── DatabaseConfig.java
+│   │   │   │   └── MonitoringConfig.java
+│   │   │   ├── graphql/                   # GraphQL layer
+│   │   │   │   ├── schema/               # Schema definitions
+│   │   │   │   ├── resolver/             # GraphQL resolvers
+│   │   │   │   ├── dataloader/           # DataLoader implementations
+│   │   │   │   ├── directive/            # Custom directives
+│   │   │   │   ├── scalar/               # Custom scalar types
+│   │   │   │   └── subscription/         # Subscription handlers
+│   │   │   ├── domain/                    # Domain model
+│   │   │   │   ├── model/                # Entity classes
+│   │   │   │   ├── repository/           # Repository interfaces
+│   │   │   │   ├── service/              # Business logic
+│   │   │   │   └── event/                # Domain events
+│   │   │   ├── security/                  # Security implementations
+│   │   │   │   ├── authentication/
+│   │   │   │   ├── authorization/
+│   │   │   │   └── permission/
+│   │   │   ├── exception/                 # Exception handling
+│   │   │   ├── monitoring/                # Metrics and monitoring
+│   │   │   └── util/                     # Utility classes
+│   │   └── resources/
+│   │       ├── application.yml           # Main configuration
+│   │       ├── application-prod.yml      # Production configuration
+│   │       ├── graphql/                  # GraphQL schema files
+│   │       │   ├── schema.graphqls       # Main schema
+│   │       │   ├── [ENTITY_NAME].graphqls # Entity-specific schema
+│   │       │   └── scalars.graphqls      # Custom scalars
+│   │       ├── db/migration/             # Database migrations
+│   │       └── static/                   # Static resources
+│   └── test/
+│       ├── java/                         # Test classes
+│       └── resources/                    # Test resources
+└── docs/                                 # Documentation
+    ├── api/                             # API documentation
+    ├── architecture/                    # Architecture documentation
+    └── deployment/                      # Deployment guides
+```
+
+#### Complete Maven Configuration - pom.xml
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.[COMPANY_NAME].[SERVICE_PREFIX]</groupId>
+    <artifactId>[PROJECT_NAME]-graphql</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>[PROJECT_NAME] GraphQL API</name>
+    <description>Enterprise GraphQL API for [DOMAIN_NAME] domain - [BUSINESS_PURPOSE]</description>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.0</version>
+        <relativePath/>
+    </parent>
+
+    <properties>
+        <java.version>17</java.version>
+        <spring-graphql.version>1.2.4</spring-graphql.version>
+        <graphql-java.version>21.3</graphql-java.version>
+        <graphql-spqr.version>0.12.0</graphql-spqr.version>
+        <testcontainers.version>1.19.3</testcontainers.version>
+        <docker.image.prefix>[COMPANY_NAME]/[SERVICE_PREFIX]</docker.image.prefix>
+    </properties>
+
+    <dependencies>
+        <!-- Core Spring Boot Dependencies -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+
+        <!-- GraphQL Dependencies -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-graphql</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.graphql-java</groupId>
+            <artifactId>graphql-java-extended-scalars</artifactId>
+            <version>21.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.graphql-java</groupId>
+            <artifactId>java-dataloader</artifactId>
+            <version>3.2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.leangen.graphql</groupId>
+            <artifactId>spqr</artifactId>
+            <version>${graphql-spqr.version}</version>
+        </dependency>
+
+        <!-- Database Dependencies -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+
+        <!-- Security Dependencies -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.12.3</version>
+        </dependency>
+
+        <!-- Caching Dependencies -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+
+        <!-- Monitoring Dependencies -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-bridge-brave</artifactId>
+        </dependency>
+
+        <!-- Validation Dependencies -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- Utility Dependencies -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>1.5.5.Final</version>
+        </dependency>
+
+        <!-- Test Dependencies -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.graphql</groupId>
+            <artifactId>spring-graphql-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.graphql-java-kickstart</groupId>
+            <artifactId>graphql-spring-boot-test</artifactId>
+            <version>15.0.0</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Spring Boot Plugin -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <!-- MapStruct Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>1.5.5.Final</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>0.2.0</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+
+            <!-- GraphQL Schema Generation Plugin -->
+            <plugin>
+                <groupId>io.github.kobylynskyi</groupId>
+                <artifactId>graphql-codegen-maven-plugin</artifactId>
+                <version>5.8.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <graphqlSchemaPaths>
+                        <graphqlSchemaPath>${project.basedir}/src/main/resources/graphql</graphqlSchemaPath>
+                    </graphqlSchemaPaths>
+                    <outputDir>${project.build.directory}/generated-sources/graphql</outputDir>
+                    <packageName>com.[COMPANY_NAME].[SERVICE_PREFIX].graphql.generated</packageName>
+                    <customTypesMapping>
+                        <DateTime>java.time.OffsetDateTime</DateTime>
+                        <Date>java.time.LocalDate</Date>
+                        <BigDecimal>java.math.BigDecimal</BigDecimal>
+                    </customTypesMapping>
+                    <generateBuilder>true</generateBuilder>
+                    <generateEqualsAndHashCode>true</generateEqualsAndHashCode>
+                    <generateToString>true</generateToString>
+                </configuration>
+            </plugin>
+
+            <!-- Docker Plugin -->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.13</version>
+                <configuration>
+                    <repository>${docker.image.prefix}/${project.artifactId}</repository>
+                    <tag>${project.version}</tag>
+                    <buildArgs>
+                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
+                </configuration>
+            </plugin>
+
+            <!-- Test Coverage Plugin -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.8</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>check</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>INSTRUCTION</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.90</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <!-- Development Profile -->
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <spring.profiles.active>dev</spring.profiles.active>
+            </properties>
+        </profile>
+
+        <!-- Production Profile -->
+        <profile>
