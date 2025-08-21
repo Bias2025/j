@@ -1,0 +1,1323 @@
+return handleBatchPublishingFailure(events, e, batchTimer);
+            }
+        });
+    }
+    
+    // Private helper methods for event publishing
+    
+    private void publishLocalEvent([ENTITY_NAME]DomainEvent event) {
+        try {
+            localEventPublisher.publishEvent(event);
+            log.debug("[COMPANY_NAME] [PROJECT_NAME]: Published local event {} for [DOMAIN_NAME]", event.getEventId());
+        } catch (Exception e) {
+            log.warn("[COMPANY_NAME] [PROJECT_NAME]: Failed to publish local event for [DOMAIN_NAME] - Event ID: {}", 
+                event.getEventId(), e);
+            // Local publishing failure shouldn't fail the entire operation
+        }
+    }
+    
+    private PublishingResult publishToDistributedBroker([ENTITY_NAME]DomainEvent event) {
+        try {
+            // Set up message headers for [DOMAIN_NAME] routing
+            Map<String, Object> headers = createMessageHeaders(event);
+            
+            // Publish to Kafka with routing key
+            SendResult<String, [ENTITY_NAME]DomainEvent> sendResult = kafkaTemplate.send(
+                eventsTopic, 
+                event.getRoutingKey(), 
+                event
+            ).get(Duration.ofSeconds(10));
+            
+            return PublishingResult.builder()
+                .messageId(sendResult.getRecordMetadata().offset() + "@" + sendResult.getRecordMetadata().partition())
+                .partition(sendResult.getRecordMetadata().partition())
+                .offset(sendResult.getRecordMetadata().offset())
+                .successful(true)
+                .build();
+            
+        } catch (Exception e) {
+            log.error("[COMPANY_NAME] [PROJECT_NAME]: Failed to publish to distributed broker for [DOMAIN_NAME]", e);
+            throw new EventPublishingException(
+                String.format("[COMPANY_NAME]: Failed to publish event %s to distributed broker for [DOMAIN_NAME]", 
+                    event.getEventId()), e);
+        }
+    }
+    
+    private BatchPublishingResult publishBatchToDistributedBroker(List<[ENTITY_NAME]DomainEvent> events) {
+        List<CompletableFuture<SendResult<String, [ENTITY_NAME]DomainEvent>>> futures = events.stream()
+            .map(event -> kafkaTemplate.send(eventsTopic, event.getRoutingKey(), event))
+            .collect(Collectors.toList());
+        
+        try {
+            List<SendResult<String, [ENTITY_NAME]DomainEvent>> results = futures.stream()
+                .map(future -> {
+                    try {
+                        return future.get(Duration.ofSeconds(30));
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .collect(Collectors.toList());
+            
+            List<String> messageIds = results.stream()
+                .map(result -> result.getRecordMetadata().offset() + "@" + result.getRecordMetadata().partition())
+                .collect(Collectors.toList());
+            
+            return BatchPublishingResult.builder()
+                .messageIds(messageIds)
+                .successful(true)
+                .build();
+            
+        } catch (Exception e) {
+            throw new BatchPublishingException(
+                String.format("[COMPANY_NAME]: Failed to publish batch of %d events for [DOMAIN_NAME]", events.size()), e);
+        }
+    }
+    
+    private Map<String, Object> createMessageHeaders([ENTITY_NAME]DomainEvent event) {
+        Map<String, Object> headers = new HashMap<>();
+        headers.put("eventType", event.getClass().getSimpleName());
+        headers.put("eventId", event.getEventId());
+        headers.put("aggregateId", event.getAggregateId());
+        headers.put("correlationId", event.getCorrelationId());
+        headers.put("priority", event.getProcessingPriority().name());
+        headers.put("domain", "[DOMAIN_NAME]");
+        headers.put("source", "[PROJECT_NAME]");
+        headers.put("company", "[COMPANY_NAME]");
+        return headers;
+    }
+    
+    private EventPublishingResult handlePublishingFailure(
+            [ENTITY_NAME]DomainEvent event, 
+            Exception exception, 
+            Timer.Sample timer) {
+        
+        log.error("[COMPANY_NAME] [PROJECT_NAME]: Failed to publish async event {} for [DOMAIN_NAME]", 
+            event.getEventId(), exception);
+        
+        // Send to dead letter queue
+        sendToDeadLetterQueue(event, exception);
+        
+        // Record failure metrics
+        metricsCollector.recordFailedPublishing(event.getClass().getSimpleName(), 
+            exception.getClass().getSimpleName(), timer.stop());
+        
+        return EventPublishingResult.builder()
+            .eventId(event.getEventId())
+            .successful(false)
+            .errorMessage(exception.getMessage())
+            .failureReason(exception.getClass().getSimpleName())
+            .sentToDeadLetterQueue(true)
+            .build();
+    }
+    
+    private void sendToDeadLetterQueue([ENTITY_NAME]DomainEvent event, Exception exception) {
+        try {
+            DeadLetterEvent dlqEvent = DeadLetterEvent.builder()
+                .originalEvent(event)
+                .failureReason(exception.getMessage())
+                .failureTimestamp(Instant.now())
+                .retryCount(0)
+                .maxRetryCount(maxRetryAttempts)
+                .build();
+            
+            kafkaTemplate.send(dlqTopic, event.getAggregateId(), dlqEvent);
+            log.info("[COMPANY_NAME] [PROJECT_NAME]: Sent failed event {} to DLQ for [DOMAIN_NAME]", event.getEventId());
+            
+        } catch (Exception dlqException) {
+            log.error("[COMPANY_NAME] [PROJECT_NAME]: Failed to send event to DLQ for [DOMAIN_NAME]", dlqException);
+            // Consider alternative failure handling (e.g., database persistence)
+        }
+    }
+}
+```
+
+### Phase 3: Asynchronous Event Processing Infrastructure
+**Enterprise Event Handlers and Processors**
+
+#### Asynchronous Event Handler Implementation
+```java
+/**
+ * Asynchronous Event Handler for [ENTITY_NAME] processing in [PROJECT_NAME]
+ * Implements enterprise async patterns for [DOMAIN_NAME] business workflows
+ */
+@Component
+@Slf4j
+@EnableAsync
+public class [ENTITY_NAME]AsyncEventHandler {
+    
+    private final [ENTITY_NAME]Service [ENTITY_NAME_LOWER]Service;
+    private final [FEATURE_NAME]ProcessingService [FEATURE_NAME_LOWER]ProcessingService;
+    private final NotificationService notificationService;
+    private final EventMetricsCollector metricsCollector;
+    private final [ENTITY_NAME]EventValidator eventValidator;
+    private final CircuitBreaker processingCircuitBreaker;
+    private final EventProcessingStateManager stateManager;
+    
+    // [DOMAIN_NAME]-specific configuration
+    @Value("${[PROJECT_NAME_LOWER].[DOMAIN_NAME_LOWER].processing.max-concurrent-events:50}")
+    private int maxConcurrentEvents;
+    
+    @Value("${[PROJECT_NAME_LOWER].[DOMAIN_NAME_LOWER].processing.timeout.default:PT30S}")
+    private Duration defaultProcessingTimeout;
+    
+    public [ENTITY_NAME]AsyncEventHandler(
+            [ENTITY_NAME]Service [ENTITY_NAME_LOWER]Service,
+            [FEATURE_NAME]ProcessingService [FEATURE_NAME_LOWER]ProcessingService,
+            NotificationService notificationService,
+            EventMetricsCollector metricsCollector,
+            [ENTITY_NAME]EventValidator eventValidator,
+            CircuitBreakerFactory circuitBreakerFactory,
+            EventProcessingStateManager stateManager) {
+        
+        this.[ENTITY_NAME_LOWER]Service = [ENTITY_NAME_LOWER]Service;
+        this.[FEATURE_NAME_LOWER]ProcessingService = [FEATURE_NAME_LOWER]ProcessingService;
+        this.notificationService = notificationService;
+        this.metricsCollector = metricsCollector;
+        this.eventValidator = eventValidator;
+        this.processingCircuitBreaker = circuitBreakerFactory.create("[ENTITY_NAME_LOWER]-event-processor");
+        this.stateManager = stateManager;
+    }
+    
+    /**
+     * Handles [ENTITY_NAME] Created events with async workflows
+     */
+    @KafkaListener(
+        topics = "${[PROJECT_NAME_LOWER].[DOMAIN_NAME_LOWER].events.topic:[ENTITY_NAME_LOWER]-events}",
+        groupId = "[ENTITY_NAME_LOWER]-created-processor",
+        containerFactory = "[ENTITY_NAME_LOWER]KafkaListenerContainerFactory",
+        properties = {
+            "max.poll.records=10",
+            "max.poll.interval.ms=300000"
+        }
+    )
+    @RetryableTopic(
+        attempts = "3",
+        backoff = @Backoff(delay = 1000, multiplier = 2),
+        dltStrategy = DltStrategy.FAIL_ON_ERROR,
+        include = {EventProcessingException.class, ValidationException.class}
+    )
+    public void handle[ENTITY_NAME]CreatedEvent(
+            @Payload [ENTITY_NAME]CreatedEvent event,
+            @Header Map<String, Object> headers,
+            Acknowledgment acknowledgment) {
+        
+        if (!([ENTITY_NAME]CreatedEvent.class.getSimpleName().equals(headers.get("eventType")))) {
+            return; // Skip non-matching events
+        }
+        
+        Timer.Sample processingTimer = metricsCollector.startEventProcessingTimer();
+        String correlationId = (String) headers.get("correlationId");
+        
+        try (MDCCloseable mdcCloseable = MDC.putCloseable("correlationId", correlationId)) {
+            log.info("[COMPANY_NAME] [PROJECT_NAME]: Processing [ENTITY_NAME] created event for [DOMAIN_NAME] - Event ID: {}, Aggregate ID: {}", 
+                event.getEventId(), event.getAggregateId());
+            
+            // Step 1: Validate event and check for duplicates
+            if (!validateEventForProcessing(event)) {
+                acknowledgment.acknowledge();
+                return;
+            }
+            
+            // Step 2: Check processing state to prevent duplicate processing
+            if (stateManager.isEventAlreadyProcessed(event.getEventId())) {
+                log.warn("[COMPANY_NAME] [PROJECT_NAME]: Event {} already processed for [DOMAIN_NAME], skipping", event.getEventId());
+                acknowledgment.acknowledge();
+                return;
+            }
+            
+            // Step 3: Mark event as being processed
+            stateManager.markEventProcessingStarted(event.getEventId(), Instant.now());
+            
+            // Step 4: Execute async workflows triggered by creation
+            List<CompletableFuture<WorkflowResult>> workflowFutures = event.getTriggeredWorkflows().stream()
+                .map(workflow -> executeWorkflowAsync(workflow, event))
+                .collect(Collectors.toList());
+            
+            // Step 5: Wait for all workflows to complete with timeout
+            CompletableFuture<Void> allWorkflows = CompletableFuture.allOf(
+                workflowFutures.toArray(new CompletableFuture[0]));
+            
+            allWorkflows.orTimeout(defaultProcessingTimeout.toMillis(), TimeUnit.MILLISECONDS)
+                .thenRun(() -> {
+                    try {
+                        // Step 6: Collect workflow results
+                        List<WorkflowResult> results = workflowFutures.stream()
+                            .map(CompletableFuture::join)
+                            .collect(Collectors.toList());
+                        
+                        // Step 7: Process workflow results
+                        handleWorkflowResults(event, results);
+                        
+                        // Step 8: Mark event as successfully processed
+                        stateManager.markEventProcessingCompleted(event.getEventId(), Instant.now(), true);
+                        
+                        // Step 9: Record success metrics
+                        metricsCollector.recordSuccessfulEventProcessing(
+                            event.getClass().getSimpleName(), processingTimer.stop());
+                        
+                        acknowledgment.acknowledge();
+                        
+                        log.info("[COMPANY_NAME] [PROJECT_NAME]: Successfully processed [ENTITY_NAME] created event for [DOMAIN_NAME] - Event ID: {}", 
+                            event.getEventId());
+                        
+                    } catch (Exception e) {
+                        handleEventProcessingFailure(event, e, acknowledgment, processingTimer);
+                    }
+                })
+                .exceptionally(throwable -> {
+                    handleEventProcessingFailure(event, (Exception) throwable, acknowledgment, processingTimer);
+                    return null;
+                });
+            
+        } catch (Exception e) {
+            handleEventProcessingFailure(event, e, acknowledgment, processingTimer);
+        }
+    }
+    
+    /**
+     * Handles [ENTITY_NAME] Status Changed events with state machine processing
+     */
+    @EventListener
+    @Async("[ENTITY_NAME_LOWER]StatusProcessor")
+    public void handle[ENTITY_NAME]StatusChangedEvent([ENTITY_NAME]StatusChangedEvent event) {
+        Timer.Sample processingTimer = metricsCollector.startEventProcessingTimer();
+        
+        try {
+            log.info("[COMPANY_NAME] [PROJECT_NAME]: Processing [ENTITY_NAME] status change for [DOMAIN_NAME] - {} to {} - Event ID: {}", 
+                event.getPreviousStatus(), event.getNewStatus(), event.getEventId());
+            
+            // Validate status transition according to [DOMAIN_NAME] business rules
+            if (!validateStatusTransition(event.getPreviousStatus(), event.getNewStatus())) {
+                throw new InvalidStatusTransitionException(
+                    String.format("[COMPANY_NAME]: Invalid status transition from %s to %s for [DOMAIN_NAME]", 
+                        event.getPreviousStatus(), event.getNewStatus()));
+            }
+            
+            // Execute follow-up actions based on new status
+            List<CompletableFuture<Void>> actionFutures = event.getFollowUpActions().stream()
+                .map(action -> executeActionAsync(action, event))
+                .collect(Collectors.toList());
+            
+            // Wait for all actions to complete
+            CompletableFuture.allOf(actionFutures.toArray(new CompletableFuture[0]))
+                .thenRun(() -> {
+                    metricsCollector.recordSuccessfulEventProcessing(
+                        event.getClass().getSimpleName(), processingTimer.stop());
+                    
+                    log.info("[COMPANY_NAME] [PROJECT_NAME]: Successfully processed [ENTITY_NAME] status change for [DOMAIN_NAME] - Event ID: {}", 
+                        event.getEventId());
+                })
+                .exceptionally(throwable -> {
+                    log.error("[COMPANY_NAME] [PROJECT_NAME]: Failed to process status change actions for [DOMAIN_NAME] - Event ID: {}", 
+                        event.getEventId(), throwable);
+                    return null;
+                });
+            
+        } catch (Exception e) {
+            log.error("[COMPANY_NAME] [PROJECT_NAME]: Failed to process [ENTITY_NAME] status change for [DOMAIN_NAME] - Event ID: {}", 
+                event.getEventId(), e);
+            metricsCollector.recordFailedEventProcessing(
+                event.getClass().getSimpleName(), e.getClass().getSimpleName(), processingTimer.stop());
+        }
+    }
+    
+    /**
+     * Handles [ENTITY_NAME] Processing Completed events
+     */
+    @EventListener
+    @Async("[ENTITY_NAME_LOWER]CompletionProcessor")
+    public void handle[ENTITY_NAME]ProcessingCompletedEvent([ENTITY_NAME]ProcessingCompletedEvent event) {
+        try {
+            log.info("[COMPANY_NAME] [PROJECT_NAME]: Processing [ENTITY_NAME] completion event for [DOMAIN_NAME] - Event ID: {}, Success: {}", 
+                event.getEventId(), event.getProcessingResult().isSuccessful());
+            
+            if (event.getProcessingResult().isSuccessful()) {
+                // Handle successful completion
+                handleSuccessfulCompletion(event);
+            } else {
+                // Handle failure and potential compensation
+                handleFailedCompletion(event);
+            }
+            
+            // Update metrics and analytics
+            updateCompletionMetrics(event);
+            
+        } catch (Exception e) {
+            log.error("[COMPANY_NAME] [PROJECT_NAME]: Failed to process completion event for [DOMAIN_NAME] - Event ID: {}", 
+                event.getEventId(), e);
+        }
+    }
+    
+    // Private helper methods for async event processing
+    
+    private boolean validateEventForProcessing([ENTITY_NAME]DomainEvent event) {
+        try {
+            EventValidationResult validationResult = eventValidator.validate(event);
+            if (!validationResult.isValid()) {
+                log.warn("[COMPANY_NAME] [PROJECT_NAME]: Event validation failed for [DOMAIN_NAME] - Event ID: {}, Errors: {}", 
+                    event.getEventId(), validationResult.getErrors());
+                return false;
+            }
+            return true;
+        } catch (Exception e) {
+            log.error("[COMPANY_NAME] [PROJECT_NAME]: Event validation error for [DOMAIN_NAME] - Event ID: {}", 
+                event.getEventId(), e);
+            return false;
+        }
+    }
+    
+    private CompletableFuture<WorkflowResult> executeWorkflowAsync(
+            AsyncWorkflowTrigger workflow, 
+            [ENTITY_NAME]CreatedEvent event) {
+        
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                log.debug("[COMPANY_NAME] [PROJECT_NAME]: Executing async workflow {} for [DOMAIN_NAME] - Event ID: {}", 
+                    workflow.getWorkflowType(), event.getEventId());
+                
+                WorkflowResult result = processingCircuitBreaker.executeSupplier(() -> {
+                    switch (workflow.getWorkflowType()) {
+                        case "[FEATURE_NAME]_VALIDATION":
+                            return execute[FEATURE_NAME]Validation(event);
+                        case "[ENTITY_NAME]_ENRICHMENT":
+                            return execute[ENTITY_NAME]Enrichment(event);
+                        case "NOTIFICATION_DISPATCH":
+                            return executeNotificationDispatch(event);
+                        default:
+                            throw new UnsupportedWorkflowException(
+                                String.format("[COMPANY_NAME]: Unsupported workflow type %s for [DOMAIN_NAME]", 
+                                    workflow.getWorkflowType()));
+                    }
+                });
+                
+                log.debug("[COMPANY_NAME] [PROJECT_NAME]: Completed async workflow {} for [DOMAIN_NAME] - Event ID: {}, Success: {}", 
+                    workflow.getWorkflowType(), event.getEventId(), result.isSuccessful());
+                
+                return result;
+                
+            } catch (Exception e) {
+                log.error("[COMPANY_NAME] [PROJECT_NAME]: Failed to execute async workflow {} for [DOMAIN_NAME] - Event ID: {}", 
+                    workflow.getWorkflowType(), event.getEventId(), e);
+                
+                return WorkflowResult.builder()
+                    .workflowType(workflow.getWorkflowType())
+                    .successful(false)
+                    .errorMessage(e.getMessage())
+                    .executionTime(Duration.ZERO)
+                    .build();
+            }
+        }, getWorkflowExecutor(workflow.getPriority()));
+    }
+    
+    private WorkflowResult execute[FEATURE_NAME]Validation([ENTITY_NAME]CreatedEvent event) {
+        Instant startTime = Instant.now();
+        
+        try {
+            // Implement [DOMAIN_NAME]-specific validation logic
+            ValidationResult validationResult = [FEATURE_NAME_LOWER]ProcessingService
+                .validateFor[FEATURE_NAME](event.get[ENTITY_NAME]Data());
+            
+            if (validationResult.isValid()) {
+                // Update [ENTITY_NAME] with validation results
+                [ENTITY_NAME_LOWER]Service.updateValidationStatus(
+                    event.getAggregateId(), 
+                    ValidationStatus.VALIDATED,
+                    validationResult.getValidationDetails());
+                
+                return WorkflowResult.builder()
+                    .workflowType("[FEATURE_NAME]_VALIDATION")
+                    .successful(true)
+                    .executionTime(Duration.between(startTime, Instant.now()))
+                    .resultData(Map.of("validationStatus", "VALIDATED"))
+                    .build();
+            } else {
+                // Handle validation failure
+                [ENTITY_NAME_LOWER]Service.updateValidationStatus(
+                    event.getAggregateId(), 
+                    ValidationStatus.FAILED,
+                    validationResult.getErrors());
+                
+                return WorkflowResult.builder()
+                    .workflowType("[FEATURE_NAME]_VALIDATION")
+                    .successful(false)
+                    .errorMessage("Validation failed: " + validationResult.getErrors())
+                    .executionTime(Duration.between(startTime, Instant.now()))
+                    .build();
+            }
+            
+        } catch (Exception e) {
+            log.error("[COMPANY_NAME] [PROJECT_NAME]: [FEATURE_NAME] validation failed for [DOMAIN_NAME] - Aggregate ID: {}", 
+                event.getAggregateId(), e);
+            throw new WorkflowExecutionException(
+                String.format("[COMPANY_NAME]: [FEATURE_NAME] validation workflow failed for [DOMAIN_NAME]"), e);
+        }
+    }
+    
+    private WorkflowResult execute[ENTITY_NAME]Enrichment([ENTITY_NAME]CreatedEvent event) {
+        Instant startTime = Instant.now();
+        
+        try {
+            // Implement [DOMAIN_NAME]-specific enrichment logic
+            EnrichmentResult enrichmentResult = [ENTITY_NAME_LOWER]Service
+                .enrichWith[DOMAIN_NAME]Data(event.getAggregateId(), event.get[ENTITY_NAME]Data());
+            
+            return WorkflowResult.builder()
+                .workflowType("[ENTITY_NAME]_ENRICHMENT")
+                .successful(enrichmentResult.isSuccessful())
+                .executionTime(Duration.between(startTime, Instant.now()))
+                .resultData(enrichmentResult.getEnrichedData())
+                .build();
+            
+        } catch (Exception e) {
+            log.error("[COMPANY_NAME] [PROJECT_NAME]: [ENTITY_NAME] enrichment failed for [DOMAIN_NAME] - Aggregate ID: {}", 
+                event.getAggregateId(), e);
+            throw new WorkflowExecutionException(
+                String.format("[COMPANY_NAME]: [ENTITY_NAME] enrichment workflow failed for [DOMAIN_NAME]"), e);
+        }
+    }
+    
+    private WorkflowResult executeNotificationDispatch([ENTITY_NAME]CreatedEvent event) {
+        Instant startTime = Instant.now();
+        
+        try {
+            // Implement [DOMAIN_NAME]-specific notification logic
+            NotificationRequest notificationRequest = NotificationRequest.builder()
+                .recipientId(event.getUserId())
+                .notificationType(NotificationType.[ENTITY_NAME]_CREATED)
+                .priority(event.getProcessingPriority().name())
+                .templateData(Map.of(
+                    "[ENTITY_NAME_LOWER]Id", event.getAggregateId(),
+                    "[ENTITY_NAME_LOWER]Reference", event.get[ENTITY_NAME]Data().getReference(),
+                    "domain", "[DOMAIN_NAME]",
+                    "company", "[COMPANY_NAME]"
+                ))
+                .build();
+            
+            NotificationResult notificationResult = notificationService.sendAsync(notificationRequest).get();
+            
+            return WorkflowResult.builder()
+                .workflowType("NOTIFICATION_DISPATCH")
+                .successful(notificationResult.isSuccessful())
+                .executionTime(Duration.between(startTime, Instant.now()))
+                .resultData(Map.of("notificationId", notificationResult.getNotificationId()))
+                .build();
+            
+        } catch (Exception e) {
+            log.error("[COMPANY_NAME] [PROJECT_NAME]: Notification dispatch failed for [DOMAIN_NAME] - Aggregate ID: {}", 
+                event.getAggregateId(), e);
+            throw new WorkflowExecutionException(
+                String.format("[COMPANY_NAME]: Notification dispatch workflow failed for [DOMAIN_NAME]"), e);
+        }
+    }
+    
+    private CompletableFuture<Void> executeActionAsync(AsyncAction action, [ENTITY_NAME]StatusChangedEvent event) {
+        return CompletableFuture.runAsync(() -> {
+            try {
+                log.debug("[COMPANY_NAME] [PROJECT_NAME]: Executing async action {} for [DOMAIN_NAME] - Event ID: {}", 
+                    action.getActionType(), event.getEventId());
+                
+                switch (action.getActionType()) {
+                    case "[FEATURE_NAME]_FINALIZATION":
+                        [FEATURE_NAME_LOWER]ProcessingService.finalize[FEATURE_NAME](event.getAggregateId());
+                        break;
+                    case "APPROVAL_NOTIFICATION":
+                        sendApprovalNotification(event);
+                        break;
+                    case "REJECTION_NOTIFICATION":
+                        sendRejectionNotification(event);
+                        break;
+                    case "CLEANUP_RESOURCES":
+                        cleanupResources(event.getAggregateId());
+                        break;
+                    case "[FEATURE_NAME]_EXECUTION":
+                        [FEATURE_NAME_LOWER]ProcessingService.execute[FEATURE_NAME](event.getAggregateId());
+                        break;
+                    default:
+                        log.warn("[COMPANY_NAME] [PROJECT_NAME]: Unknown action type {} for [DOMAIN_NAME]", action.getActionType());
+                }
+                
+            } catch (Exception e) {
+                log.error("[COMPANY_NAME] [PROJECT_NAME]: Failed to execute async action {} for [DOMAIN_NAME] - Event ID: {}", 
+                    action.getActionType(), event.getEventId(), e);
+                throw new RuntimeException(e);
+            }
+        }, getActionExecutor(action.getPriority()));
+    }
+    
+    private boolean validateStatusTransition([ENTITY_NAME]Status fromStatus, [ENTITY_NAME]Status toStatus) {
+        // Implement [DOMAIN_NAME]-specific status transition validation
+        return switch (fromStatus) {
+            case DRAFT -> toStatus == [ENTITY_NAME]Status.SUBMITTED;
+            case SUBMITTED -> toStatus == [ENTITY_NAME]Status.PROCESSING || toStatus == [ENTITY_NAME]Status.REJECTED;
+            case PROCESSING -> toStatus == [ENTITY_NAME]Status.APPROVED || toStatus == [ENTITY_NAME]Status.REJECTED;
+            case APPROVED -> toStatus == [ENTITY_NAME]Status.COMPLETED;
+            case REJECTED, COMPLETED -> false; // Terminal states
+            default -> false;
+        };
+    }
+    
+    private void handleWorkflowResults([ENTITY_NAME]CreatedEvent event, List<WorkflowResult> results) {
+        boolean allSuccessful = results.stream().allMatch(WorkflowResult::isSuccessful);
+        
+        if (allSuccessful) {
+            log.info("[COMPANY_NAME] [PROJECT_NAME]: All workflows completed successfully for [DOMAIN_NAME] - Event ID: {}", 
+                event.getEventId());
+            
+            // Publish completion event
+            [ENTITY_NAME]ProcessingCompletedEvent completionEvent = [ENTITY_NAME]ProcessingCompletedEvent.builder()
+                .eventId(UUID.randomUUID().toString())
+                .aggregateId(event.getAggregateId())
+                .aggregateVersion(event.getAggregateVersion() + 1)
+                .occurredAt(Instant.now())
+                .correlationId(event.getCorrelationId())
+                .userId(event.getUserId())
+                .processingResult(ProcessingResult.builder()
+                    .successful(true)
+                    .workflowResults(results)
+                    .build())
+                .processingDuration(Duration.ofSeconds(30)) // Calculate actual duration
+                .build();
+            
+            // Publish async completion event
+            CompletableFuture.runAsync(() -> {
+                try {
+                    // This would trigger the completion event handler
+                    ApplicationEventPublisher eventPublisher = 
+                        ApplicationContextProvider.getApplicationContext().getBean(ApplicationEventPublisher.class);
+                    eventPublisher.publishEvent(completionEvent);
+                } catch (Exception e) {
+                    log.error("[COMPANY_NAME] [PROJECT_NAME]: Failed to publish completion event for [DOMAIN_NAME]", e);
+                }
+            });
+            
+        } else {
+            log.warn("[COMPANY_NAME] [PROJECT_NAME]: Some workflows failed for [DOMAIN_NAME] - Event ID: {}", event.getEventId());
+            
+            // Handle partial failure - may need compensation logic
+            List<WorkflowResult> failedWorkflows = results.stream()
+                .filter(result -> !result.isSuccessful())
+                .collect(Collectors.toList());
+            
+            // Implement compensation logic for failed workflows
+            handleWorkflowFailures(event, failedWorkflows);
+        }
+    }
+    
+    private void handleEventProcessingFailure(
+            [ENTITY_NAME]DomainEvent event, 
+            Exception exception, 
+            Acknowledgment acknowledgment, 
+            Timer.Sample timer) {
+        
+        log.error("[COMPANY_NAME] [PROJECT_NAME]: Failed to process event for [DOMAIN_NAME] - Event ID: {}", 
+            event.getEventId(), exception);
+        
+        // Mark event processing as failed
+        stateManager.markEventProcessingCompleted(event.getEventId(), Instant.now(), false);
+        
+        // Record failure metrics
+        metricsCollector.recordFailedEventProcessing(
+            event.getClass().getSimpleName(), 
+            exception.getClass().getSimpleName(), 
+            timer.stop());
+        
+        // Decide whether to retry or send to DLQ based on exception type
+        if (isRetryableException(exception)) {
+            // Don't acknowledge - let Kafka retry
+            log.info("[COMPANY_NAME] [PROJECT_NAME]: Event {} will be retried for [DOMAIN_NAME]", event.getEventId());
+        } else {
+            // Acknowledge to prevent infinite retries and send to DLQ
+            acknowledgment.acknowledge();
+            log.info("[COMPANY_NAME] [PROJECT_NAME]: Event {} sent to DLQ for [DOMAIN_NAME]", event.getEventId());
+        }
+    }
+    
+    private boolean isRetryableException(Exception exception) {
+        return exception instanceof TransientException ||
+               exception instanceof ConnectException ||
+               exception instanceof TimeoutException;
+    }
+    
+    private Executor getWorkflowExecutor(EventPriority priority) {
+        // Return different executors based on priority
+        return switch (priority) {
+            case CRITICAL, HIGH -> ApplicationContextProvider.getApplicationContext()
+                .getBean("highPriorityWorkflowExecutor", Executor.class);
+            case MEDIUM -> ApplicationContextProvider.getApplicationContext()
+                .getBean("mediumPriorityWorkflowExecutor", Executor.class);
+            case LOW -> ApplicationContextProvider.getApplicationContext()
+                .getBean("lowPriorityWorkflowExecutor", Executor.class);
+        };
+    }
+    
+    private Executor getActionExecutor(EventPriority priority) {
+        return getWorkflowExecutor(priority);
+    }
+    
+    // Additional helper methods for specific [DOMAIN_NAME] operations
+    private void handleSuccessfulCompletion([ENTITY_NAME]ProcessingCompletedEvent event) {
+        // Implementation for successful completion handling
+    }
+    
+    private void handleFailedCompletion([ENTITY_# Spring Boot Event-Driven Asynchronous Architecture Prompt - CRAFT Format
+
+```java
+// You are a world-class event-driven architecture expert and Spring Boot asynchronous processing specialist with 20+ years of combined experience, 
+// specializing in enterprise-grade distributed systems, message-driven microservices, and high-performance asynchronous processing patterns.
+//
+// CONTEXT: create comprehensive Spring Boot event-driven asynchronous processing system working with [ENTITY_NAME] entity in [DOMAIN_NAME] domain for [PROJECT_NAME] project
+//
+// REQUIREMENTS:
+// Functional: Asynchronous event processing with guaranteed delivery, Event sourcing and CQRS implementation, Distributed event streaming with Apache Kafka, Asynchronous command processing with message queues, Event-driven saga pattern implementation, Dead letter queue handling for failed events, Event replay and recovery mechanisms, Asynchronous notification processing, Event-driven workflow orchestration, Real-time event streaming and processing, Asynchronous data synchronization across services, Event-driven state machine implementation
+// Non-Functional: Ultra-high throughput (100K+ events/second), Low-latency event processing (<50ms), Fault-tolerant asynchronous processing, Horizontal scalability with event partitioning, 99.99% uptime with graceful degradation, Memory-efficient event processing, Backpressure handling and flow control, Circuit breaker patterns for async operations, Distributed tracing for event flows, Comprehensive async monitoring and observability
+//
+// ARCHITECTURE: Event-driven microservices architecture, CQRS (Command Query Responsibility Segregation), Event sourcing patterns, Saga pattern for distributed transactions, Asynchronous messaging patterns (Pub/Sub, Point-to-Point), Event streaming architecture, Domain-driven design with bounded contexts, Hexagonal architecture with event ports, Cloud-native event-driven patterns, Reactive programming with event streams
+//
+// TESTING: Asynchronous integration testing with testcontainers, Event-driven contract testing, Chaos engineering for async resilience, Performance testing for event throughput, End-to-end async workflow testing, Event replay testing scenarios, Dead letter queue testing, Concurrent event processing testing, Event ordering and idempotency testing, Distributed tracing validation testing
+//
+// CONSTRAINTS:
+// Quality: Minimum 90% event processing success rate, Comprehensive async error handling and recovery, Clean event-driven code principles (SOLID, DRY), Event schema evolution compatibility, Comprehensive async documentation and event catalogs, Idempotent event processing guarantees
+// Performance: Event processing latency <50ms for critical events, Throughput capacity 100K+ events/second, Memory usage optimization for event streams, Efficient event serialization/deserialization, Optimal thread pool configuration, Database connection pool optimization for async operations
+// Security: Secure event transmission with encryption, Event payload sanitization and validation, Access control for event publishers/consumers, Audit trail for all event processing, Secure message queue authentication, Event-level authorization and access control
+//
+// FRAMEWORKS: Spring Boot 3.x, Spring Events, Apache Kafka, Spring Cloud Stream, Spring Integration, Spring Batch, Spring WebFlux, Project Reactor, RabbitMQ, Redis Streams, Axon Framework, Spring State Machine
+//
+// ORIGINALITY REQUIREMENTS:
+// - Create UNIQUE event-driven implementation with custom business logic specific to [DOMAIN_NAME] domain
+// - Use distinctive async event names, processing patterns, and handler structures for [ENTITY_NAME]
+// - Implement domain-specific event choreography and orchestration patterns for [FEATURE_NAME]
+// - Add unique async error handling patterns with [COMPANY_NAME]-specific retry and recovery strategies
+// - Include original comments explaining [PROJECT_NAME] event-driven business context and async implementation decisions
+// - Avoid generic async boilerplate patterns - create contextual, [DOMAIN_NAME]-driven event processing
+// - Use creative async naming conventions that reflect the [DOMAIN_NAME] business domain and [COMPANY_NAME] standards
+// - Implement custom event utilities and async helper classes specific to [ENTITY_NAME] use case
+// - Create unique async test scenarios based on real [DOMAIN_NAME] business event requirements
+// - Generate original async documentation that explains [PROJECT_NAME] specific event-driven implementation choices
+//
+// Generate comprehensive Spring Boot event-driven async implementation that:
+// - Follows enterprise async patterns and SOLID principles with unique [DOMAIN_NAME] business event logic
+// - Includes extensive async error handling with [COMPANY_NAME]-specific event recovery strategies
+// - Implements proper async logging with contextual [PROJECT_NAME] business event information
+// - Uses modern Java 17+ async features in creative ways for [ENTITY_NAME] event processing
+// - Includes comprehensive async test coverage with realistic [DOMAIN_NAME] business event scenarios
+// - Handles async edge cases specific to [DOMAIN_NAME] domain and [ENTITY_NAME] event requirements
+// - Follows async security best practices with custom [COMPANY_NAME] event validation logic
+// - Implements proper async documentation with [PROJECT_NAME] business event context explanations
+// - Adheres to specified quality gates with unique async [DOMAIN_NAME] implementation approach
+// - Creates original async code structure that reflects specific [COMPANY_NAME] business event needs
+
+/*
+ * Generated with CRAFT method for Spring Boot Event-Driven Async Architecture - ORIGINALITY FOCUSED
+ * This enterprise-grade async prompt generates UNIQUE, production-ready event-driven code with:
+ * - Custom async [DOMAIN_NAME] business event logic implementation tailored to your domain
+ * - Original async event naming conventions and processing patterns for [ENTITY_NAME]
+ * - Domain-specific async validation and error handling for [FEATURE_NAME]
+ * - Unique async test scenarios based on real [DOMAIN_NAME] business event requirements
+ * - Creative async implementation patterns that avoid common event-driven boilerplate
+ * - Contextual async comments and documentation for [PROJECT_NAME]
+ * 
+ * PARAMETERIZED PLACEHOLDERS - Replace with your specific values:
+ * - [DOMAIN_NAME] → Your business domain (finance, healthcare, e-commerce, logistics, manufacturing, etc.)
+ * - [ENTITY_NAME] → Your actual entity (Order, Payment, Patient, Shipment, Product, etc.)
+ * - [FEATURE_NAME] → Your specific feature (OrderProcessing, PaymentValidation, PatientAdmission, etc.)
+ * - [PROJECT_NAME] → Your project name (ECommerceSystem, HealthcarePlatform, LogisticsHub, etc.)
+ * - [COMPANY_NAME] → Your company name (RetailCorp, HealthTech, LogiFlow, ManufacturingInc, etc.)
+ * 
+ * EVENT-DRIVEN ASYNC CUSTOMIZATIONS:
+ * - Add your specific event types and async processing requirements
+ * - Include your company's async messaging standards and naming conventions
+ * - Specify your unique async error handling and retry strategies
+ * - Define your custom event validation logic and async business workflows
+ * - Configure your message broker settings and async processing topology
+ * - Implement your event sourcing and CQRS patterns
+ * - Add your async security and event encryption mechanisms
+ * - Include your async monitoring and distributed tracing requirements
+ * 
+ * ASYNC ARCHITECTURE PATTERNS TO IMPLEMENT:
+ * - Event Sourcing with async event store operations
+ * - CQRS with async command and query separation
+ * - Saga pattern with async compensation workflows
+ * - Event choreography vs orchestration patterns
+ * - Async message routing and transformation
+ * - Dead letter queue handling and retry mechanisms
+ * - Event versioning and schema evolution
+ * - Async notification and alerting systems
+ * 
+ * ASYNC PERFORMANCE OPTIMIZATIONS:
+ * - Optimal thread pool configuration for event processing
+ * - Efficient event batching and bulk processing
+ * - Async connection pooling and resource management
+ * - Event partitioning strategies for scalability
+ * - Backpressure handling in high-throughput scenarios
+ * - Memory-efficient event serialization
+ * - Async caching strategies for event processing
+ * - Circuit breaker patterns for external async calls
+ * 
+ * The more specific your async business context, the more original and optimized the generated event-driven code will be!
+ */
+
+## SPRING BOOT EVENT-DRIVEN ASYNCHRONOUS ARCHITECTURE IMPLEMENTATION
+
+### Phase 1: Event-Driven Domain Model and Event Definitions
+**Enterprise [DOMAIN_NAME] Asynchronous Event Architecture**
+
+#### Domain Events for [ENTITY_NAME] Processing
+```java
+/**
+ * Base domain event for [ENTITY_NAME] operations in [PROJECT_NAME]
+ * Implements event-driven patterns for [DOMAIN_NAME] business processes
+ * 
+ * This event serves as the foundation for all [ENTITY_NAME]-related
+ * asynchronous processing in the [COMPANY_NAME] [DOMAIN_NAME] domain.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "eventType")
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = [ENTITY_NAME]CreatedEvent.class, name = "[ENTITY_NAME]_CREATED"),
+    @JsonSubTypes.Type(value = [ENTITY_NAME]UpdatedEvent.class, name = "[ENTITY_NAME]_UPDATED"),
+    @JsonSubTypes.Type(value = [ENTITY_NAME]StatusChangedEvent.class, name = "[ENTITY_NAME]_STATUS_CHANGED"),
+    @JsonSubTypes.Type(value = [ENTITY_NAME]ProcessingCompletedEvent.class, name = "[ENTITY_NAME]_PROCESSING_COMPLETED"),
+    @JsonSubTypes.Type(value = [ENTITY_NAME]ValidationFailedEvent.class, name = "[ENTITY_NAME]_VALIDATION_FAILED")
+})
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
+@EqualsAndHashCode(of = {"eventId", "aggregateId"})
+public abstract class [ENTITY_NAME]DomainEvent {
+    
+    @JsonProperty("eventId")
+    @NotNull(message = "[COMPANY_NAME]: Event ID is required for [DOMAIN_NAME] async processing")
+    private String eventId;
+    
+    @JsonProperty("aggregateId")
+    @NotNull(message = "[COMPANY_NAME]: Aggregate ID is required for [ENTITY_NAME] event correlation")
+    private String aggregateId;
+    
+    @JsonProperty("aggregateVersion")
+    @Min(value = 1, message = "[COMPANY_NAME]: Aggregate version must be positive for [DOMAIN_NAME] event sourcing")
+    private Long aggregateVersion;
+    
+    @JsonProperty("occurredAt")
+    @NotNull(message = "[COMPANY_NAME]: Event timestamp is required for [DOMAIN_NAME] event ordering")
+    private Instant occurredAt;
+    
+    @JsonProperty("correlationId")
+    private String correlationId;
+    
+    @JsonProperty("causationId")
+    private String causationId;
+    
+    @JsonProperty("userId")
+    private String userId;
+    
+    @JsonProperty("eventMetadata")
+    @Builder.Default
+    private Map<String, Object> eventMetadata = new HashMap<>();
+    
+    // [DOMAIN_NAME]-specific business context
+    @JsonProperty("[DOMAIN_NAME_LOWER]Context")
+    private [DOMAIN_NAME]Context [DOMAIN_NAME_LOWER]Context;
+    
+    /**
+     * Factory method for creating event with [COMPANY_NAME] standards
+     */
+    public static <T extends [ENTITY_NAME]DomainEvent> T createEvent(
+            Class<T> eventClass,
+            String aggregateId,
+            Long aggregateVersion,
+            String userId,
+            [DOMAIN_NAME]Context context) {
+        
+        try {
+            T event = eventClass.getDeclaredConstructor().newInstance();
+            event.setEventId(UUID.randomUUID().toString());
+            event.setAggregateId(aggregateId);
+            event.setAggregateVersion(aggregateVersion);
+            event.setOccurredAt(Instant.now());
+            event.setCorrelationId(MDC.get("correlationId"));
+            event.setUserId(userId);
+            event.set[DOMAIN_NAME]Context(context);
+            
+            // Add [COMPANY_NAME]-specific metadata
+            event.getEventMetadata().put("source", "[PROJECT_NAME]");
+            event.getEventMetadata().put("domain", "[DOMAIN_NAME]");
+            event.getEventMetadata().put("entity", "[ENTITY_NAME]");
+            
+            return event;
+        } catch (Exception e) {
+            throw new EventCreationException(
+                String.format("[COMPANY_NAME]: Failed to create event %s for [DOMAIN_NAME]", eventClass.getSimpleName()), e);
+        }
+    }
+    
+    /**
+     * Determines if this event should be processed asynchronously
+     */
+    public abstract boolean requiresAsyncProcessing();
+    
+    /**
+     * Returns the routing key for message broker routing
+     */
+    public abstract String getRoutingKey();
+    
+    /**
+     * Returns processing priority for [DOMAIN_NAME] business rules
+     */
+    public abstract EventPriority getProcessingPriority();
+}
+
+/**
+ * [ENTITY_NAME] Created Event - Triggered when new [ENTITY_NAME] is created
+ * Initiates async workflows for [DOMAIN_NAME] processing
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@SuperBuilder
+@JsonTypeName("[ENTITY_NAME]_CREATED")
+public class [ENTITY_NAME]CreatedEvent extends [ENTITY_NAME]DomainEvent {
+    
+    @JsonProperty("[ENTITY_NAME_LOWER]Data")
+    @NotNull(message = "[COMPANY_NAME]: [ENTITY_NAME] data is required for creation event")
+    private [ENTITY_NAME]EventData [ENTITY_NAME_LOWER]Data;
+    
+    @JsonProperty("creationSource")
+    @NotBlank(message = "[COMPANY_NAME]: Creation source is required for [DOMAIN_NAME] audit trail")
+    private String creationSource;
+    
+    @JsonProperty("validationStatus")
+    @Builder.Default
+    private ValidationStatus validationStatus = ValidationStatus.PENDING;
+    
+    @Override
+    public boolean requiresAsyncProcessing() {
+        return true; // [ENTITY_NAME] creation triggers multiple async workflows
+    }
+    
+    @Override
+    public String getRoutingKey() {
+        return String.format("[COMPANY_NAME].[DOMAIN_NAME].[ENTITY_NAME_LOWER].created.%s", 
+            [ENTITY_NAME_LOWER]Data.getCategory());
+    }
+    
+    @Override
+    public EventPriority getProcessingPriority() {
+        return EventPriority.HIGH; // Creation events are high priority for [DOMAIN_NAME]
+    }
+    
+    /**
+     * Creates async workflows based on [DOMAIN_NAME] business rules
+     */
+    public List<AsyncWorkflowTrigger> getTriggeredWorkflows() {
+        List<AsyncWorkflowTrigger> workflows = new ArrayList<>();
+        
+        // [DOMAIN_NAME]-specific workflow triggers
+        workflows.add(AsyncWorkflowTrigger.builder()
+            .workflowType("[FEATURE_NAME]_VALIDATION")
+            .priority(EventPriority.HIGH)
+            .estimatedDuration(Duration.ofSeconds(30))
+            .build());
+            
+        workflows.add(AsyncWorkflowTrigger.builder()
+            .workflowType("[ENTITY_NAME]_ENRICHMENT")
+            .priority(EventPriority.MEDIUM)
+            .estimatedDuration(Duration.ofMinutes(2))
+            .build());
+            
+        // Add notification workflow if required
+        if ([ENTITY_NAME_LOWER]Data.requiresNotification()) {
+            workflows.add(AsyncWorkflowTrigger.builder()
+                .workflowType("NOTIFICATION_DISPATCH")
+                .priority(EventPriority.LOW)
+                .estimatedDuration(Duration.ofSeconds(10))
+                .build());
+        }
+        
+        return workflows;
+    }
+}
+
+/**
+ * [ENTITY_NAME] Status Changed Event - Triggered during status transitions
+ * Orchestrates async state machine transitions for [DOMAIN_NAME]
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@SuperBuilder
+@JsonTypeName("[ENTITY_NAME]_STATUS_CHANGED")
+public class [ENTITY_NAME]StatusChangedEvent extends [ENTITY_NAME]DomainEvent {
+    
+    @JsonProperty("previousStatus")
+    @NotNull(message = "[COMPANY_NAME]: Previous status is required for [DOMAIN_NAME] state tracking")
+    private [ENTITY_NAME]Status previousStatus;
+    
+    @JsonProperty("newStatus")
+    @NotNull(message = "[COMPANY_NAME]: New status is required for [DOMAIN_NAME] state tracking")
+    private [ENTITY_NAME]Status newStatus;
+    
+    @JsonProperty("statusChangeReason")
+    private String statusChangeReason;
+    
+    @JsonProperty("automatedTransition")
+    @Builder.Default
+    private Boolean automatedTransition = false;
+    
+    @Override
+    public boolean requiresAsyncProcessing() {
+        // Only certain status transitions require async processing
+        return newStatus.triggersAsyncWorkflow();
+    }
+    
+    @Override
+    public String getRoutingKey() {
+        return String.format("[COMPANY_NAME].[DOMAIN_NAME].[ENTITY_NAME_LOWER].status.%s.to.%s", 
+            previousStatus.name().toLowerCase(), newStatus.name().toLowerCase());
+    }
+    
+    @Override
+    public EventPriority getProcessingPriority() {
+        return newStatus.getProcessingPriority();
+    }
+    
+    /**
+     * Determines follow-up actions based on [DOMAIN_NAME] business rules
+     */
+    public List<AsyncAction> getFollowUpActions() {
+        List<AsyncAction> actions = new ArrayList<>();
+        
+        switch (newStatus) {
+            case APPROVED:
+                actions.add(new AsyncAction("[FEATURE_NAME]_FINALIZATION", EventPriority.HIGH));
+                actions.add(new AsyncAction("APPROVAL_NOTIFICATION", EventPriority.MEDIUM));
+                break;
+            case REJECTED:
+                actions.add(new AsyncAction("REJECTION_NOTIFICATION", EventPriority.MEDIUM));
+                actions.add(new AsyncAction("CLEANUP_RESOURCES", EventPriority.LOW));
+                break;
+            case PROCESSING:
+                actions.add(new AsyncAction("[FEATURE_NAME]_EXECUTION", EventPriority.HIGH));
+                break;
+        }
+        
+        return actions;
+    }
+}
+
+/**
+ * [ENTITY_NAME] Processing Completed Event - Signals completion of async workflows
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@SuperBuilder
+@JsonTypeName("[ENTITY_NAME]_PROCESSING_COMPLETED")
+public class [ENTITY_NAME]ProcessingCompletedEvent extends [ENTITY_NAME]DomainEvent {
+    
+    @JsonProperty("processingResult")
+    @NotNull(message = "[COMPANY_NAME]: Processing result is required for [DOMAIN_NAME] completion tracking")
+    private ProcessingResult processingResult;
+    
+    @JsonProperty("processingDuration")
+    private Duration processingDuration;
+    
+    @JsonProperty("processedBy")
+    private String processedBy;
+    
+    @JsonProperty("qualityMetrics")
+    private QualityMetrics qualityMetrics;
+    
+    @Override
+    public boolean requiresAsyncProcessing() {
+        // Completion events may trigger additional async workflows
+        return processingResult.isSuccessful() && processingResult.hasFollowUpActions();
+    }
+    
+    @Override
+    public String getRoutingKey() {
+        String resultStatus = processingResult.isSuccessful() ? "success" : "failure";
+        return String.format("[COMPANY_NAME].[DOMAIN_NAME].[ENTITY_NAME_LOWER].completed.%s", resultStatus);
+    }
+    
+    @Override
+    public EventPriority getProcessingPriority() {
+        return processingResult.isSuccessful() ? EventPriority.MEDIUM : EventPriority.HIGH;
+    }
+}
+
+/**
+ * [DOMAIN_NAME] Context - Business context for async event processing
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class [DOMAIN_NAME]Context {
+    
+    private String businessUnit;
+    private String region;
+    private String customerSegment;
+    private Map<String, String> businessMetadata;
+    
+    // [DOMAIN_NAME]-specific context fields
+    private [DOMAIN_NAME]Priority priority;
+    private [DOMAIN_NAME]Category category;
+    private List<String> requiredApprovals;
+    private Duration slaTarget;
+    
+    /**
+     * Determines if context requires expedited async processing
+     */
+    public boolean requiresExpeditedProcessing() {
+        return priority == [DOMAIN_NAME]Priority.CRITICAL ||
+               (slaTarget != null && slaTarget.compareTo(Duration.ofHours(1)) < 0);
+    }
+}
+
+/**
+ * Event processing priorities for [DOMAIN_NAME] business operations
+ */
+public enum EventPriority {
+    CRITICAL(1, Duration.ofSeconds(5)),
+    HIGH(2, Duration.ofSeconds(30)),
+    MEDIUM(3, Duration.ofMinutes(5)),
+    LOW(4, Duration.ofMinutes(30));
+    
+    private final int priorityLevel;
+    private final Duration maxProcessingDelay;
+    
+    EventPriority(int priorityLevel, Duration maxProcessingDelay) {
+        this.priorityLevel = priorityLevel;
+        this.maxProcessingDelay = maxProcessingDelay;
+    }
+    
+    public int getPriorityLevel() { return priorityLevel; }
+    public Duration getMaxProcessingDelay() { return maxProcessingDelay; }
+}
+```
+
+### Phase 2: Asynchronous Event Publishing Infrastructure
+**Enterprise-Grade Event Publishing with Kafka Integration**
+
+#### Event Publisher Service Implementation
+```java
+/**
+ * Enterprise Event Publisher for [DOMAIN_NAME] async processing
+ * Implements reliable event publishing with [COMPANY_NAME] standards
+ */
+@Service
+@Slf4j
+public class [ENTITY_NAME]AsyncEventPublisher {
+    
+    private final KafkaTemplate<String, [ENTITY_NAME]DomainEvent> kafkaTemplate;
+    private final ApplicationEventPublisher localEventPublisher;
+    private final EventStore eventStore;
+    private final [ENTITY_NAME]EventValidator eventValidator;
+    private final EventMetricsCollector metricsCollector;
+    private final CircuitBreaker publishingCircuitBreaker;
+    private final RetryTemplate retryTemplate;
+    
+    // [DOMAIN_NAME]-specific configuration
+    @Value("${[PROJECT_NAME_LOWER].[DOMAIN_NAME_LOWER].events.topic:[ENTITY_NAME_LOWER]-events}")
+    private String eventsTopic;
+    
+    @Value("${[PROJECT_NAME_LOWER].[DOMAIN_NAME_LOWER].events.dlq-topic:[ENTITY_NAME_LOWER]-events-dlq}")
+    private String dlqTopic;
+    
+    @Value("${[PROJECT_NAME_LOWER].[DOMAIN_NAME_LOWER].events.retry.max-attempts:3}")
+    private int maxRetryAttempts;
+    
+    public [ENTITY_NAME]AsyncEventPublisher(
+            KafkaTemplate<String, [ENTITY_NAME]DomainEvent> kafkaTemplate,
+            ApplicationEventPublisher localEventPublisher,
+            EventStore eventStore,
+            [ENTITY_NAME]EventValidator eventValidator,
+            EventMetricsCollector metricsCollector,
+            CircuitBreakerFactory circuitBreakerFactory) {
+        
+        this.kafkaTemplate = kafkaTemplate;
+        this.localEventPublisher = localEventPublisher;
+        this.eventStore = eventStore;
+        this.eventValidator = eventValidator;
+        this.metricsCollector = metricsCollector;
+        this.publishingCircuitBreaker = circuitBreakerFactory.create("[ENTITY_NAME_LOWER]-event-publisher");
+        
+        // Configure retry template for [DOMAIN_NAME] requirements
+        this.retryTemplate = RetryTemplate.builder()
+            .maxAttempts(maxRetryAttempts)
+            .exponentialBackoff(Duration.ofMillis(100), 2, Duration.ofSeconds(5))
+            .retryOn(Exception.class)
+            .build();
+    }
+    
+    /**
+     * Publishes [ENTITY_NAME] domain event with comprehensive error handling
+     * Implements [DOMAIN_NAME] async processing standards for [COMPANY_NAME]
+     */
+    @Async("[ENTITY_NAME_LOWER]EventPublisher")
+    public CompletableFuture<EventPublishingResult> publishAsync([ENTITY_NAME]DomainEvent event) {
+        return CompletableFuture.supplyAsync(() -> {
+            Timer.Sample publishingTimer = metricsCollector.startPublishingTimer();
+            
+            try {
+                log.info("[COMPANY_NAME] [PROJECT_NAME]: Publishing async event {} for [DOMAIN_NAME] - Event ID: {}", 
+                    event.getClass().getSimpleName(), event.getEventId());
+                
+                // Step 1: Validate event according to [DOMAIN_NAME] business rules
+                EventValidationResult validationResult = eventValidator.validate(event);
+                if (!validationResult.isValid()) {
+                    throw new EventValidationException(
+                        String.format("[COMPANY_NAME]: Event validation failed for [DOMAIN_NAME] - Errors: %s", 
+                            validationResult.getErrors()));
+                }
+                
+                // Step 2: Store event in event store for [DOMAIN_NAME] audit trail
+                EventStoreRecord storeRecord = eventStore.store(event);
+                
+                // Step 3: Publish to local event bus for immediate processing
+                publishLocalEvent(event);
+                
+                // Step 4: Publish to distributed message broker with circuit breaker
+                PublishingResult distributedResult = publishingCircuitBreaker.executeSupplier(
+                    () -> publishToDistributedBroker(event));
+                
+                // Step 5: Update event store with publishing status
+                eventStore.updatePublishingStatus(storeRecord.getEventId(), 
+                    PublishingStatus.PUBLISHED, distributedResult.getMessageId());
+                
+                // Step 6: Record metrics for [DOMAIN_NAME] monitoring
+                metricsCollector.recordSuccessfulPublishing(event.getClass().getSimpleName(), 
+                    publishingTimer.stop());
+                
+                log.info("[COMPANY_NAME] [PROJECT_NAME]: Successfully published async event {} for [DOMAIN_NAME] - Message ID: {}", 
+                    event.getEventId(), distributedResult.getMessageId());
+                
+                return EventPublishingResult.builder()
+                    .eventId(event.getEventId())
+                    .eventStoreId(storeRecord.getEventId())
+                    .messageId(distributedResult.getMessageId())
+                    .publishedAt(Instant.now())
+                    .successful(true)
+                    .build();
+                
+            } catch (Exception e) {
+                return handlePublishingFailure(event, e, publishingTimer);
+            }
+        });
+    }
+    
+    /**
+     * Publishes event with saga coordination for distributed transactions
+     */
+    @Async("[ENTITY_NAME_LOWER]SagaCoordinator")
+    public CompletableFuture<SagaCoordinationResult> publishWithSagaCoordination(
+            [ENTITY_NAME]DomainEvent event, 
+            SagaContext sagaContext) {
+        
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                log.info("[COMPANY_NAME] [PROJECT_NAME]: Publishing event {} with saga coordination for [DOMAIN_NAME] - Saga ID: {}", 
+                    event.getEventId(), sagaContext.getSagaId());
+                
+                // Add saga metadata to event
+                event.getEventMetadata().put("sagaId", sagaContext.getSagaId());
+                event.getEventMetadata().put("sagaStep", sagaContext.getCurrentStep());
+                event.getEventMetadata().put("compensationRequired", sagaContext.isCompensationRequired());
+                
+                // Publish event with saga routing
+                EventPublishingResult publishingResult = publishAsync(event).get();
+                
+                if (publishingResult.isSuccessful()) {
+                    // Update saga state
+                    SagaStateUpdate stateUpdate = SagaStateUpdate.builder()
+                        .sagaId(sagaContext.getSagaId())
+                        .eventId(event.getEventId())
+                        .newState(SagaState.EVENT_PUBLISHED)
+                        .nextExpectedEvent(sagaContext.getNextExpectedEvent())
+                        .timeoutDuration(sagaContext.getStepTimeout())
+                        .build();
+                    
+                    return SagaCoordinationResult.builder()
+                        .sagaId(sagaContext.getSagaId())
+                        .eventPublishingResult(publishingResult)
+                        .sagaStateUpdate(stateUpdate)
+                        .successful(true)
+                        .build();
+                } else {
+                    // Handle saga failure
+                    return handleSagaPublishingFailure(sagaContext, publishingResult);
+                }
+                
+            } catch (Exception e) {
+                log.error("[COMPANY_NAME] [PROJECT_NAME]: Failed to publish event with saga coordination for [DOMAIN_NAME]", e);
+                return SagaCoordinationResult.builder()
+                    .sagaId(sagaContext.getSagaId())
+                    .successful(false)
+                    .errorMessage(e.getMessage())
+                    .compensationRequired(true)
+                    .build();
+            }
+        });
+    }
+    
+    /**
+     * Batch publishing for high-throughput [DOMAIN_NAME] scenarios
+     */
+    @Async("[ENTITY_NAME_LOWER]BatchPublisher")
+    public CompletableFuture<BatchPublishingResult> publishBatchAsync(
+            List<[ENTITY_NAME]DomainEvent> events) {
+        
+        return CompletableFuture.supplyAsync(() -> {
+            Timer.Sample batchTimer = metricsCollector.startBatchPublishingTimer();
+            
+            try {
+                log.info("[COMPANY_NAME] [PROJECT_NAME]: Publishing batch of {} events for [DOMAIN_NAME]", events.size());
+                
+                // Validate all events first
+                List<EventValidationResult> validationResults = events.stream()
+                    .map(eventValidator::validate)
+                    .collect(Collectors.toList());
+                
+                List<[ENTITY_NAME]DomainEvent> validEvents = IntStream.range(0, events.size())
+                    .filter(i -> validationResults.get(i).isValid())
+                    .mapToObj(events::get)
+                    .collect(Collectors.toList());
+                
+                if (validEvents.isEmpty()) {
+                    throw new BatchValidationException(
+                        "[COMPANY_NAME]: No valid events in batch for [DOMAIN_NAME] processing");
+                }
+                
+                // Store events in batch
+                List<EventStoreRecord> storeRecords = eventStore.storeBatch(validEvents);
+                
+                // Publish to distributed broker in batch
+                BatchPublishingResult distributedResult = retryTemplate.execute(context -> 
+                    publishBatchToDistributedBroker(validEvents));
+                
+                // Update event store statuses
+                eventStore.updateBatchPublishingStatus(
+                    storeRecords.stream().map(EventStoreRecord::getEventId).collect(Collectors.toList()),
+                    PublishingStatus.PUBLISHED,
+                    distributedResult.getMessageIds());
+                
+                metricsCollector.recordSuccessfulBatchPublishing(validEvents.size(), batchTimer.stop());
+                
+                log.info("[COMPANY_NAME] [PROJECT_NAME]: Successfully published batch of {} events for [DOMAIN_NAME]", 
+                    validEvents.size());
+                
+                return BatchPublishingResult.builder()
+                    .totalEvents(events.size())
+                    .successfulEvents(validEvents.size())
+                    .failedEvents(events.size() - validEvents.size())
+                    .messageIds(distributedResult.getMessageIds())
+                    .publishedAt(Instant.now())
+                    .successful(true)
+                    .build();
+                
+            } catch (Exception e) {
+                return handleBatchPublishingFailure
