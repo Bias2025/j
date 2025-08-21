@@ -1,0 +1,115 @@
+# Secure Credential Reader Java Class Generation Prompt - CRAFT Format
+
+```java
+// You are a world-class security architect and Java expert with 20+ years of experience in enterprise-grade security implementations,
+// specializing in secure credential management, encryption, and production-ready security patterns for enterprise applications.
+//
+// CONTEXT: Create a comprehensive Java class to securely read credentials from a CRED file located in [SHARED_LOCATION] 
+// for [PROJECT_NAME] application serving [BUSINESS_PURPOSE] with enterprise-grade security standards
+//
+// REQUIREMENTS:
+// Functional: Secure credential file reading with encryption/decryption support, Multiple credential format support (JSON, Properties, XML, YAML), Environment-specific credential loading (dev, staging, prod), Credential validation and format verification, Automatic credential refresh and hot-reloading capabilities, Credential caching with TTL and security considerations, Multi-tenant credential support with isolation, Credential versioning and rollback support, Audit logging for credential access and modifications, Integration with external secret management systems (AWS Secrets Manager, HashiCorp Vault, Azure Key Vault), Credential masking and secure logging, Backup and recovery mechanisms for credential files
+// Non-Functional: Enterprise-grade security with encryption at rest and in transit, High performance with sub-50ms credential retrieval, Memory-safe credential handling with automatic cleanup, Thread-safe operations for concurrent access, Fault tolerance with graceful degradation, Comprehensive error handling and recovery mechanisms, Production-ready logging with security audit trails, Zero-downtime credential updates, Scalable architecture supporting distributed environments, Compliance with security standards (SOX, PCI-DSS, GDPR)
+//
+// ARCHITECTURE: Secure credential management architecture with proper abstraction layers, Factory pattern for credential provider implementations, Strategy pattern for different encryption/decryption algorithms, Observer pattern for credential change notifications, Singleton pattern for credential manager instances, Decorator pattern for credential validation and transformation, Proxy pattern for secure credential access, Chain of responsibility for credential resolution fallbacks
+//
+// TESTING: Comprehensive unit testing with credential security validation, Integration testing with actual credential files, Security testing for unauthorized access scenarios, Performance testing for credential retrieval under load, Mock testing for external secret management services, Error scenario testing with corrupted or missing files, Concurrent access testing for thread safety validation, Encryption/decryption testing with various algorithms, Audit logging testing for compliance verification
+//
+// CONSTRAINTS:
+// Quality: Zero credential exposure in logs or memory dumps, Minimum security standards compliance (encryption, access control), Clean code principles with security-first design, Comprehensive JavaDoc documentation with security considerations, SonarQube security quality gates compliance, Thread-safety guaranteed for concurrent operations, Comprehensive error handling without credential leakage
+// Performance: Credential retrieval time <50ms for cached credentials, Memory usage optimization with secure cleanup, File I/O optimization with efficient parsing, CPU usage optimization for encryption/decryption operations, Cache hit ratio >95% for frequently accessed credentials, Network latency optimization for remote credential sources
+// Security: AES-256 encryption for credential storage, Secure key management with key rotation support, Access control with role-based permissions, Audit logging for all credential operations, Input validation to prevent injection attacks, Secure memory handling with automatic cleanup, Protection against timing attacks, Compliance with enterprise security policies
+//
+// FRAMEWORKS: Java 17+, Spring Boot Security, Apache Commons Configuration, Jackson for JSON processing, BouncyCastle for encryption, Logback for secure logging, Micrometer for metrics, JUnit 5 for testing
+//
+// ORIGINALITY REQUIREMENTS:
+// - Create ENTERPRISE-GRADE credential reader specific to [PROJECT_NAME] and [BUSINESS_PURPOSE] requirements
+// - Implement SOPHISTICATED security patterns tailored to [DOMAIN_NAME] compliance and regulatory needs
+// - Generate COMPREHENSIVE encryption/decryption strategies for [CREDENTIAL_TYPE] security requirements
+// - Design ADVANCED credential management with [ENVIRONMENT]-specific configurations and access patterns
+// - Create PRODUCTION-READY error handling and logging specific to [PROJECT_NAME] security audit requirements
+// - Implement SECURE caching mechanisms optimized for [BUSINESS_PURPOSE] performance and security needs
+// - Generate ENTERPRISE monitoring and alerting for [PROJECT_NAME] credential management operations
+// - Create SOPHISTICATED backup and recovery strategies for [DOMAIN_NAME] business continuity requirements
+// - Design ADVANCED integration patterns with [EXTERNAL_SYSTEMS] and third-party credential management services
+// - Implement COMPREHENSIVE testing framework covering [PROJECT_NAME] security and compliance validation scenarios
+//
+// Generate comprehensive Java credential reader implementation that:
+// - Creates COMPLETE credential reader class with enterprise-grade security and error handling
+// - Implements FULL encryption/decryption support with multiple algorithm options and key management
+// - Develops COMPREHENSIVE credential file format support (JSON, Properties, XML, YAML) with validation
+// - Generates PRODUCTION-READY caching mechanisms with TTL, security, and performance optimization
+// - Creates ADVANCED audit logging and monitoring with security event tracking and compliance reporting
+// - Implements SOPHISTICATED error handling with secure failure modes and graceful degradation
+// - Develops COMPLETE testing suite covering security, performance, and reliability scenarios
+// - Generates COMPREHENSIVE documentation with security best practices and usage guidelines
+// - Creates ENTERPRISE-GRADE configuration management with environment-specific credential handling
+// - Implements PRODUCTION-READY integration with external secret management systems and backup strategies
+
+/*
+ * ENHANCED CRAFT METHOD FOR COMPREHENSIVE CREDENTIAL READER GENERATION
+ * This enterprise-grade prompt generates COMPLETE, production-ready credential management solution with:
+ * 
+ * COMPREHENSIVE SECURITY IMPLEMENTATION:
+ * - AES-256 encryption with secure key management and rotation
+ * - Multiple authentication mechanisms with role-based access control
+ * - Secure memory handling with automatic credential cleanup
+ * - Protection against timing attacks and side-channel vulnerabilities
+ * - Input validation and sanitization for security injection prevention
+ * - Audit logging with tamper-evident security event tracking
+ * - Compliance support for SOX, PCI-DSS, GDPR, and industry standards
+ * - Integration with enterprise identity and access management systems
+ * 
+ * ADVANCED CREDENTIAL MANAGEMENT:
+ * - Multi-format support (JSON, Properties, XML, YAML, encrypted formats)
+ * - Environment-specific credential loading with inheritance and overrides
+ * - Hot-reloading capabilities with zero-downtime credential updates
+ * - Credential versioning with rollback and change tracking
+ * - Multi-tenant support with proper credential isolation
+ * - Backup and recovery mechanisms with encrypted backup storage
+ * - Integration with cloud secret management services (AWS, Azure, GCP)
+ * - Credential lifecycle management with expiration and renewal
+ * 
+ * ENTERPRISE PERFORMANCE OPTIMIZATION:
+ * - Intelligent caching with configurable TTL and security considerations
+ * - Lazy loading with on-demand credential retrieval
+ * - Connection pooling for remote credential sources
+ * - Asynchronous credential refresh with background updates
+ * - Memory optimization with secure credential cleanup
+ * - File system optimization with efficient parsing and validation
+ * - Network optimization for remote credential management integration
+ * - CPU optimization for encryption/decryption operations
+ * 
+ * PRODUCTION-READY INFRASTRUCTURE:
+ * - Complete error handling with secure failure modes
+ * - Comprehensive monitoring with custom metrics and alerting
+ * - Health checks for credential availability and integrity
+ * - Circuit breaker patterns for external service integration
+ * - Retry mechanisms with exponential backoff and jitter
+ * - Configuration management with environment-specific settings
+ * - Deployment automation with credential migration support
+ * - Documentation with security guidelines and best practices
+ * 
+ * PARAMETERIZED PLACEHOLDERS - Replace with your specific values:
+ * - [PROJECT_NAME] → Your project name (PaymentProcessor, HealthcareAPI, BankingSystem, etc.)
+ * - [BUSINESS_PURPOSE] → Your business purpose (payment processing, patient management, financial services, etc.)
+ * - [SHARED_LOCATION] → Your credential file location (/opt/credentials, /etc/app/creds, network share, etc.)
+ * - [CREDENTIAL_TYPE] → Your credential types (database, API keys, certificates, OAuth tokens, etc.)
+ * - [DOMAIN_NAME] → Your business domain (fintech, healthcare, ecommerce, logistics, etc.)
+ * - [ENVIRONMENT] → Your environment (development, staging, production, DR, etc.)
+ * - [EXTERNAL_SYSTEMS] → Your external integrations (AWS, Azure, Vault, LDAP, etc.)
+ * - [COMPANY_NAME] → Your company name (TechCorp, HealthTech, FinanceInc, etc.)
+ * 
+ * CREDENTIAL MANAGEMENT CUSTOMIZATIONS:
+ * - Define your specific credential types and access patterns
+ * - Specify your encryption requirements and key management strategies
+ * - Configure your audit and compliance requirements
+ * - Set up your performance and caching requirements
+ * - Define your integration requirements with external systems
+ * - Configure your backup and disaster recovery strategies
+ * - Specify your monitoring and alerting requirements
+ * - Define your deployment and rollback strategies
+ * 
+ * The more specific your [BUSINESS_PURPOSE] and [CREDENTIAL_TYPE] context, the more tailored and secure the credential management solution will be!
+ */
+
