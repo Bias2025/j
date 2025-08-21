@@ -1,0 +1,190 @@
+Java 17 Coding Guidelines (for Coders & Developers)
+0) Baseline
+
+Language: Java 17 (LTS). No legacy APIs unless there’s a hard requirement.
+
+Build: Gradle or Maven, reproducible builds, lock versions.
+
+Style: One formatter for all (e.g., Google Java Format or Spotless). Zero bikeshedding.
+
+1) Language Features You Should Use
+
+Records for immutable data carriers (DTOs, value objects).
+
+Keep them tiny; add validation in the canonical constructor if needed.
+
+Sealed classes to model closed hierarchies. Great for exhaustive handling with switch.
+
+Switch expressions (yield) instead of long if/else chains.
+
+Pattern matching for instanceof: if (x instanceof Foo f) { ... }
+
+Text blocks (""") for multi-line SQL/JSON—paired with parameterization (no string-concat SQL).
+
+var for local inference—use when it improves readability, not to hide types.
+
+java.net.http.HttpClient over Apache/legacy HTTP.
+
+Sanity check: If you wrote a POJO with 40 lines of boilerplate and no logic, it probably wanted to be a record.
+
+2) API & Design
+
+Immutability first: Prefer immutable types; defensive copies on inbound/outbound collections.
+
+Optional: Use as a return type when “might be absent” is part of the API. Do not use it for fields or method params.
+
+Collections: Return interfaces (List, Map) and prefer unmodifiable views.
+
+Method contracts: Document nullability, ownership, and performance implications (e.g., “O(n) with m locks”).
+
+NIO.2 (java.nio.file) for files; java.time for time; no Date/Calendar.
+
+No checked exceptions as flow control. Bubble up meaningful exceptions, wrap external faults.
+
+3) Error Handling
+
+Catch narrowly, never Exception unless at process/edge boundary.
+
+Translate lower-level exceptions into domain exceptions at module boundaries.
+
+Message hygiene: safe messages for users, full details in logs; never leak secrets/PII.
+
+Finally blocks / try-with-resources everywhere resources appear.
+
+4) Logging
+
+SLF4J façade; Logback (or your standard) impl.
+
+Levels: ERROR (actionable), WARN (suspicious), INFO (key lifecycle), DEBUG (dev detail), TRACE (deep-dive).
+
+No System.out/err in production code.
+
+Structured logging (key-value) where possible.
+
+5) Concurrency
+
+Use java.util.concurrent primitives; avoid manual synchronized unless necessary.
+
+Prefer immutable messages + executor services or CompletableFuture for async workflows.
+
+Parallel streams only when measured beneficial and data is non-blocking.
+
+Timeouts everywhere (HTTP calls, futures, locks).
+
+Thread names matter; name pools by subsystem.
+
+Do not use Java serialization across threads or services.
+
+6) Nullability & Contracts
+
+Pick one nullness annotation library (e.g., SpotBugs, JetBrains, or JSpecify) and stick to it.
+
+Enforce via static analysis (SpotBugs/Error Prone/SonarQube rules).
+
+Methods either:
+
+Guarantee non-null returns (preferred—document it), or
+
+Return Optional<T> explicitly.
+
+Validate public boundaries; trust internal only if proven.
+
+7) Security (no surprises on audit day)
+
+No Java native serialization for untrusted data. Use JSON (Jackson) or protobuf; configure safe defaults.
+
+SQL: always Prepared Statements/parameterized queries. No string-concat SQL.
+
+Secrets: never in code, logs, or images. Use env/secret manager.
+
+TLS: validate certs, pin if appropriate, strong cipher defaults.
+
+Deserialization: if you must, whitelist types; disable polymorphic binding unless explicitly required.
+
+Input validation: sanitize at borders; canonicalize paths before file access.
+
+OWASP: run dependency checks (OWASP DC / Snyk) in CI.
+
+8) Performance
+
+Measure first (JMH for microbenchmarks).
+
+Data structures over cleverness: pick the right map/list/set.
+
+Avoid premature parallelism and needless object churn; prefer streams when they read clearer and benchmark well.
+
+Cache consciously (Caffeine), with TTLs and metrics.
+
+Keep hot code allocation-light; prefer records for light value types.
+
+9) Testing
+
+JUnit 5 + Mockito (or your standard).
+
+Testcontainers for DB/queue/integration reality.
+
+Coverage via JaCoCo with minimum thresholds, but target meaningful branch coverage.
+
+Given/When/Then naming; one assertion concept per test.
+
+Parameterized tests for edge cases; random tests with seeds for determinism.
+
+Avoid white-box testing of private internals—test behavior via public surface.
+
+10) Modules, Packaging & Structure
+
+For libraries, use JPMS (module-info.java) to expose only what’s needed.
+
+Layered package structure:
+
+api (interfaces/records), domain, application (use cases/services), infrastructure (adapters), web (controllers).
+
+Keep module boundaries clean; no cyclic deps; explicit dependency direction (domain has zero infra deps).
+
+11) Dependencies
+
+Pin versions; avoid wildcard ranges.
+
+Small surface area: fewer libs, fewer headaches. Prefer JDK features over third-party when comparable.
+
+License compliance: approve new deps.
+
+Run dependency audit in CI (OWASP DC/Snyk/Trivy).
+
+12) Configuration & Environments
+
+Externalize config; no env-specific logic in code.
+
+Strong defaults; fail fast on missing critical config.
+
+Feature flags for risky changes.
+
+Locale/timezone explicitness where relevant.
+
+13) Documentation
+
+Javadoc for public APIs: what it does, not how it’s implemented. Include null/ownership/complexity notes.
+
+README per module: purpose, run/test instructions, gotchas.
+
+ADR (Architecture Decision Records) for notable choices; one page beats 40 Slack messages.
+
+14) Code Review Rules of Engagement
+
+Small PRs (<400 lines changed).
+
+CI must be green (build, tests, static analysis, lint).
+
+Review for: correctness, clarity, cohesion, and blast radius.
+
+NITs go last; block only on correctness, design, and security.
+
+If two smart devs can’t understand a line in 30 seconds, rewrite it.
+
+15) Static Analysis & CI
+
+Minimum: formatting check, lint (Checkstyle/PMD), SpotBugs/Error Prone, tests, coverage, dependency scan.
+
+SonarQube gate for critical & blocker issues: zero tolerated.
+
+Reject PRs with new warnings; debt only via explicit tickets.
