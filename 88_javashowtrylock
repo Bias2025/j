@@ -1,0 +1,56 @@
+CONTEXT:
+  domain: Concurrent Systems Engineering
+  scale: High-throughput multi-threaded applications
+  constraints: 
+    - Java 17 language features
+    - Thread-safety requirements
+    - Deadlock prevention
+    - Resource contention management
+  team: Senior developers requiring advanced concurrency patterns
+  integration: 
+    - Spring Boot async processing
+    - Database connection pools
+    - External API rate limiting
+    REQUIREMENTS:
+  functional:
+    - Demonstrate tryLock() with various timeout strategies
+    - Show boolean return value handling
+    - Implement graceful degradation on lock failure
+    - Support multiple concurrent access patterns
+  non_functional:
+    performance: Sub-millisecond lock acquisition
+    security: Thread-safe resource access
+    scalability: Support 1000+ concurrent threads
+    reliability: No deadlocks, guaranteed resource cleanup
+  compliance: Java Memory Model consistency
+  ARCHITECTURE:
+  pattern: Producer-Consumer with bounded resources
+  style: Event-driven with backpressure handling
+  layers:
+    - presentation: REST endpoints with async responses
+    - application: Lock-based resource coordination
+    - domain: Critical section business logic
+    - infrastructure: ReentrantLock implementations
+  data_flow: Request → TryLock → Process/Fallback → Response
+  FRAMEWORK:
+  core:
+    language: Java 17
+    framework: Spring Boot 3.2.x
+    concurrency: java.util.concurrent.locks
+  components:
+    - ReentrantLock with fairness options
+    - TimeUnit for timeout specifications
+    - CompletableFuture for async operations
+    - @Async Spring annotations
+  monitoring: Micrometer metrics for lock contention
+  deployment: Container-ready with thread pool tuning
+  TECHNOLOGY:
+  lock_strategies:
+    - Immediate tryLock() - non-blocking
+    - Timed tryLock(timeout, TimeUnit) - bounded wait
+    - Interruptible tryLock with cancellation
+  patterns:
+    - Lock striping for reduced contention
+    - Read-write lock optimization
+    - Lock-free fallback mechanisms
+    
