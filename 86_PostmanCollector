@@ -1,0 +1,64 @@
+CONTEXT:
+  domain: REST API Testing Infrastructure
+  purpose: Automated Postman collection generation with JWT security
+  scale: Enterprise-grade API testing suite
+  security_model: JWT Bearer Token Authentication
+  testing_scope: 
+    - Authentication endpoints
+    - Protected resource endpoints
+    - Authorization validation
+    - Token refresh mechanisms
+  integration_points:
+    - Spring Security with JWT
+    - Postman/Newman for CI/CD
+    - Multiple environment support (dev/staging/prod)
+    REQUIREMENTS:
+  functional:
+    - Auto-generate Postman collections from Spring Boot controllers
+    - Include JWT token acquisition flow
+    - Propagate tokens across requests automatically
+    - Support multiple authentication schemes
+    - Environment variable management
+  non_functional:
+    performance: Collection import < 2 seconds
+    security: Secure token storage in Postman variables
+    maintainability: Auto-sync with API changes
+    usability: One-click token refresh
+  compliance: 
+    - OAuth 2.0 RFC 6749
+    - JWT RFC 7519
+    - OpenAPI 3.0 specification
+    ARCHITECTURE:
+  pattern: Collection-per-Microservice
+  structure:
+    - Authentication folder (token acquisition)
+    - Resource folders (grouped by domain)
+    - Pre-request scripts (token validation)
+    - Test scripts (response validation)
+  token_flow:
+    1. Login request → JWT token
+    2. Store in collection variable
+    3. Auto-inject in subsequent requests
+    4. Auto-refresh on expiration
+  data_management:
+    - Environment variables for base URLs
+    - Collection variables for tokens
+    - Global variables for shared data
+    FRAMEWORK:
+  backend:
+    - Spring Boot 3.2+
+    - Spring Security 6.2+
+    - io.jsonwebtoken:jjwt:0.12.3
+  documentation:
+    - SpringDoc OpenAPI 2.3.0
+    - Swagger annotations
+  postman_integration:
+    - Postman Collection Format v2.1
+    - Newman CLI for automation
+    - pm.* API for scripting
+    TECHNOLOGY:
+  jwt_implementation: HMAC SHA-384
+  token_storage: Postman collection variables
+  refresh_strategy: Proactive refresh at 80% TTL
+  error_handling: Automatic retry with token refresh
+  monitoring: Request/response logging with masking
