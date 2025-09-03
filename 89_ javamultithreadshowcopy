@@ -1,0 +1,52 @@
+CONTEXT:
+  domain: High-Concurrency Data Processing System
+  scale: 
+    - 10,000+ concurrent users
+    - 500,000 RPS read operations
+    - 5,000 RPS write operations
+  constraints:
+    - Zero data loss tolerance
+    - Sub-50ms P99 read latency
+    - Thread-safe iteration requirements
+  team: Senior Java developers requiring production-grade concurrent solutions
+  integration: Spring Boot microservices with reactive streams
+
+REQUIREMENTS:
+  functional:
+    - Thread-safe list operations without external synchronization
+    - Safe iteration during concurrent modifications
+    - Bulk operations support
+    - Stream API compatibility
+  non_functional:
+    performance: Optimized for read-heavy workloads (95% reads, 5% writes)
+    security: No race conditions or memory consistency errors
+    scalability: Support 1000+ concurrent threads
+    reliability: 99.99% uptime with graceful degradation
+  compliance: Java Memory Model guarantees, happens-before relationships
+
+ARCHITECTURE:
+  pattern: Producer-Consumer with Event Broadcasting
+  style: Reactive microservices with shared state management
+  layers:
+    - presentation: REST controllers with async responses
+    - application: Service layer with concurrent processors
+    - domain: Thread-safe collections for shared state
+    - infrastructure: CopyOnWriteArrayList for observer patterns
+  data_flow: Event-driven with immutable snapshots
+
+FRAMEWORK:
+  core:
+    language: Java 17
+    framework: Spring Boot 3.2.x
+  concurrency:
+    collections: java.util.concurrent.CopyOnWriteArrayList
+    executors: Virtual threads (Project Loom)
+    synchronizers: CompletableFuture, CountDownLatch
+  monitoring: Micrometer metrics for thread pool statistics
+  deployment: Kubernetes with HPA based on thread metrics
+
+TECHNOLOGY:
+  jvm_flags: -XX:+UseZGC -Xmx4G -XX:MaxDirectMemorySize=512M
+  thread_model: Virtual threads for I/O, platform threads for CPU-intensive
+  memory_model: Volatile reads, synchronized writes
+  testing: JCStress for concurrency correctness
