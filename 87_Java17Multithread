@@ -1,0 +1,149 @@
+prompt_structure:
+  pattern: "Comprehensive Framework with Principled Instructions"
+  persona: "Senior Java Concurrency Expert with 20+ years experience"
+  context_depth: "Complete problem space with metrics"
+  instruction_clarity: "Explicit, unambiguous, chain-of-thought enabled"
+  CONTEXT:
+  domain: "High-frequency financial transaction processing"
+  business_problem: "Process 100,000+ concurrent transactions without data corruption"
+  scale: 
+    concurrent_users: 50000
+    transactions_per_second: 10000
+    data_volume: "500GB daily"
+    p99_latency_target: "< 50ms"
+  constraints:
+    java_version: "17 LTS"
+    framework: "Spring Boot 3.2.x"
+    zero_data_loss: true
+    audit_compliance: "SOX, PCI-DSS Level 1"
+  team:
+    size: 12
+    expertise: "Mid-to-senior level Java developers"
+  integration:
+    database: "PostgreSQL 15 with connection pooling"
+    message_queue: "Apache Kafka"
+    cache: "Redis cluster"
+    REQUIREMENTS:
+  functional:
+    - "Handle concurrent account balance updates without race conditions"
+    - "Process batch transfers with atomic guarantees"
+    - "Implement distributed locking for cross-service operations"
+    - "Provide real-time transaction monitoring"
+    - "Support rollback and compensation patterns"
+  non_functional:
+    performance:
+      - "Sub-50ms response time at P99"
+      - "10,000 TPS sustained throughput"
+      - "Zero deadlocks under load"
+    security:
+      - "Thread-safe encryption/decryption"
+      - "Audit trail for all concurrent operations"
+      - "Protection against timing attacks"
+    scalability:
+      - "Horizontal scaling to 100 nodes"
+      - "Graceful degradation under overload"
+    reliability:
+      - "99.999% uptime SLA"
+      - "Automatic recovery from thread starvation"
+  compliance:
+    - "ACID transaction guarantees"
+    - "PCI-DSS for payment processing"
+    - "SOX audit requirements"
+    ARCHITECTURE:
+  pattern: "Event-Driven with CQRS"
+  concurrency_model:
+    - "Virtual Threads (Project Loom) for I/O operations"
+    - "Platform threads for CPU-intensive work"
+    - "Structured concurrency for task management"
+  synchronization_strategy:
+    - "Fine-grained locking with synchronized blocks"
+    - "Lock-free algorithms using AtomicReference"
+    - "StampedLock for optimistic reads"
+    - "Semaphores for resource pooling"
+  layers:
+    presentation:
+      - "REST controllers with async support"
+      - "WebSocket for real-time updates"
+    application:
+      - "Command handlers with saga orchestration"
+      - "Event processors with backpressure"
+    domain:
+      - "Aggregate roots with version control"
+      - "Domain events for state changes"
+    infrastructure:
+      - "Thread-safe repositories"
+      - "Connection pool management"
+      - "Distributed lock coordination"
+  data_flow:
+    - "CQRS with eventual consistency"
+    - "Event sourcing for audit trail"
+    - "Optimistic locking with retry logic"
+    FRAMEWORK:
+  core:
+    language: "Java 17"
+    framework: "Spring Boot 3.2.0"
+    build: "Maven 3.9.x"
+  concurrency:
+    executors:
+      - "Virtual Thread Executor (Executors.newVirtualThreadPerTaskExecutor())"
+      - "ForkJoinPool for parallel streams"
+      - "ScheduledThreadPoolExecutor for periodic tasks"
+    synchronization:
+      - "synchronized keyword for critical sections"
+      - "ReentrantLock with fairness"
+      - "ReadWriteLock for read-heavy operations"
+      - "CountDownLatch for coordination"
+      - "CyclicBarrier for phased execution"
+    concurrent_collections:
+      - "ConcurrentHashMap for shared state"
+      - "ConcurrentLinkedQueue for producer-consumer"
+      - "BlockingQueue implementations"
+  persistence:
+    database: "PostgreSQL 15"
+    connection_pool: "HikariCP with 50 connections"
+    orm: "Spring Data JPA with pessimistic locking"
+    migration: "Flyway"
+  messaging:
+    broker: "Apache Kafka"
+    pattern: "Transactional outbox"
+  caching:
+    provider: "Redis with Redisson locks"
+    strategy: "Write-through with TTL"
+  monitoring:
+    metrics: "Micrometer with Prometheus"
+    tracing: "OpenTelemetry"
+    logging: "Structured logging with correlation IDs"
+  deployment:
+    platform: "Kubernetes with HPA"
+    container: "Docker with JVM tuning"
+    TECHNOLOGY:
+  thread_safety_patterns:
+    - "Immutable objects with records"
+    - "Thread-local storage for context"
+    - "Copy-on-write collections"
+    - "Double-checked locking with volatile"
+  race_condition_prevention:
+    synchronized_usage:
+      - "Method-level for simple cases"
+      - "Block-level for fine control"
+      - "Static synchronization for class-level locks"
+    atomic_operations:
+      - "AtomicInteger for counters"
+      - "AtomicReference for object updates"
+      - "LongAdder for high-contention counters"
+    lock_strategies:
+      - "Try-lock with timeout"
+      - "Lock ordering to prevent deadlocks"
+      - "Lock-free algorithms where possible"
+  performance_optimizations:
+    - "Lock striping for reduced contention"
+    - "Batch processing to minimize lock acquisition"
+    - "Optimistic locking with version fields"
+    - "Read-write lock separation"
+  testing:
+    - "JUnit 5 with parallel execution"
+    - "Concurrent test scenarios with CountDownLatch"
+    - "Thread safety validation with jcstress"
+    - "Load testing with Gatling"
+    - "Deadlock detection tests"
+    
