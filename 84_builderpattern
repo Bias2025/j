@@ -1,0 +1,131 @@
+PROMPT_TITLE: "Generate Production-Ready Builder Pattern Implementation for Complex Domain Objects in Spring Boot"
+
+CRAFT-T_ANALYSIS:
+  Context:
+    domain: "Complex object creation with multiple optional parameters"
+    problem_space: "Need flexible, readable object construction avoiding telescoping constructors"
+    scale: "Enterprise application with 10K+ object instantiations per minute"
+    constraints: 
+      - "Java 17 language features required"
+      - "Spring Boot 3.x compatibility"
+      - "Thread-safe implementation"
+      - "Immutable objects preferred"
+    team_context: "Senior developers requiring maintainable, testable code"
+    
+  Requirements:
+    functional:
+      - "Support 15+ optional parameters per object"
+      - "Fluent API for method chaining"
+      - "Validation at build time"
+      - "Support for nested builders"
+      - "JSON serialization/deserialization compatibility"
+    non_functional:
+      - performance: "Object creation < 1ms"
+      - memory: "Minimal object allocation overhead"
+      - thread_safety: "Concurrent builder usage support"
+      - testability: "90%+ code coverage achievable"
+    patterns_required:
+      - "Builder Pattern (GoF)"
+      - "Fluent Interface"
+      - "Immutable Object Pattern"
+      - "Factory Method Pattern for builder creation"
+      
+  Architecture:
+    pattern: "Domain-Driven Design with Builder Pattern"
+    layers:
+      - domain: "Immutable domain objects with private constructors"
+      - builders: "Static nested Builder classes"
+      - validators: "Build-time validation layer"
+      - factories: "Builder factory for complex scenarios"
+    design_principles:
+      - "Single Responsibility: Each builder builds one aggregate"
+      - "Open/Closed: Extensible through inheritance"
+      - "Interface Segregation: Separate interfaces for different build stages"
+      
+  Framework:
+    core:
+      - "Java 17 with records where applicable"
+      - "Spring Boot 3.2.x"
+      - "Spring Data JPA for persistence"
+    libraries:
+      - "Lombok for boilerplate reduction (optional)"
+      - "Jackson for JSON processing"
+      - "Jakarta Validation API"
+      - "AssertJ for fluent test assertions"
+    annotations:
+      - "@JsonDeserialize(builder = ...)"
+      - "@Builder (if using Lombok)"
+      - "@Valid for validation"
+      
+  Technology:
+    implementation_details:
+      - "Static factory methods for builder instantiation"
+      - "Method chaining with 'return this'"
+      - "Defensive copying for collections"
+      - "Null-safety with Optional<T>"
+      - "Builder inheritance for common fields"
+    optimizations:
+      - "Lazy initialization where appropriate"
+      - "Object pooling for frequently used configurations"
+      - "String interning for repeated values"
+
+SPECIFIC_INSTRUCTIONS:
+  "Generate a complete, production-ready implementation of the Builder Pattern that includes:
+  
+  1. A complex domain object (e.g., CustomerOrder) with:
+     - 5 required fields (id, customerId, orderDate, status, totalAmount)
+     - 10+ optional fields (discount, shipping details, payment method, notes, etc.)
+     - Nested objects (Address, PaymentInfo, LineItems)
+     - Collections (List<OrderItem>, Set<Tag>)
+  
+  2. A static nested Builder class that:
+     - Uses fluent interface for all setters
+     - Validates required fields in build() method
+     - Performs business rule validation
+     - Handles null safety elegantly
+     - Supports copying from existing objects
+  
+  3. Advanced features:
+     - Stage-based builder (interfaces for required vs optional stages)
+     - Builder factory for common configurations
+     - JSON serialization/deserialization with Jackson
+     - JPA entity mapping compatibility
+     - Thread-safe builder implementation
+  
+  4. Complete test suite including:
+     - Unit tests with 95%+ coverage
+     - Builder validation tests
+     - Concurrent usage tests
+     - JSON round-trip tests
+     - Performance benchmarks
+  
+  5. Integration with Spring Boot:
+     - REST controller using builders
+     - Service layer with builder factories
+     - Repository integration
+     - Request/Response DTOs with builders
+  
+  6. Documentation:
+     - Javadoc for all public methods
+     - Usage examples in comments
+     - Performance characteristics noted
+     - Design decisions explained
+  
+  Generate ALL code with NO placeholders, fully functional and production-ready."
+
+OUTPUT_FORMAT:
+  structure:
+    - "Complete domain model with Builder"
+    - "Builder factory implementation"
+    - "Validation layer"
+    - "Spring Boot integration (Controller/Service/Repository)"
+    - "Comprehensive test suite"
+    - "Configuration classes"
+    - "README with usage examples"
+  
+  quality_requirements:
+    - "Zero TODO comments"
+    - "No abstract methods without implementation"
+    - "All edge cases handled"
+    - "Thread-safe implementation"
+    - "Optimized for GC pressure"
