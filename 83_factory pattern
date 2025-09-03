@@ -1,0 +1,89 @@
+CONTEXT:
+  domain: Enterprise Object Creation Management
+  problem_space: Dynamic object instantiation without compile-time class coupling
+  scale_metrics:
+    - 10,000+ object creations per second
+    - 50+ different product types
+    - Multi-tenant SaaS environment
+  constraints:
+    - Zero downtime deployments required
+    - New product types added weekly
+    - Must integrate with existing Spring DI container
+  team_context:
+    - Senior Java developers familiar with GoF patterns
+    - Existing Spring Boot 3.2.x infrastructure
+  integration_points:
+    - Spring ApplicationContext
+    - JPA entities requiring factory creation
+    - REST controllers needing dynamic response objects
+    REQUIREMENTS:
+  functional:
+    - Create objects without specifying exact class at compile time
+    - Support runtime product type registration
+    - Enable product family creation (Abstract Factory support)
+    - Provide type-safe factory methods
+    - Support parameterized object creation
+  non_functional:
+    performance: 
+      - Sub-millisecond object creation
+      - Zero reflection overhead for common types
+    security:
+      - Prevent unauthorized product type registration
+      - Audit trail for object creation
+    scalability:
+      - Thread-safe concurrent creation
+      - Memory-efficient object pooling option
+    reliability:
+      - Graceful fallback for unknown types
+      - Circuit breaker for external factory dependencies
+  compliance:
+    - SOLID principles adherence
+    - Spring Boot best practices
+    - Zero security vulnerabilities (OWASP Top 10)
+    ARCHITECTURE:
+  pattern: Factory Method + Abstract Factory hybrid
+  style: Component-based with Spring Integration
+  layers:
+    presentation: Factory REST endpoints for testing
+    application: Factory orchestration services
+    domain: Product interfaces and concrete implementations
+    infrastructure: Spring-managed factory beans
+  data_flow:
+    - Request → Factory Registry → Concrete Factory → Product Instance
+    - Support for prototype and singleton scopes
+  key_decisions:
+    - Use Spring's FactoryBean for framework integration
+    - Implement registry pattern for dynamic factory management
+    - Leverage @Conditional annotations for environment-specific factories
+    FRAMEWORK:
+  core:
+    language: Java 17
+    framework: Spring Boot 3.2.x
+    build: Maven/Gradle with multi-module structure
+  libraries:
+    - Spring Context (DI container integration)
+    - Spring AOP (cross-cutting concerns)
+    - Lombok (boilerplate reduction)
+    - MapStruct (object mapping)
+  testing:
+    - JUnit DSL + Mockito
+    - TestContainers for integration tests
+    - ArchUnit for architecture validation
+  monitoring:
+    - Micrometer metrics
+    - Spring Boot Actuator
+    - OpenTelemetry tracing
+    TECHNOLOGY:
+  implementation_strategy:
+    - Generic type-safe factories with bounded wildcards
+    - Annotation-driven factory registration
+    - Spring profiles for environment-specific products
+    - Factory method chaining for complex creation
+  optimizations:
+    - Object pooling for expensive creations
+    - Lazy initialization with suppliers
+    - Compile-time factory validation
+  integration_patterns:
+    - @Component scanning for auto-registration
+    - @Qualifier for factory selection
+    - @Primary for default factories
