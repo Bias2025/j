@@ -1,0 +1,186 @@
+PROMPT_TITLE: "Generate Complete Spring Boot Strategy Pattern Implementation with Runtime Algorithm Selection"
+
+INSTRUCTION_SET:
+  role: "You are an elite Spring Boot architect implementing a production-ready Strategy Pattern"
+  objective: "Create a fully functional Spring Boot application demonstrating runtime algorithm selection"
+  constraints: 
+    - Java 17
+    - Spring Boot 3.x
+    - PostgreSQL compatible
+    - 100% test coverage
+    - Production-ready with monitoring
+    CONTEXT:
+  domain: "Dynamic Algorithm Selection System"
+  business_case: "Enterprise application requiring runtime switching between different processing algorithms based on client preferences, load conditions, or business rules"
+  scale_metrics:
+    - concurrent_requests: "10,000 RPS"
+    - data_volume: "1-10MB per request"
+    - response_time: "<100ms P99"
+  constraints:
+    - java_version: "17"
+    - spring_boot_version: "3.2.x"
+    - deployment: "Kubernetes/Cloud-native"
+  team_context:
+    - size: "5-10 developers"
+    - skill_level: "Mid to Senior"
+    - existing_stack: "Spring ecosystem"
+  integration_points:
+    - "REST API endpoints"
+    - "Message queues (Kafka/RabbitMQ)"
+    - "PostgreSQL for strategy configuration"
+    - "Redis for caching strategy results"
+    REQUIREMENTS:
+  functional:
+    - "Support multiple algorithm implementations (minimum 3 strategies)"
+    - "Runtime strategy selection without application restart"
+    - "Strategy selection based on: request headers, user preferences, system load"
+    - "Audit trail of strategy selections and executions"
+    - "Fallback mechanism for failed strategies"
+    - "Strategy performance metrics collection"
+  non_functional:
+    performance:
+      - "Strategy selection overhead: <1ms"
+      - "Strategy execution: <50ms average"
+      - "Memory footprint: <100MB per strategy instance"
+    security:
+      - "Strategy execution isolation"
+      - "Input validation before strategy execution"
+      - "Rate limiting per strategy type"
+    scalability:
+      - "Support 50+ concurrent strategy types"
+      - "Horizontal scaling capability"
+      - "Strategy hot-swapping without downtime"
+    reliability:
+      - "99.99% uptime SLA"
+      - "Circuit breaker for failing strategies"
+      - "Automatic retry with exponential backoff"
+  compliance:
+    - "GDPR compliant logging"
+    - "SOC2 audit requirements"
+    - "Strategy execution traceability"
+    ARCHITECTURE:
+  pattern: "Strategy Pattern with Factory and Registry"
+  style: "Microservice-ready monolith"
+  layers:
+    presentation:
+      - "REST Controllers with OpenAPI documentation"
+      - "WebSocket for real-time strategy updates"
+    application:
+      - "Strategy Factory with dynamic registration"
+      - "Strategy Context manager"
+      - "Strategy execution orchestrator"
+    domain:
+      - "Strategy interface hierarchy"
+      - "Business rule engine for strategy selection"
+      - "Strategy metadata and configuration entities"
+    infrastructure:
+      - "PostgreSQL for strategy configurations"
+      - "Redis for strategy result caching"
+      - "Spring Cloud Config for external configuration"
+  data_flow:
+    - "Request → Controller → Strategy Selector → Strategy Factory → Strategy Execution → Response"
+    - "Async processing for heavy strategies via @Async"
+    - "Event-driven strategy result notifications"
+    FRAMEWORK:
+  core:
+    language: "Java 17"
+    framework: "Spring Boot 3.2.x"
+    build_tool: "Maven 3.9+"
+  dependencies:
+    - "spring-boot-starter-web"
+    - "spring-boot-starter-data-jpa"
+    - "spring-boot-starter-cache"
+    - "spring-boot-starter-actuator"
+    - "spring-boot-starter-validation"
+    - "spring-boot-starter-aop"
+  persistence:
+    database: "PostgreSQL 15+"
+    orm: "Spring Data JPA with Hibernate"
+    migration: "Flyway"
+    connection_pool: "HikariCP"
+  messaging:
+    - "Spring Cloud Stream"
+    - "Apache Kafka (optional)"
+  caching:
+    - "Spring Cache abstraction"
+    - "Redis with Lettuce client"
+  monitoring:
+    - "Micrometer metrics"
+    - "Spring Boot Actuator"
+    - "OpenTelemetry"
+  testing:
+    - "JUnit 5"
+    - "Mockito"
+    - "TestContainers"
+    - "RestAssured"
+    TECHNOLOGY_IMPLEMENTATION:
+  strategy_components:
+    - "StrategyInterface with generic type parameters"
+    - "AbstractStrategy base class with common functionality"
+    - "ConcreteStrategy implementations (minimum 3)"
+    - "StrategyFactory with @Component scanning"
+    - "StrategyRegistry for runtime registration"
+    - "StrategyContext for execution management"
+    - "StrategySelector with rule engine"
+  
+  code_generation_requirements:
+    - "Complete Maven pom.xml with all dependencies"
+    - "Application.java with @SpringBootApplication"
+    - "Strategy interface with execute() method"
+    - "3+ concrete strategy implementations"
+    - "StrategyFactory with dynamic loading"
+    - "REST controller with strategy selection endpoint"
+    - "JPA entities for strategy configuration"
+    - "PostgreSQL schema migration scripts"
+    - "Comprehensive unit and integration tests"
+    - "Docker Compose for local development"
+    - "Performance benchmarks"
+    - "README with curl examples"
+  
+  specific_features:
+    - "Strategy warm-up on application start"
+    - "Strategy health checks"
+    - "Strategy versioning support"
+    - "A/B testing capability for strategies"
+    - "Strategy execution timeout handling"
+    - "Async strategy execution option"
+    - "Strategy chaining capability"
+    - "Strategy result transformation pipeline"
+    GENERATE:
+  structure:
+    - "src/main/java/com/enterprise/strategy/"
+      - "Application.java"
+      - "config/StrategyConfiguration.java"
+      - "core/Strategy.java (interface)"
+      - "core/AbstractStrategy.java"
+      - "core/StrategyContext.java"
+      - "factory/StrategyFactory.java"
+      - "registry/StrategyRegistry.java"
+      - "selector/StrategySelector.java"
+      - "impl/FastStrategy.java"
+      - "impl/AccurateStrategy.java"
+      - "impl/BalancedStrategy.java"
+      - "controller/StrategyController.java"
+      - "entity/StrategyConfig.java"
+      - "repository/StrategyConfigRepository.java"
+      - "service/StrategyService.java"
+      - "exception/StrategyException.java"
+      - "metrics/StrategyMetrics.java"
+    - "src/main/resources/"
+      - "application.yml"
+      - "db/migration/V1__create_strategy_tables.sql"
+    - "src/test/java/"
+      - "Complete test suite with 90%+ coverage"
+    - "pom.xml"
+    - "docker-compose.yml"
+    - "README.md"
+  
+  quality_requirements:
+    - "No TODOs or placeholders"
+    - "Production-ready error handling"
+    - "Comprehensive JavaDoc"
+    - "Performance annotations (O(n) complexity)"
+    - "Security validations"
+    - "Monitoring hooks"
+    - "Circuit breaker implementation"
+    - "Rate limiting"
