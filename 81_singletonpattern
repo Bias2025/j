@@ -1,0 +1,94 @@
+CONTEXT:
+  domain: Enterprise Application Development
+  pattern_focus: Singleton Design Pattern
+  use_cases:
+    - Database connection pools
+    - Configuration managers
+    - Cache managers
+    - Logger instances
+    - Thread pools
+    - Service registries
+  scale: 
+    - Single JVM instance management
+    - Thread-safe access for 10K+ concurrent requests
+    - Sub-millisecond instance retrieval
+  constraints:
+    - Must be thread-safe
+    - Lazy initialization preferred
+    - Spring Boot integration required
+    - Serialization-safe implementation
+    - Reflection attack prevention
+  team: Senior developers requiring production-grade singleton
+  integration: Spring IoC container, JPA, REST controllers
+  REQUIREMENTS:
+  functional:
+    - Guarantee single instance per JVM
+    - Provide global access point
+    - Support lazy initialization
+    - Integrate with Spring dependency injection
+    - Support configuration hot-reload capability
+  non_functional:
+    performance: 
+      - Instance access < 1ms
+      - Zero synchronization overhead after initialization
+    security:
+      - Prevent reflection attacks
+      - Prevent deserialization attacks
+      - Thread-safe initialization
+    scalability:
+      - Support 100K+ concurrent accesses
+      - Minimal memory footprint
+    reliability:
+      - 99.999% availability
+      - Graceful degradation support
+  compliance:
+    - OWASP secure coding standards
+    - Spring Boot best practices
+    - Java memory model compliance
+    ARCHITECTURE:
+  pattern: Singleton with Bill Pugh Solution
+  style: Spring-managed singleton with fallback
+  layers:
+    - presentation: REST controllers accessing singleton
+    - application: Service layer using singleton
+    - domain: Singleton instance management
+    - infrastructure: Spring IoC integration
+  implementation_strategies:
+    - Enum-based (absolute safety)
+    - Bill Pugh inner static helper
+    - Spring @Component singleton
+    - Double-checked locking (legacy support)
+  data_flow: Thread-safe lazy initialization → cached access
+  FRAMEWORK:
+  core:
+    language: Java 17
+    framework: Spring Boot 3.2.x
+  patterns:
+    primary: Bill Pugh Singleton
+    spring: @Component/@Service with @Scope("singleton")
+    alternative: Enum singleton for absolute safety
+  testing:
+    unit: JUnit 5 + Mockito
+    concurrent: JCStress framework
+    performance: JMH benchmarks
+  monitoring:
+    metrics: Micrometer
+    logging: SLF4J + Logback
+  deployment: 
+    platform: Kubernetes/Docker
+    jvm_opts: -XX:+UseG1GC -Xmx2g
+    TECHNOLOGY:
+  implementation_approach:
+    - Thread-safe initialization without synchronization overhead
+    - Serialization safety with readResolve()
+    - Reflection attack prevention
+    - Spring integration patterns
+  performance_optimizations:
+    - Volatile keyword for visibility
+    - Final fields for immutability
+    - Lazy holder pattern for deferred loading
+  testing_strategy:
+    - Concurrent access testing
+    - Serialization/deserialization verification
+    - Reflection attack simulation
+    - Spring context integration tests
