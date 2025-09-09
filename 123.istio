@@ -1,94 +1,94 @@
-# Istio Retry Mechanisms Configuration Prompt - CRAFT Format
+# Istio DestinationRule Configuration Prompt - CRAFT Format
 
 ```yaml
-# You are a world-class Istio resilience architect and fault tolerance expert with 25+ years of experience in enterprise-grade service mesh reliability,
-# specializing in Istio retry mechanisms, circuit breakers, and comprehensive failure recovery strategies for modern microservices architectures.
+# You are a world-class Istio traffic management architect and destination routing expert with 25+ years of experience in enterprise-grade service mesh configuration,
+# specializing in Istio DestinationRule configuration, load balancing optimization, and comprehensive traffic policy management for modern microservices architectures.
 #
-# CONTEXT: Design and implement comprehensive retry mechanisms for [PROJECT_NAME] Istio service mesh configurations
-# to enhance [DOMAIN_NAME] domain service reliability serving [BUSINESS_PURPOSE] with complete fault tolerance and automatic recovery
+# CONTEXT: Design and implement comprehensive Istio DestinationRule configurations for [PROJECT_NAME] service mesh
+# to optimize [DOMAIN_NAME] domain traffic management serving [BUSINESS_PURPOSE] with complete load balancing and connection optimization
 #
 # REQUIREMENTS:
-# Functional: Comprehensive retry policy configuration with exponential backoff and jitter algorithms, Advanced retry condition specification with HTTP status codes and connection failure handling, Timeout management with per-request and per-retry timeout configuration, Retry budget management with circuit breaker integration and resource protection, Host selection retry with healthy endpoint prioritization and load balancing, Connection failure retry with TCP-level error handling and connection pool management, Rate limiting integration with retry coordination and quota management, Dead letter queue integration with failed request handling and analysis, Observability integration with retry metrics collection and performance monitoring, Security policy integration with authentication retry and token refresh mechanisms, Cross-service retry coordination with upstream and downstream service communication, Configuration templating with service-specific retry policies and standardized patterns
-# Non-Functional: Enhanced service reliability through intelligent retry mechanisms and automatic failure recovery, Improved system resilience with cascading failure prevention and resource protection, Better user experience through transparent error handling and seamless retry operations, Enhanced performance optimization through efficient retry algorithms and resource utilization, Improved observability with comprehensive retry metrics and failure analysis, Better resource efficiency through intelligent retry budgets and waste prevention, Enhanced security through secure retry operations and credential management, Improved operational efficiency through automated retry configuration and policy management
+# Functional: Comprehensive DestinationRule configuration with advanced load balancing algorithms and traffic distribution, Connection pool optimization with TCP and HTTP connection management for optimal performance, Circuit breaker implementation with failure detection and automatic recovery mechanisms, TLS configuration with mutual TLS and certificate management for secure communication, Subset definition with version-based routing and canary deployment support, Outlier detection with unhealthy instance removal and automatic recovery, Health checking integration with service health validation and failover mechanisms, Port-specific configuration with protocol optimization and service-specific settings, Session affinity configuration with sticky sessions and consistent hash-based routing, Rate limiting integration with connection-level and request-level throttling, Observability integration with traffic metrics collection and performance monitoring, Security policy integration with encryption and access control at destination level
+# Non-Functional: Enhanced traffic performance through optimized load balancing and connection management, Improved service reliability with circuit breakers and outlier detection mechanisms, Better resource utilization through efficient connection pooling and traffic optimization, Enhanced security posture with comprehensive TLS configuration and encryption enforcement, Improved scalability through intelligent traffic distribution and resource allocation, Better fault tolerance through health checking and automatic failover capabilities, Enhanced monitoring with comprehensive traffic metrics and performance analytics, Improved operational efficiency through automated traffic management and policy enforcement
 #
-# ARCHITECTURE: Resilience architecture with multi-tier retry strategies and failure isolation, Circuit breaker architecture with retry coordination and resource protection, Observability architecture with comprehensive retry monitoring and analytics, Security architecture with secure retry operations and credential management, Performance architecture with optimized retry algorithms and resource efficiency
+# ARCHITECTURE: Istio DestinationRule architecture with comprehensive traffic policy management and connection optimization, Multi-tier load balancing architecture with algorithm selection and performance optimization, Circuit breaker architecture with failure detection and recovery mechanisms, Security architecture with TLS configuration and encryption enforcement, Observability architecture with traffic monitoring and performance analytics
 #
-# TESTING: Retry testing with failure injection and recovery validation, Performance testing with retry overhead measurement and latency analysis, Resilience testing with cascading failure scenarios and retry effectiveness, Load testing with retry behavior under high-volume traffic, Integration testing with service mesh functionality during retry operations
+# TESTING: DestinationRule testing with traffic simulation and load balancing validation, Performance testing with connection pool optimization and throughput measurement, Resilience testing with circuit breaker validation and failure recovery, Security testing with TLS configuration and encryption verification, Load testing with high-volume traffic and scalability validation
 #
 # CONSTRAINTS:
-# Quality: Zero infinite retry loops with proper retry budget enforcement and circuit breaker integration, Complete failure coverage with comprehensive retry condition specification, Reliable retry behavior with predictable retry patterns and consistent performance, Comprehensive monitoring with detailed retry metrics and failure analysis, Configuration consistency with standardized retry policies across all services, Error handling with proper failure classification and retry decision logic, Performance optimization with minimal retry overhead and efficient resource utilization
-# Performance: Optimized retry algorithms with exponential backoff and jitter for minimal system impact, Memory usage optimization with efficient retry state management and resource cleanup, CPU efficiency through optimized retry logic and minimal processing overhead, Network performance optimization with intelligent retry timing and connection management, Latency minimization through fast retry decisions and efficient failure detection, Throughput optimization through intelligent retry scheduling and resource allocation
-# Security: Secure retry operations with proper credential handling and token refresh mechanisms, Access control for retry configuration with role-based permissions and policy enforcement, Audit logging with comprehensive retry activity tracking and security event correlation, Resource protection with retry budget enforcement and DDoS prevention, Credential security with secure retry token management and authentication
+# Quality: Zero traffic disruption during DestinationRule updates with rolling configuration changes, Complete load balancing accuracy with consistent traffic distribution and optimal performance, Reliable circuit breaker behavior with predictable failure detection and recovery, Comprehensive TLS security with proper encryption and certificate validation, Configuration consistency with standardized traffic policies across all services, Error handling with graceful degradation and automatic recovery mechanisms, Performance optimization with minimal overhead and maximum throughput
+# Performance: Optimized load balancing with efficient traffic distribution algorithms and minimal latency, Connection pool efficiency with optimal resource utilization and connection reuse, Memory usage optimization with intelligent connection management and resource cleanup, CPU efficiency through optimized traffic processing and minimal overhead, Network performance optimization with connection pooling and traffic compression, Latency minimization through intelligent routing and proximity-based load balancing
+# Security: Comprehensive TLS encryption with strong cipher suites and certificate validation, Mutual TLS configuration with client certificate authentication and validation, Security policy enforcement with access control and encryption at destination level, Certificate management with automatic provisioning and renewal, Audit logging with comprehensive traffic security event tracking and compliance reporting
 #
-# FRAMEWORKS: Istio 1.20+, Envoy Proxy, Kubernetes 1.28+, Prometheus, Grafana, Jaeger, Circuit Breaker Libraries
+# FRAMEWORKS: Istio 1.20+, Envoy Proxy, Kubernetes 1.28+, Prometheus, Grafana, Jaeger, cert-manager
 #
 # ORIGINALITY REQUIREMENTS:
-# - Create COMPREHENSIVE retry mechanisms for [PROJECT_NAME] Istio service reliability and [DOMAIN_NAME] fault tolerance
-# - Implement ADVANCED retry policies tailored to [PROJECT_NAME] service characteristics and [BUSINESS_PURPOSE] requirements
-# - Design SOPHISTICATED backoff strategies for [DOMAIN_NAME] optimal retry timing and resource efficiency
-# - Generate THOROUGH circuit breaker integration for [PROJECT_NAME] cascading failure prevention and resource protection
-# - Create ROBUST observability integration for [BUSINESS_PURPOSE] retry monitoring and performance analysis
-# - Implement COMPLETE security integration for [DOMAIN_NAME] secure retry operations and credential management
-# - Design COMPREHENSIVE configuration templates for [PROJECT_NAME] standardized retry policies and best practices
-# - Generate ADVANCED automation for [BUSINESS_PURPOSE] retry policy management and operational efficiency
-# - Create DETAILED documentation for [DOMAIN_NAME] retry mechanisms and troubleshooting procedures
-# - Implement AUTOMATED validation for [PROJECT_NAME] retry configuration compliance and effectiveness verification
+# - Create COMPREHENSIVE DestinationRule configuration for [PROJECT_NAME] Istio traffic optimization and [DOMAIN_NAME] load balancing
+# - Implement ADVANCED load balancing strategies tailored to [PROJECT_NAME] traffic patterns and [BUSINESS_PURPOSE] requirements
+# - Design SOPHISTICATED connection pooling for [DOMAIN_NAME] performance optimization and resource efficiency
+# - Generate THOROUGH circuit breaker configuration for [PROJECT_NAME] fault tolerance and automatic recovery
+# - Create ROBUST TLS management for [BUSINESS_PURPOSE] secure communication and encryption enforcement
+# - Implement COMPLETE subset management for [DOMAIN_NAME] version-based routing and deployment strategies
+# - Design COMPREHENSIVE outlier detection for [PROJECT_NAME] unhealthy instance management and service reliability
+# - Generate ADVANCED observability integration for [BUSINESS_PURPOSE] traffic monitoring and performance analysis
+# - Create DETAILED documentation for [DOMAIN_NAME] DestinationRule configuration and operational procedures
+# - Implement AUTOMATED validation for [PROJECT_NAME] traffic policy compliance and performance verification
 #
-# Generate comprehensive Istio retry mechanisms solution that:
-# - Creates COMPLETE retry policy configurations with exponential backoff, jitter, and intelligent retry conditions
-# - Implements ADVANCED circuit breaker integration with retry budget management and cascading failure prevention
-# - Develops SOPHISTICATED timeout management with per-request and per-retry timeout configuration and optimization
-# - Generates THOROUGH observability integration with retry metrics collection and comprehensive failure analysis
-# - Creates ROBUST security integration with secure retry operations and authentication token management
-# - Implements COMPREHENSIVE configuration templating with service-specific policies and standardized patterns
-# - Develops ADVANCED automation with retry policy orchestration and dynamic configuration management
-# - Generates COMPLETE testing framework with retry validation and performance measurement procedures
-# - Creates DETAILED documentation explaining retry strategies and operational maintenance procedures
-# - Implements AUTOMATED monitoring ensuring retry effectiveness and configuration compliance validation
+# Generate comprehensive Istio DestinationRule solution that:
+# - Creates COMPLETE DestinationRule YAML configurations with advanced load balancing and traffic optimization
+# - Implements ADVANCED connection pooling with TCP and HTTP optimization for maximum performance
+# - Develops SOPHISTICATED circuit breaker patterns with intelligent failure detection and recovery
+# - Generates THOROUGH TLS configuration with mutual TLS and comprehensive security enforcement
+# - Creates ROBUST subset definitions with version-based routing and canary deployment capabilities
+# - Implements COMPREHENSIVE outlier detection with health monitoring and automatic instance management
+# - Develops ADVANCED observability integration with traffic metrics and performance monitoring
+# - Generates COMPLETE automation with traffic policy orchestration and configuration management
+# - Creates DETAILED documentation explaining DestinationRule architecture and operational procedures
+# - Implements AUTOMATED testing procedures ensuring traffic policy reliability and performance validation
 
 /*
- * ENHANCED CRAFT METHOD FOR COMPREHENSIVE ISTIO RETRY MECHANISMS CONFIGURATION
- * This enterprise-grade prompt generates COMPLETE, production-ready retry solution with:
+ * ENHANCED CRAFT METHOD FOR COMPREHENSIVE ISTIO DESTINATIONRULE CONFIGURATION
+ * This enterprise-grade prompt generates COMPLETE, production-ready DestinationRule solution with:
  * 
- * COMPREHENSIVE RETRY POLICY CONFIGURATION:
- * - Advanced retry condition specification with HTTP status codes and connection failures
- * - Sophisticated exponential backoff algorithms with jitter and randomization
- * - Complete timeout management with per-request and per-retry timeout configuration
- * - Advanced retry budget management with circuit breaker integration and resource protection
- * - Comprehensive host selection retry with healthy endpoint prioritization
- * - Sophisticated connection failure handling with TCP-level error recovery
- * - Advanced rate limiting integration with retry coordination and quota management
- * - Complete observability integration with retry metrics and failure tracking
+ * COMPREHENSIVE DESTINATIONRULE ARCHITECTURE:
+ * - Advanced load balancing configuration with multiple algorithms and optimization strategies
+ * - Sophisticated connection pool management with TCP and HTTP optimization
+ * - Complete circuit breaker implementation with failure detection and recovery
+ * - Advanced TLS configuration with mutual TLS and certificate management
+ * - Comprehensive subset definition with version-based routing and deployment support
+ * - Sophisticated outlier detection with health monitoring and automatic recovery
+ * - Advanced session affinity with consistent hash-based routing and sticky sessions
+ * - Complete observability integration with metrics collection and performance monitoring
  * 
- * ADVANCED RESILIENCE STRATEGIES:
- * - Sophisticated circuit breaker patterns with retry budget enforcement
- * - Advanced bulkhead patterns with resource isolation and failure containment
- * - Complex timeout strategies with cascading timeout prevention and optimization
- * - Comprehensive failure classification with intelligent retry decision logic
- * - Advanced health checking integration with retry endpoint selection
- * - Sophisticated degradation strategies with graceful failure handling
- * - Complex retry coordination with upstream and downstream service communication
- * - Advanced load shedding integration with retry traffic management
+ * ADVANCED LOAD BALANCING STRATEGIES:
+ * - Sophisticated algorithm selection with round-robin, least-connection, and random distribution
+ * - Advanced consistent hash load balancing with session affinity and sticky routing
+ * - Complex weighted routing with traffic splitting and canary deployment support
+ * - Comprehensive locality-aware routing with zone and region-based traffic distribution
+ * - Advanced health-based routing with healthy endpoint prioritization
+ * - Sophisticated performance-based routing with latency and throughput optimization
+ * - Complex failover strategies with automatic backup endpoint selection
+ * - Advanced traffic shaping with rate limiting and traffic smoothing
  * 
- * SOPHISTICATED RETRY ALGORITHMS:
- * - Advanced exponential backoff with configurable base delay and multiplier
- * - Complex jitter algorithms with uniform and exponential randomization
- * - Sophisticated retry spacing with adaptive timing and performance optimization
- * - Advanced retry budget calculation with dynamic adjustment and monitoring
- * - Comprehensive retry scheduling with intelligent timing and resource awareness
- * - Complex retry state management with efficient memory utilization
- * - Advanced retry coordination with distributed system synchronization
- * - Sophisticated retry optimization with machine learning and pattern recognition
+ * SOPHISTICATED CONNECTION OPTIMIZATION:
+ * - Advanced TCP connection pooling with connection limits and timeout management
+ * - Complex HTTP connection optimization with keep-alive and connection reuse
+ * - Sophisticated connection health checking with automatic connection validation
+ * - Advanced timeout configuration with connection, request, and idle timeouts
+ * - Comprehensive connection security with TLS configuration and encryption
+ * - Complex connection monitoring with performance metrics and health tracking
+ * - Advanced connection scaling with dynamic pool sizing and resource allocation
+ * - Sophisticated connection cleanup with automatic resource management
  * 
- * PRODUCTION-READY RETRY IMPLEMENTATIONS:
- * - Thread-safe retry operations with proper concurrency control and state management
- * - Memory-efficient retry handling with optimized state storage and cleanup
- * - Performance-optimized retry algorithms with minimal overhead and efficient processing
- * - Error-resilient retry logic with comprehensive exception handling and recovery
- * - Configurable retry parameters with external property support and dynamic adjustment
- * - Monitored retry operations with detailed logging and performance tracking
- * - Documented retry strategies with comprehensive guides and troubleshooting procedures
- * - Maintainable retry architecture with modular design and extensible framework
+ * PRODUCTION-READY DESTINATIONRULE IMPLEMENTATIONS:
+ * - Thread-safe configuration management with proper resource isolation and updates
+ * - Memory-efficient traffic handling with optimized resource allocation and cleanup
+ * - Performance-optimized load balancing with efficient algorithms and minimal overhead
+ * - Error-resilient traffic management with comprehensive fault tolerance
+ * - Scalable traffic architecture with dynamic resource allocation and optimization
+ * - Monitored traffic operations with comprehensive metrics and alerting
+ * - Documented traffic policies with operational runbooks and best practices
+ * - Maintainable traffic configuration with modular design and centralized management
  * 
  * PARAMETERIZED PLACEHOLDERS - Replace with your specific values:
  * - [PROJECT_NAME] → Your project name (ECommerceApp, PaymentService, UserManagement, etc.)
@@ -97,300 +97,49 @@
  * - [SERVICE_NAME] → Your service name (checkout-service, payment-gateway, user-service, etc.)
  * - [COMPANY_NAME] → Your company name (RetailCorp, PaymentInc, UserSystems, etc.)
  * - [NAMESPACE] → Your namespace (production, staging, development, etc.)
- * - [UPSTREAM_SERVICE] → Your upstream service (user-service, inventory-service, etc.)
- * - [RETRY_BUDGET] → Your retry budget percentage (10%, 20%, 30%, etc.)
+ * - [SERVICE_VERSION] → Your service version (v1, v2, stable, canary, etc.)
+ * - [LOAD_BALANCER_ALGORITHM] → Your preferred algorithm (ROUND_ROBIN, LEAST_CONN, RANDOM, etc.)
  * 
- * ISTIO RETRY MECHANISMS CUSTOMIZATIONS:
- * - Identify your specific failure patterns and error conditions for targeted retry configuration
- * - Define your performance requirements and SLA targets for intelligent retry timing
- * - Specify your resource constraints and efficiency goals for optimal retry budget management
- * - Configure your service dependencies and communication patterns for coordinated retry strategies
- * - Set up your monitoring and alerting requirements for comprehensive retry oversight
- * - Define your security requirements and compliance needs for secure retry operations
- * - Specify your automation requirements and integration needs for operational efficiency
- * - Configure your testing requirements and validation strategies for retry effectiveness
+ * ISTIO DESTINATIONRULE CUSTOMIZATIONS:
+ * - Identify your specific traffic patterns and load characteristics for optimized load balancing configuration
+ * - Define your performance requirements and SLA targets for connection pool optimization
+ * - Specify your fault tolerance requirements and recovery strategies for circuit breaker configuration
+ * - Configure your security requirements and encryption needs for comprehensive TLS setup
+ * - Set up your deployment requirements and versioning strategies for subset management
+ * - Define your health monitoring requirements and failure detection for outlier detection
+ * - Specify your observability requirements and metrics collection for traffic monitoring
+ * - Configure your automation requirements and policy management for operational efficiency
  * 
- * The more specific your service failure patterns and [DOMAIN_NAME] reliability requirements, the more targeted and effective the retry configuration will be!
+ * The more specific your service characteristics and [DOMAIN_NAME] traffic requirements, the more targeted and effective the DestinationRule configuration will be!
  */
 
-## COMPREHENSIVE ISTIO RETRY MECHANISMS FRAMEWORK
+## COMPREHENSIVE ISTIO DESTINATIONRULE FRAMEWORK
 
-### Phase 1: Advanced Retry Policy Configuration
-**Enterprise [DOMAIN_NAME] Service Mesh Resilience Foundation**
+### Phase 1: Advanced DestinationRule Configuration
+**Enterprise [DOMAIN_NAME] Traffic Management and Load Balancing Foundation**
 
-#### Complete VirtualService with Comprehensive Retry Configuration
+#### Complete DestinationRule with Comprehensive Traffic Policies
 ```yaml
-# Comprehensive Istio Retry Mechanisms for [PROJECT_NAME] - [SERVICE_NAME]
-# File: istio/retry/[SERVICE_NAME]-retry-policy.yaml
+# Comprehensive Istio DestinationRule for [PROJECT_NAME] - [SERVICE_NAME]
+# File: istio/destination-rules/[SERVICE_NAME]-destination-rule.yaml
 
 apiVersion: networking.istio.io/v1beta1
-kind: VirtualService
+kind: DestinationRule
 metadata:
-  name: [SERVICE_NAME]-retry-vs
+  name: [SERVICE_NAME]-destination-rule
   namespace: [NAMESPACE]
   labels:
     app: [SERVICE_NAME]
     project: [PROJECT_NAME]
     domain: [DOMAIN_NAME]
-    purpose: retry-configuration
+    purpose: traffic-management
     managed-by: istio-platform-team
-    resilience-tier: enterprise
+    policy-tier: enterprise
   annotations:
-    description: "Advanced retry mechanisms for [SERVICE_NAME] with comprehensive fault tolerance"
+    description: "Enterprise DestinationRule for [SERVICE_NAME] with comprehensive traffic optimization"
     owner: "[COMPANY_NAME]-platform-team"
-    retry-strategy: "exponential-backoff"
-    circuit-breaker-integration: "enabled"
+    load-balancing-algorithm: "[LOAD_BALANCER_ALGORITHM]"
+    circuit-breaker-enabled: "true"
+    tls-mode: "mutual"
     observability-enabled: "true"
-    last-updated: "{{ .Values.global.timestamp }}"
-    documentation: "https://docs.[COMPANY_NAME].com/istio/retry/[SERVICE_NAME]"
-spec:
-  # Service Host Configuration
-  hosts:
-  - [SERVICE_NAME].[NAMESPACE].svc.cluster.local
-  - [SERVICE_NAME]
-  
-  # Comprehensive HTTP Routing with Advanced Retry Mechanisms
-  http:
-  
-  # Primary Route with Standard Retry Configuration
-  - match:
-    - headers:
-        x-request-type:
-          exact: "standard"
-    - uri:
-        prefix: "/api/v1"
-    route:
-    - destination:
-        host: [SERVICE_NAME].[NAMESPACE].svc.cluster.local
-        port:
-          number: 8080
-        subset: stable    # Route to stable version
-    
-    # COMPREHENSIVE RETRY CONFIGURATION
-    retries:
-      # Maximum number of retry attempts (excluding initial request)
-      attempts: 3
-      
-      # Per-try timeout - Maximum time to wait for each individual attempt
-      perTryTimeout: 10s
-      
-      # Retry conditions - When to retry the request
-      retryOn: |
-        5xx,
-        reset,
-        connect-failure,
-        refused-stream,
-        unavailable,
-        cancelled,
-        deadline-exceeded,
-        resource-exhausted
-      
-      # HTTP status codes that trigger retries
-      retriableStatusCodes:
-      - 502    # Bad Gateway
-      - 503    # Service Unavailable  
-      - 504    # Gateway Timeout
-      - 429    # Too Many Requests (with proper backoff)
-      
-      # Retry budget configuration for resource protection
-      retryRemoteLocalities: true
-      
-    # REQUEST TIMEOUT CONFIGURATION
-    timeout: 30s    # Total request timeout including all retries
-    
-    # FAULT INJECTION FOR TESTING (Remove in production)
-    # fault:
-    #   delay:
-    #     percentage:
-    #       value: 1.0    # 1% of requests
-    #     fixedDelay: 2s
-    #   abort:
-    #     percentage:
-    #       value: 0.5    # 0.5% of requests
-    #     httpStatus: 503
-  
-  # Critical Operations Route with Enhanced Retry Configuration
-  - match:
-    - headers:
-        x-request-type:
-          exact: "critical"
-    - uri:
-        prefix: "/api/v1/critical"
-    - method:
-        exact: "POST"
-    route:
-    - destination:
-        host: [SERVICE_NAME].[NAMESPACE].svc.cluster.local
-        port:
-          number: 8080
-        subset: stable
-    
-    # ENHANCED RETRY FOR CRITICAL OPERATIONS
-    retries:
-      # Increased retry attempts for critical operations
-      attempts: 5
-      
-      # Shorter per-try timeout for faster failure detection
-      perTryTimeout: 5s
-      
-      # More aggressive retry conditions
-      retryOn: |
-        5xx,
-        4xx,
-        reset,
-        connect-failure,
-        refused-stream,
-        unavailable,
-        cancelled,
-        deadline-exceeded,
-        resource-exhausted,
-        retriable-headers
-      
-      # Extended retriable status codes for critical operations
-      retriableStatusCodes:
-      - 408    # Request Timeout
-      - 409    # Conflict (for idempotent operations)
-      - 429    # Too Many Requests
-      - 500    # Internal Server Error
-      - 502    # Bad Gateway
-      - 503    # Service Unavailable
-      - 504    # Gateway Timeout
-      
-      # Retry policy for different localities
-      retryRemoteLocalities: true
-      
-      # Host selection retry - Try different healthy hosts
-      hostSelectionRetryMaxAttempts: 3
-      
-      # Retriable request headers (for conditional retries)
-      retriableRequestHeaders:
-      - name: "x-idempotent"
-        exact_match: "true"
-      - name: "x-retry-policy"
-        prefix_match: "aggressive"
-    
-    # Extended timeout for critical operations
-    timeout: 60s
-  
-  # Read Operations Route with Optimized Retry Configuration  
-  - match:
-    - method:
-        exact: "GET"
-    - uri:
-        prefix: "/api/v1/read"
-    route:
-    - destination:
-        host: [SERVICE_NAME].[NAMESPACE].svc.cluster.local
-        port:
-          number: 8080
-        subset: stable
-    
-    # OPTIMIZED RETRY FOR READ OPERATIONS
-    retries:
-      # More aggressive retries for read operations (idempotent)
-      attempts: 4
-      
-      # Faster timeout for read operations
-      perTryTimeout: 3s
-      
-      # Comprehensive retry conditions for reads
-      retryOn: |
-        5xx,
-        reset,
-        connect-failure,
-        refused-stream,
-        unavailable,
-        cancelled,
-        deadline-exceeded
-      
-      # Status codes for read operation retries
-      retriableStatusCodes:
-      - 502    # Bad Gateway
-      - 503    # Service Unavailable
-      - 504    # Gateway Timeout
-      - 408    # Request Timeout
-      
-      # Enable remote locality retries for better availability
-      retryRemoteLocalities: true
-      
-      # Host selection retry for read operations
-      hostSelectionRetryMaxAttempts: 5
-    
-    # Moderate timeout for read operations
-    timeout: 20s
-  
-  # External Service Route with Conservative Retry Configuration
-  - match:
-    - headers:
-        x-service-type:
-          exact: "external"
-    - uri:
-        prefix: "/api/v1/external"
-    route:
-    - destination:
-        host: [SERVICE_NAME].[NAMESPACE].svc.cluster.local
-        port:
-          number: 8080
-        subset: stable
-    
-    # CONSERVATIVE RETRY FOR EXTERNAL SERVICE CALLS
-    retries:
-      # Limited retries for external services to prevent cascade failures
-      attempts: 2
-      
-      # Longer per-try timeout for external services
-      perTryTimeout: 15s
-      
-      # Conservative retry conditions
-      retryOn: |
-        connect-failure,
-        refused-stream,
-        unavailable,
-        reset
-      
-      # Limited retriable status codes for external calls
-      retriableStatusCodes:
-      - 502    # Bad Gateway
-      - 504    # Gateway Timeout
-      
-      # Disable remote locality retries for external services
-      retryRemoteLocalities: false
-    
-    # Extended timeout for external service calls
-    timeout: 45s
-  
-  # Default Route with Balanced Retry Configuration
-  - route:
-    - destination:
-        host: [SERVICE_NAME].[NAMESPACE].svc.cluster.local
-        port:
-          number: 8080
-        subset: stable
-    
-    # DEFAULT RETRY CONFIGURATION
-    retries:
-      # Standard retry attempts
-      attempts: 3
-      
-      # Balanced per-try timeout
-      perTryTimeout: 8s
-      
-      # Standard retry conditions
-      retryOn: |
-        5xx,
-        reset,
-        connect-failure,
-        refused-stream,
-        unavailable
-      
-      # Standard retriable status codes
-      retriableStatusCodes:
-      - 502    # Bad Gateway
-      - 503    # Service Unavailable
-      - 504    # Gateway Timeout
-      
-      # Enable remote locality retries
-      retryRemoteLocalities: true
-    
-    # Standard timeout
-    timeout: 30
+    last
