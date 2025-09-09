@@ -1,0 +1,101 @@
+CONTEXT:
+  domain: Financial Services / Banking
+  scale: 
+    - 100K+ concurrent users
+    - 50K RPS peak traffic
+    - $10M+ daily transaction volume
+  constraints:
+    - PCI-DSS compliance required
+    - 99.99% uptime SLA
+    - Sub-100ms P99 latency requirement
+    - Zero-downtime deployment mandate
+  team:
+    - 15 senior Java/Spring Boot engineers
+    - 5 DevOps/Kubernetes specialists
+    - Existing Spring Boot 3.2.x microservices
+  integration:
+    - Legacy core banking systems
+    - Payment gateways (Stripe, PayPal)
+    - Fraud detection services
+    - Regulatory reporting APIs
+    REQUIREMENTS:
+  functional:
+    - Implement multi-tier rate limiting (user/API/global)
+    - Support dynamic rate limit adjustments without restart
+    - Provide real-time rate limit metrics and alerts
+    - Enable bypass for VIP/institutional clients
+    - Implement distributed rate limiting across pods
+  non_functional:
+    performance: 
+      - <5ms rate check latency
+      - Support 100K+ unique rate limit keys
+    security:
+      - Prevent DDoS attacks
+      - Implement API key validation
+      - Rate limit by IP, user, and API endpoint
+    scalability:
+      - Horizontal scaling without rate limit reset
+      - Redis cluster for distributed state
+    reliability:
+      - Graceful degradation if Redis unavailable
+      - Circuit breaker for rate limit service
+  compliance:
+    - Audit trail for all rate limit violations
+    - GDPR-compliant logging
+    - Financial regulatory requirements
+    ARCHITECTURE:
+  pattern: Service Mesh with Sidecar Proxy
+  style: Microservices with ISTIO Service Mesh
+  layers:
+    - mesh: ISTIO Envoy Proxy (rate limiting at edge)
+    - application: Spring Boot services
+    - cache: Redis Cluster for distributed state
+    - monitoring: Prometheus + Grafana
+  data_flow:
+    - Ingress Gateway → Envoy Filter → Rate Limit Service
+    - Token bucket algorithm with sliding window
+    - Async rate limit state synchronization
+    FRAMEWORK:
+  core:
+    language: Java 17
+    framework: Spring Boot 3.2.x
+  service_mesh:
+    istio: 1.20.x
+    envoy: Latest stable
+  rate_limiting:
+    algorithm: Token Bucket + Sliding Window
+    storage: Redis Cluster 7.x
+    client: Lettuce (reactive)
+  monitoring:
+    metrics: Micrometer + Prometheus
+    tracing: OpenTelemetry
+    dashboards: Grafana
+  deployment:
+    platform: Kubernetes 1.28+
+    ci_cd: GitOps with ArgoCD
+    TECHNOLOGY:
+  istio_components:
+    - EnvoyFilter for rate limiting
+    - VirtualService for routing
+    - DestinationRule for circuit breaking
+  spring_components:
+    - Spring Cloud Gateway for fallback
+    - Spring Boot Actuator for metrics
+    - Resilience4j for local rate limiting
+  redis_features:
+    - Lua scripts for atomic operations
+    - Redis Streams for audit logs
+    - Pub/Sub for rate limit updates
+    TESTING:
+  unit_tests:
+    - Mockito for service layer
+    - TestContainers for Redis integration
+  integration_tests:
+    - ISTIO test scenarios
+    - Rate limit boundary testing
+  performance_tests:
+    - JMeter for load testing
+    - Chaos engineering with Litmus
+  security_tests:
+    - OWASP ZAP for API security
+    - Penetration testing for DDoS
