@@ -1,0 +1,257 @@
+# Istio Local Service Calls Configuration Prompt - CRAFT Format
+
+```yaml
+# You are a world-class Istio service discovery architect and local networking expert with 25+ years of experience in enterprise-grade service mesh communication,
+# specializing in local service calls, namespace-local routing, and simplified service discovery patterns for modern microservices architectures without FQDN complexity.
+#
+# CONTEXT: Design and implement comprehensive local service call configurations for [PROJECT_NAME] Istio service mesh
+# to optimize [DOMAIN_NAME] domain internal communication serving [BUSINESS_PURPOSE] with simplified service discovery and namespace-local routing
+#
+# REQUIREMENTS:
+# Functional: Comprehensive local service call configuration with simplified service names and namespace-aware routing, Advanced service discovery optimization with local service resolution and DNS simplification, Sidecar configuration with local service exposure and traffic scope limitation, Namespace-aware routing with automatic service discovery and local communication optimization, Service registry optimization with local service filtering and efficient discovery mechanisms, Traffic management with local service prioritization and cross-namespace communication control, Load balancing optimization for local services with proximity-based routing and latency reduction, Security policy enforcement with namespace-local access control and service-to-service authentication, Observability integration with local service metrics collection and communication tracking, Configuration templating with standardized local service patterns and reusable configurations, Performance optimization with reduced DNS lookups and faster service resolution, Debugging and troubleshooting tools with local service visibility and communication analysis
+# Non-Functional: Enhanced service communication performance through optimized local service discovery and reduced network overhead, Improved configuration simplicity with straightforward service naming and reduced complexity, Better development velocity with simplified service references and intuitive configuration patterns, Enhanced network efficiency through local service prioritization and optimized routing, Improved security posture with namespace-aware access control and service isolation, Better operational efficiency through simplified service management and reduced configuration overhead, Enhanced monitoring with local service communication visibility and performance tracking, Improved troubleshooting capability with clear service communication patterns and debugging tools
+#
+# ARCHITECTURE: Local service mesh architecture with namespace-aware service discovery and simplified routing, Sidecar proxy architecture with local service optimization and traffic scope management, Service registry architecture with local service filtering and efficient discovery, Security architecture with namespace-local access control and service isolation, Observability architecture with local service monitoring and communication analytics
+#
+# TESTING: Local service call testing with namespace-local communication validation, Performance testing with local service resolution speed and latency measurement, Security testing with namespace access control and service isolation verification, Integration testing with service discovery functionality and routing validation, Load testing with local service communication under high-volume traffic
+#
+# CONSTRAINTS:
+# Quality: Zero service discovery failures with reliable local service resolution and consistent communication, Complete namespace isolation with proper service access control and security boundaries, Reliable local service routing with predictable communication patterns and consistent performance, Comprehensive monitoring with detailed local service metrics and communication tracking, Configuration consistency with standardized local service patterns across all namespaces, Error handling with graceful service discovery failures and automatic retry mechanisms, Performance optimization with minimal DNS overhead and fast service resolution
+# Performance: Optimized service discovery with local service caching and efficient resolution algorithms, Network performance optimization with reduced latency and improved throughput for local calls, Memory usage optimization with efficient service registry caching and resource management, CPU efficiency through optimized routing algorithms and minimal processing overhead, DNS optimization with reduced lookups and intelligent caching strategies, Connection optimization with local service connection pooling and reuse
+# Security: Comprehensive namespace isolation with secure service boundaries and access control, Service-to-service authentication with automatic credential management and validation, Access control enforcement with namespace-aware policies and service permissions, Network security with proper traffic isolation and secure communication channels, Audit logging with comprehensive service communication tracking and security event monitoring
+#
+# FRAMEWORKS: Istio 1.20+, Kubernetes DNS, Envoy Proxy, Kubernetes 1.28+, Prometheus, Grafana, Jaeger
+#
+# ORIGINALITY REQUIREMENTS:
+# - Create COMPREHENSIVE local service configuration for [PROJECT_NAME] Istio namespace communication and [DOMAIN_NAME] service discovery
+# - Implement ADVANCED sidecar optimization tailored to [PROJECT_NAME] local service patterns and [BUSINESS_PURPOSE] requirements
+# - Design SOPHISTICATED service discovery for [DOMAIN_NAME] namespace-aware routing and simplified communication
+# - Generate THOROUGH security policies for [PROJECT_NAME] namespace isolation and service access control
+# - Create ROBUST performance optimization for [BUSINESS_PURPOSE] local service communication and latency reduction
+# - Implement COMPLETE monitoring integration for [DOMAIN_NAME] local service visibility and performance tracking
+# - Design COMPREHENSIVE configuration templates for [PROJECT_NAME] standardized local service patterns
+# - Generate ADVANCED automation for [BUSINESS_PURPOSE] local service management and operational efficiency
+# - Create DETAILED documentation for [DOMAIN_NAME] local service communication best practices
+# - Implement AUTOMATED validation for [PROJECT_NAME] local service configuration compliance and performance verification
+#
+# Generate comprehensive Istio local service calls solution that:
+# - Creates COMPLETE local service configurations with simplified service names and namespace-aware routing
+# - Implements ADVANCED sidecar optimization with local service exposure and traffic scope management
+# - Develops SOPHISTICATED service discovery with local service filtering and efficient resolution
+# - Generates THOROUGH security policies with namespace isolation and service access control
+# - Creates ROBUST performance optimization with local service prioritization and latency reduction
+# - Implements COMPREHENSIVE monitoring integration with local service metrics and communication tracking
+# - Develops ADVANCED configuration templates with standardized patterns and reusable components
+# - Generates COMPLETE automation with local service management and operational efficiency
+# - Creates DETAILED documentation explaining local service communication strategies and best practices
+# - Implements AUTOMATED testing procedures ensuring local service reliability and performance validation
+
+/*
+ * ENHANCED CRAFT METHOD FOR COMPREHENSIVE ISTIO LOCAL SERVICE CALLS CONFIGURATION
+ * This enterprise-grade prompt generates COMPLETE, production-ready local service solution with:
+ * 
+ * COMPREHENSIVE LOCAL SERVICE ARCHITECTURE:
+ * - Advanced local service discovery with simplified service names and namespace awareness
+ * - Sophisticated sidecar configuration with local service exposure and traffic optimization
+ * - Complete service registry optimization with local service filtering and efficient resolution
+ * - Advanced routing configuration with namespace-local prioritization and cross-namespace control
+ * - Comprehensive security policies with namespace isolation and service access control
+ * - Sophisticated performance optimization with local service caching and connection management
+ * - Advanced observability integration with local service metrics and communication tracking
+ * - Complete configuration templating with standardized patterns and reusable components
+ * 
+ * ADVANCED SERVICE DISCOVERY OPTIMIZATION:
+ * - Sophisticated local service resolution with DNS optimization and caching strategies
+ * - Advanced service registry filtering with namespace-aware service exposure
+ * - Complex service naming patterns with simplified references and intuitive configuration
+ * - Comprehensive service endpoint discovery with health checking and availability monitoring
+ * - Advanced service topology awareness with proximity-based routing and optimization
+ * - Sophisticated service dependency management with automatic discovery and resolution
+ * - Complex service versioning with local service subset management and routing
+ * - Advanced service lifecycle management with automatic registration and deregistration
+ * 
+ * SOPHISTICATED NAMESPACE-AWARE ROUTING:
+ * - Advanced local service prioritization with namespace-local traffic optimization
+ * - Complex cross-namespace communication control with security policies and access rules
+ * - Sophisticated traffic isolation with namespace boundaries and service segmentation
+ * - Advanced load balancing with local service awareness and proximity-based routing
+ * - Comprehensive traffic management with local service traffic shaping and optimization
+ * - Complex routing rules with namespace-aware service selection and failover
+ * - Advanced service mesh integration with namespace-local configuration and policies
+ * - Sophisticated performance optimization with local service communication efficiency
+ * 
+ * PRODUCTION-READY LOCAL SERVICE IMPLEMENTATIONS:
+ * - Thread-safe service discovery with proper concurrency control and resource management
+ * - Memory-efficient service resolution with optimized caching and resource cleanup
+ * - Performance-optimized local communication with minimal overhead and efficient routing
+ * - Error-resilient service discovery with comprehensive failure handling and recovery
+ * - Configurable service patterns with external property support and dynamic configuration
+ * - Monitored service communication with detailed logging and performance tracking
+ * - Documented service patterns with comprehensive guides and best practices
+ * - Maintainable service architecture with modular design and extensible framework
+ * 
+ * PARAMETERIZED PLACEHOLDERS - Replace with your specific values:
+ * - [PROJECT_NAME] → Your project name (ECommerceApp, PaymentService, UserManagement, etc.)
+ * - [DOMAIN_NAME] → Your business domain (ecommerce, payments, user-management, etc.)
+ * - [BUSINESS_PURPOSE] → Your business purpose (online shopping, payment processing, user authentication, etc.)
+ * - [SERVICE_NAME] → Your service name (checkout-service, payment-gateway, user-service, etc.)
+ * - [COMPANY_NAME] → Your company name (RetailCorp, PaymentInc, UserSystems, etc.)
+ * - [NAMESPACE] → Your namespace (production, staging, development, etc.)
+ * - [TARGET_SERVICE] → Your target service name (inventory-service, notification-service, etc.)
+ * - [SERVICE_PORT] → Your service port (8080, 9090, 3000, etc.)
+ * 
+ * ISTIO LOCAL SERVICE CALLS CUSTOMIZATIONS:
+ * - Identify your specific service communication patterns and namespace organization for optimized local routing
+ * - Define your performance requirements and latency targets for local service communication optimization
+ * - Specify your security requirements and isolation needs for namespace-aware access control
+ * - Configure your service discovery requirements and resolution patterns for efficient local communication
+ * - Set up your monitoring and observability requirements for local service visibility
+ * - Define your automation requirements and management patterns for operational efficiency
+ * - Specify your testing requirements and validation strategies for local service reliability
+ * - Configure your documentation requirements and knowledge sharing for team enablement
+ * 
+ * The more specific your service communication patterns and [DOMAIN_NAME] namespace organization, the more targeted and effective the local service configuration will be!
+ */
+
+## COMPREHENSIVE ISTIO LOCAL SERVICE CALLS FRAMEWORK
+
+### Phase 1: Advanced Local Service Discovery Configuration
+**Enterprise [DOMAIN_NAME] Namespace-Aware Service Communication Foundation**
+
+#### Complete Sidecar Configuration for Local Service Optimization
+```yaml
+# Comprehensive Sidecar Configuration for Local Service Calls - [PROJECT_NAME]
+# File: istio/sidecar/[NAMESPACE]-local-services-sidecar.yaml
+
+apiVersion: networking.istio.io/v1beta1
+kind: Sidecar
+metadata:
+  name: local-services-sidecar
+  namespace: [NAMESPACE]
+  labels:
+    app: local-services
+    project: [PROJECT_NAME]
+    domain: [DOMAIN_NAME]
+    purpose: local-service-optimization
+    managed-by: istio-platform-team
+    scope: namespace-local
+  annotations:
+    description: "Optimized sidecar configuration for local service calls without FQDN"
+    owner: "[COMPANY_NAME]-platform-team"
+    service-discovery-scope: "namespace-local"
+    dns-optimization: "enabled"
+    local-service-priority: "high"
+    last-updated: "{{ .Values.global.timestamp }}"
+    documentation: "https://docs.[COMPANY_NAME].com/istio/local-services/[NAMESPACE]"
+spec:
+  # Workload selector - Apply to all workloads in namespace
+  workloadSelector:
+    labels:
+      # Apply to all services in this namespace
+      istio-injection: enabled
+  
+  # INGRESS CONFIGURATION - Control incoming traffic
+  ingress:
+  - port:
+      number: 8080
+      name: http-local
+      protocol: HTTP
+    defaultEndpoint: 127.0.0.1:8080
+    hosts:
+    - "./*"                    # Allow all services in current namespace
+    - "./[SERVICE_NAME]"       # Specific local service
+    - "./[TARGET_SERVICE]"     # Target service for communication
+  
+  - port:
+      number: 9090
+      name: metrics
+      protocol: HTTP
+    defaultEndpoint: 127.0.0.1:9090
+    hosts:
+    - "./*"                    # Metrics endpoint for all local services
+  
+  - port:
+      number: 443
+      name: https-local
+      protocol: HTTPS
+    defaultEndpoint: 127.0.0.1:8443
+    hosts:
+    - "./*"                    # HTTPS traffic for local services
+  
+  # EGRESS CONFIGURATION - Control outgoing traffic for local services
+  egress:
+  
+  # Local Namespace Services (Primary Communication Pattern)
+  - port:
+      number: 8080
+      name: http-local-egress
+      protocol: HTTP
+    hosts:
+    # LOCAL SERVICE REFERENCES WITHOUT FQDN
+    - "[TARGET_SERVICE]"              # Simple service name
+    - "inventory-service"             # Inventory service
+    - "notification-service"          # Notification service  
+    - "audit-service"                 # Audit service
+    - "config-service"                # Configuration service
+    - "cache-service"                 # Cache service
+    - "metrics-service"               # Metrics service
+    - "health-service"                # Health check service
+    
+    # Wildcard for all namespace services
+    - "./*"                           # All services in current namespace
+  
+  # HTTPS Local Services
+  - port:
+      number: 443
+      name: https-local-egress
+      protocol: HTTPS
+    hosts:
+    - "[TARGET_SERVICE]"              # HTTPS target service
+    - "secure-config-service"         # Secure configuration
+    - "auth-service"                  # Authentication service
+    - "certificate-service"           # Certificate management
+    - "./*"                           # All HTTPS services in namespace
+  
+  # Database and Cache Services (Local namespace)
+  - port:
+      number: 5432
+      name: postgresql-local
+      protocol: TCP
+    hosts:
+    - "postgresql"                    # Local PostgreSQL
+    - "database-service"              # Database service
+    - "db-proxy"                      # Database proxy
+  
+  - port:
+      number: 6379
+      name: redis-local
+      protocol: TCP
+    hosts:
+    - "redis"                         # Local Redis
+    - "cache-service"                 # Cache service
+    - "session-store"                 # Session storage
+  
+  # Cross-Namespace Services (Controlled Access)
+  - port:
+      number: 8080
+      name: cross-namespace-http
+      protocol: HTTP
+    hosts:
+    # SHARED SERVICES IN OTHER NAMESPACES (Using simple names)
+    - "shared-config/config-service"          # Shared configuration
+    - "shared-auth/auth-service"              # Shared authentication
+    - "shared-monitoring/metrics-service"     # Shared monitoring
+    - "shared-logging/log-service"            # Shared logging
+    
+    # INFRASTRUCTURE SERVICES
+    - "istio-system/istio-proxy"              # Istio proxy
+    - "kube-system/kube-dns"                  # DNS service
+  
+  # External Services (Minimal Required)
+  - port:
+      number: 443
+      name: external-https
+      protocol: HTTPS
+    hosts:
+    # ONLY ESSENTIAL EXTERNAL SERVICES
+    - "api.github.com"                #
