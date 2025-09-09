@@ -1,0 +1,114 @@
+CONTEXT:
+  domain: Financial Services / Banking
+  system_type: Transaction Service Bus (TSB)
+  security_layer: ISTIO Service Mesh
+  compliance: PCI-DSS, SOX, GDPR, Basel III
+  scale_metrics:
+    - 100K+ concurrent users
+    - 1M+ transactions/day
+    - Sub-100ms authorization latency
+  integration_points:
+    - Core Banking Systems
+    - Payment Gateways
+    - Risk Management Systems
+    - Audit/Compliance Services
+  existing_infrastructure:
+    - Spring Boot microservices
+    - PostgreSQL with JSONB
+    - Kubernetes orchestration
+    - ISTIO service mesh
+    REQUIREMENTS:
+  functional:
+    - Multi-level authorization (user/role/resource/context)
+    - Dynamic policy evaluation
+    - Transaction-level authorization
+    - Delegated authorization support
+    - Real-time fraud detection integration
+  non_functional:
+    performance:
+      - P99 latency < 50ms for auth decisions
+      - 99.999% availability
+      - Zero-downtime policy updates
+    security:
+      - mTLS between all services
+      - JWT token validation
+      - OAuth2/OIDC compliance
+      - Audit trail for all auth decisions
+    scalability:
+      - Horizontal scaling to 1000+ pods
+      - Policy caching with TTL
+      - Circuit breaker patterns
+      ARCHITECTURE:
+  pattern: Policy-as-Code with OPA (Open Policy Agent)
+  authorization_flow:
+    - ISTIO EnvoyFilter for request interception
+    - External authorization via ExtAuthz
+    - OPA sidecar for policy evaluation
+    - Spring Security integration
+  layers:
+    edge:
+      - ISTIO Gateway with JWT validation
+      - Rate limiting per client/API key
+    mesh:
+      - Service-to-service mTLS
+      - Authorization policies per namespace
+    application:
+      - Spring Security with custom voters
+      - Method-level authorization
+      - Transaction context enrichment
+  data_flow:
+    - Request → ISTIO → OPA → Spring Boot → PostgreSQL
+    - Async audit via Kafka to compliance service
+    FRAMEWORK:
+  core:
+    language: Java 17
+    framework: Spring Boot 3.2.x
+    security: Spring Security 6.x
+  service_mesh:
+    platform: ISTIO 1.20+
+    policy_engine: OPA 0.60+
+    protocol: Envoy xDS v3
+  persistence:
+    database: PostgreSQL 15+
+    cache: Redis 7+ with Redisson
+    audit_store: TimescaleDB
+  messaging:
+    event_bus: Apache Kafka 3.6+
+    protocol: Avro with Schema Registry
+  observability:
+    tracing: Jaeger with OpenTelemetry
+    metrics: Prometheus + Grafana
+    logging: ELK Stack with structured logs
+    TECHNOLOGY:
+  authorization_protocols:
+    - OAuth 2.0 with PKCE
+    - OpenID Connect 1.0
+    - SAML 2.0 for legacy systems
+    - Custom JWT claims for fine-grained auth
+  istio_components:
+    - AuthorizationPolicy CRDs
+    - RequestAuthentication for JWT
+    - PeerAuthentication for mTLS
+    - EnvoyFilter for custom logic
+  spring_integration:
+    - @PreAuthorize with SpEL
+    - Custom AccessDecisionVoter
+    - Method Security with AOP
+    - Reactive Security for WebFlux
+    TESTING:
+  unit_tests:
+    - Mockito for service layer
+    - @WithMockUser for controllers
+    - TestContainers for PostgreSQL
+  integration_tests:
+    - ISTIO test mesh setup
+    - OPA policy testing framework
+    - End-to-end auth flow validation
+  performance_tests:
+    - JMeter for load testing
+    - Gatling for spike testing
+    - K6 for distributed testing
+  security_tests:
+    - OWASP ZAP scanning
+    - Penetration testing scenarios
+    - Token replay attack prevention
