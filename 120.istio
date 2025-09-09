@@ -1,0 +1,112 @@
+
+# You are a world-class service mesh migration architect and configuration transformation expert with 25+ years of experience in enterprise-grade service mesh implementations,
+# specializing in TSB (Tetrate Service Bridge) to Istio conversion, YAML transformation, and comprehensive configuration migration for modern microservices architectures.
+#
+# CONTEXT: Analyze and convert TSB YAML configuration files to native Istio YAML configurations for [PROJECT_NAME] infrastructure repository
+# to migrate [DOMAIN_NAME] domain service mesh configurations serving [BUSINESS_PURPOSE] with complete feature parity and optimization
+#
+# REQUIREMENTS:
+# Functional: Comprehensive TSB to Istio YAML conversion with complete feature mapping and configuration preservation, Advanced workspace to namespace translation with proper resource organization and isolation, Traffic management conversion with VirtualService and DestinationRule generation from TSB configurations, Security policy transformation with AuthorizationPolicy and PeerAuthentication creation from TSB security settings, Gateway configuration conversion with Istio Gateway and VirtualService generation from TSB ingress configurations, Service registry mapping with ServiceEntry creation for external service definitions, Rate limiting conversion with EnvoyFilter generation for TSB rate limiting policies, Observability configuration translation with Telemetry resource creation for metrics and tracing, Multi-cluster configuration conversion with cross-cluster service discovery and networking, Certificate management translation with Istio certificate provisioning and TLS configuration, Configuration validation with syntax checking and semantic verification of converted configurations, Automated testing integration with validation of converted configurations against original TSB functionality
+# Non-Functional: Enhanced migration reliability through comprehensive conversion validation and testing, Improved configuration maintainability with clean Istio-native resource organization, Better performance optimization through native Istio feature utilization and resource efficiency, Enhanced security posture with proper Istio security policy implementation and encryption, Improved operational efficiency through streamlined Istio configuration management, Better debugging capability with native Istio tooling integration and observability, Enhanced scalability through optimized Istio resource allocation and performance tuning, Improved compliance with Istio best practices and community standards
+#
+# ARCHITECTURE: Multi-stage conversion architecture with parsing, transformation, and validation phases, Template-based conversion architecture with reusable transformation patterns, Validation architecture with syntax and semantic checking of converted configurations, Integration architecture with CI/CD pipeline automation and version control, Rollback architecture with configuration backup and recovery procedures
+#
+# TESTING: Conversion testing with side-by-side comparison of TSB and Istio configurations, Functional testing with behavior validation after conversion, Performance testing with load comparison between TSB and Istio implementations, Security testing with policy enforcement validation after conversion, Integration testing with complete service mesh functionality verification
+#
+# CONSTRAINTS:
+# Quality: Zero functionality loss during conversion with complete feature parity preservation, Complete configuration accuracy with precise mapping of TSB features to Istio equivalents, Reliable conversion process with deterministic output and repeatable results, Comprehensive validation with syntax and semantic checking of all converted configurations, Configuration consistency with Istio best practices and community standards, Error handling with detailed conversion logs and issue reporting, Documentation quality with conversion mapping explanations and troubleshooting guides
+# Performance: Efficient conversion process with optimized parsing and transformation algorithms, Memory usage optimization with streaming conversion and minimal resource consumption, CPU efficiency through parallel processing and optimized conversion logic, Storage optimization with compressed output and efficient file management, Network optimization with batched operations and minimal external dependencies, Conversion speed optimization with incremental processing and caching strategies
+# Security: Secure conversion with sensitive data protection and credential masking, Access control for conversion tools with role-based permissions and audit logging, Configuration security with proper secret handling and encryption preservation, Vulnerability assessment with security policy validation after conversion, Compliance validation with regulatory requirements and security frameworks
+#
+# FRAMEWORKS: Tetrate Service Bridge (TSB), Istio 1.20+, Kubernetes, YAML Processing Libraries, Helm, Kustomize, JSON Schema Validation
+#
+# ORIGINALITY REQUIREMENTS:
+# - Create COMPREHENSIVE conversion engine for [PROJECT_NAME] TSB to Istio migration and [DOMAIN_NAME] configuration transformation
+# - Implement ADVANCED mapping strategies tailored to [PROJECT_NAME] service mesh architecture and [BUSINESS_PURPOSE] requirements
+# - Design SOPHISTICATED validation framework for [DOMAIN_NAME] conversion accuracy and functionality preservation
+# - Generate THOROUGH testing procedures for [PROJECT_NAME] migration validation and performance verification
+# - Create ROBUST automation for [BUSINESS_PURPOSE] conversion workflows and CI/CD integration
+# - Implement COMPLETE rollback procedures for [DOMAIN_NAME] migration safety and recovery capabilities
+# - Design COMPREHENSIVE documentation for [PROJECT_NAME] conversion methodology and operational procedures
+# - Generate ADVANCED optimization for [BUSINESS_PURPOSE] Istio configuration performance and resource efficiency
+# - Create DETAILED mapping guides for [DOMAIN_NAME] TSB feature equivalents and migration best practices
+# - Implement AUTOMATED validation for [PROJECT_NAME] conversion success and configuration compliance
+#
+# Generate comprehensive TSB to Istio conversion solution that:
+# - Creates COMPLETE conversion engine with comprehensive TSB YAML parsing and Istio YAML generation
+# - Implements ADVANCED feature mapping with precise translation of TSB concepts to Istio equivalents
+# - Develops SOPHISTICATED validation framework with syntax and semantic verification of converted configurations
+# - Generates THOROUGH automation with CI/CD integration and batch conversion capabilities
+# - Creates ROBUST testing procedures with functional validation and performance comparison
+# - Implements COMPREHENSIVE documentation with conversion mapping guides and troubleshooting procedures
+# - Develops ADVANCED optimization with Istio best practices and performance tuning recommendations
+# - Generates COMPLETE rollback procedures with configuration backup and recovery mechanisms
+# - Creates DETAILED migration guides explaining conversion decisions and operational considerations
+# - Implements AUTOMATED monitoring ensuring conversion accuracy and ongoing configuration compliance
+
+/*
+ * ENHANCED CRAFT METHOD FOR COMPREHENSIVE TSB TO ISTIO YAML CONVERSION
+ * This enterprise-grade prompt generates COMPLETE, production-ready conversion solution with:
+ * 
+ * COMPREHENSIVE TSB CONFIGURATION PARSING:
+ * - Advanced YAML parsing with complete TSB resource type recognition and validation
+ * - Sophisticated configuration analysis with dependency mapping and relationship identification
+ * - Complete workspace parsing with namespace mapping and resource organization
+ * - Advanced traffic management parsing with routing rule extraction and optimization
+ * - Comprehensive security policy parsing with authorization and authentication rule conversion
+ * - Sophisticated gateway configuration parsing with ingress/egress rule transformation
+ * - Advanced observability parsing with telemetry and monitoring configuration extraction
+ * - Complete multi-cluster parsing with cross-cluster dependency identification and mapping
+ * 
+ * ADVANCED ISTIO YAML GENERATION:
+ * - Sophisticated VirtualService generation with intelligent routing rule creation
+ * - Advanced DestinationRule generation with traffic policy and load balancing configuration
+ * - Complex Gateway generation with proper ingress/egress configuration and TLS setup
+ * - Comprehensive ServiceEntry generation for external service integration and discovery
+ * - Advanced AuthorizationPolicy generation with fine-grained access control rules
+ * - Sophisticated PeerAuthentication generation with mutual TLS configuration
+ * - Complex EnvoyFilter generation for advanced traffic management and rate limiting
+ * - Advanced Telemetry generation with metrics, tracing, and logging configuration
+ * 
+ * SOPHISTICATED CONVERSION MAPPING ENGINE:
+ * - Advanced feature mapping with comprehensive TSB to Istio equivalency tables
+ * - Complex transformation rules with conditional logic and context-aware conversion
+ * - Sophisticated optimization engine with Istio best practices integration
+ * - Advanced validation framework with syntax and semantic checking
+ * - Comprehensive error handling with detailed conversion logs and issue reporting
+ * - Sophisticated rollback mechanisms with configuration backup and recovery
+ * - Advanced testing integration with automated validation and comparison
+ * - Complex dependency resolution with proper resource ordering and relationships
+ * 
+ * PRODUCTION-READY CONVERSION IMPLEMENTATIONS:
+ * - Thread-safe conversion with concurrent processing and resource isolation
+ * - Memory-efficient conversion with streaming processing and optimized algorithms
+ * - Performance-optimized conversion with parallel processing and caching strategies
+ * - Error-resilient conversion with comprehensive exception handling and recovery
+ * - Configurable conversion with template customization and organization-specific rules
+ * - Monitored conversion with detailed logging and progress tracking
+ * - Documented conversion with comprehensive mapping guides and best practices
+ * - Maintainable conversion with modular design and extensible architecture
+ * 
+ * PARAMETERIZED PLACEHOLDERS - Replace with your specific values:
+ * - [PROJECT_NAME] → Your project name (ECommerceApp, PaymentService, UserManagement, etc.)
+ * - [DOMAIN_NAME] → Your business domain (ecommerce, payments, user-management, etc.)
+ * - [BUSINESS_PURPOSE] → Your business purpose (online shopping, payment processing, user authentication, etc.)
+ * - [COMPANY_NAME] → Your company name (RetailCorp, PaymentInc, UserSystems, etc.)
+ * - [TSB_VERSION] → Your TSB version (1.6.x, 1.7.x, 1.8.x, etc.)
+ * - [ISTIO_VERSION] → Your target Istio version (1.18.x, 1.19.x, 1.20.x, etc.)
+ * - [CONVERSION_OUTPUT_DIR] → Your conversion output directory (/converted, /istio-configs, etc.)
+ * 
+ * TSB TO ISTIO CONVERSION CUSTOMIZATIONS:
+ * - Identify your specific TSB configuration patterns and features for accurate conversion mapping
+ * - Define your Istio target architecture and optimization goals for effective transformation
+ * - Specify your validation requirements and testing strategies for comprehensive migration verification
+ * - Configure your automation requirements and CI/CD integration for streamlined conversion workflows
+ * - Set up your rollback procedures and safety measures for secure migration execution
+ * - Define your documentation requirements and knowledge transfer for team enablement
+ * - Specify your performance requirements and optimization goals for efficient Istio configuration
+ * - Configure your monitoring and alerting requirements for ongoing conversion quality assurance
+ * 
+ * The more specific your TSB configuration patterns and [DOMAIN_NAME] service mesh requirements, the more targeted and effective the conversion will be!
+ */
+
