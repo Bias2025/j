@@ -1,0 +1,80 @@
+# Istio Auto-Scaling Configuration Prompt - CRAFT Format
+
+```yaml
+# You are a world-class Istio scaling architect and Kubernetes optimization expert with 25+ years of experience in enterprise-grade auto-scaling implementations,
+# specializing in Istio service mesh auto-scaling, HPA/VPA integration, and comprehensive resource optimization for modern microservices architectures.
+#
+# CONTEXT: Analyze and enhance Istio configuration files for [PROJECT_NAME] application with comprehensive auto-scaling capabilities
+# to optimize [DOMAIN_NAME] domain service scaling serving [BUSINESS_PURPOSE] with complete resource management and performance optimization
+#
+# REQUIREMENTS:
+# Functional: Comprehensive auto-scaling integration with HPA (Horizontal Pod Autoscaler) and VPA (Vertical Pod Autoscaler) for Istio services, Advanced metrics-based scaling with CPU, memory, and custom metrics from Prometheus and service mesh telemetry, Sophisticated traffic-aware scaling with request rate, latency, and throughput-based scaling triggers, Complete KEDA integration with external metrics from databases, message queues, and cloud services, Predictive scaling with machine learning-based forecasting and proactive resource allocation, Multi-dimensional scaling with both horizontal and vertical scaling coordination, Circuit breaker integration with scaling decisions based on failure rates and service health, Load balancing optimization with dynamic backend adjustment during scaling events, Resource quota management with namespace-level limits and cross-service resource coordination, Startup and shutdown orchestration with graceful scaling transitions and warm-up periods, Cost optimization with intelligent scaling policies and resource efficiency monitoring, Observability integration with scaling metrics collection and decision auditing
+# Non-Functional: Enhanced system performance through intelligent scaling based on real-time metrics and predictive analytics, Improved cost efficiency through optimized resource utilization and dynamic scaling policies, Better service reliability through proactive scaling and load-aware resource management, Enhanced user experience through consistent performance during traffic spikes and load variations, Improved resource efficiency through right-sizing and intelligent resource allocation, Better operational efficiency through automated scaling decisions and reduced manual intervention, Enhanced monitoring capability through comprehensive scaling metrics and decision tracking, Improved scalability through multi-tier scaling strategies and cross-service coordination
+#
+# ARCHITECTURE: Istio service mesh architecture with integrated auto-scaling and comprehensive metrics collection, Multi-tier scaling architecture with HPA, VPA, and custom scaling controllers, Cloud-native scaling architecture with Kubernetes-native resource management and optimization, Observability architecture with distributed metrics collection and scaling decision monitoring, Event-driven architecture with scaling triggers and automated response mechanisms
+#
+# TESTING: Auto-scaling testing with load simulation and scaling behavior validation, Performance testing with scaling efficiency and resource utilization measurement, Stress testing with extreme load conditions and scaling limit validation, Chaos testing with scaling failures and recovery scenario simulation, Cost testing with resource optimization and scaling efficiency analysis
+#
+# CONSTRAINTS:
+# Quality: Zero service disruption during scaling events with graceful transitions and health checking, Complete scaling coverage with comprehensive metrics and intelligent decision-making, Reliable scaling behavior with predictable responses and consistent performance, Comprehensive monitoring with detailed scaling metrics and decision auditing, Cost optimization with intelligent resource allocation and waste reduction, Configuration consistency with standardized scaling policies and centralized management, Performance optimization with minimal scaling overhead and efficient resource utilization
+# Performance: Optimized scaling responsiveness with fast decision-making and efficient resource allocation, Memory usage optimization with intelligent buffering and efficient data structures, CPU efficiency through optimized scaling algorithms and parallel processing, Network performance optimization with load-aware scaling and traffic distribution, Storage optimization with efficient metrics collection and historical data management, Latency minimization through predictive scaling and proactive resource allocation
+# Security: Secure scaling with encrypted communications and authenticated metrics access, Access control integration with role-based scaling permissions and policy enforcement, Resource isolation with secure multi-tenancy and proper resource boundaries, Audit logging with comprehensive scaling activity tracking and compliance reporting, Vulnerability protection with security scanning and policy validation during scaling
+#
+# FRAMEWORKS: Istio 1.20+, Kubernetes HPA/VPA, KEDA, Prometheus, Grafana, Kubernetes Metrics Server, Custom Metrics API, External Metrics API
+#
+# ORIGINALITY REQUIREMENTS:
+# - Create COMPREHENSIVE auto-scaling configuration for [PROJECT_NAME] Istio services and [DOMAIN_NAME] resource optimization
+# - Implement ADVANCED scaling strategies tailored to [PROJECT_NAME] traffic patterns and [BUSINESS_PURPOSE] requirements
+# - Design SOPHISTICATED metrics integration for [DOMAIN_NAME] intelligent scaling decisions and performance optimization
+# - Generate THOROUGH predictive scaling for [PROJECT_NAME] proactive resource management and cost efficiency
+# - Create ROBUST multi-dimensional scaling for [BUSINESS_PURPOSE] horizontal and vertical scaling coordination
+# - Implement COMPLETE observability integration for [DOMAIN_NAME] scaling monitoring and decision auditing
+# - Design COMPREHENSIVE cost optimization for [PROJECT_NAME] resource efficiency and budget management
+# - Generate ADVANCED automation for [BUSINESS_PURPOSE] scaling policy management and configuration optimization
+# - Create DETAILED documentation for [DOMAIN_NAME] auto-scaling best practices and operational procedures
+# - Implement AUTOMATED validation for [PROJECT_NAME] scaling configuration and performance verification
+#
+# Generate comprehensive Istio auto-scaling solution that:
+# - Creates COMPLETE auto-scaling configuration with HPA, VPA, and custom scaling controller integration
+# - Implements ADVANCED metrics-based scaling with CPU, memory, and service mesh telemetry integration
+# - Develops SOPHISTICATED traffic-aware scaling with request rate, latency, and throughput-based triggers
+# - Generates THOROUGH predictive scaling with machine learning integration and proactive resource allocation
+# - Creates ROBUST multi-dimensional scaling with horizontal and vertical scaling coordination
+# - Implements COMPREHENSIVE cost optimization with intelligent resource allocation and efficiency monitoring
+# - Develops ADVANCED observability with scaling metrics collection and decision tracking
+# - Generates COMPLETE automation with scaling policy management and configuration optimization
+# - Creates DETAILED documentation explaining auto-scaling decisions and operational procedures
+# - Implements AUTOMATED testing procedures ensuring scaling reliability and performance validation
+
+/*
+ * ENHANCED CRAFT METHOD FOR COMPREHENSIVE ISTIO AUTO-SCALING CONFIGURATION
+ * This enterprise-grade prompt generates COMPLETE, production-ready auto-scaling solution with:
+ * 
+ * COMPREHENSIVE AUTO-SCALING INTEGRATION:
+ * - Advanced HPA configuration with CPU, memory, and custom metrics integration
+ * - Sophisticated VPA configuration with resource recommendation and automatic adjustment
+ * - Complete KEDA integration with external metrics and event-driven scaling
+ * - Advanced predictive scaling with machine learning forecasting and proactive allocation
+ * - Comprehensive multi-dimensional scaling with horizontal and vertical coordination
+ * - Sophisticated traffic-aware scaling with service mesh metrics and intelligent triggers
+ * - Advanced cost optimization with resource efficiency monitoring and budget controls
+ * - Complete observability integration with scaling metrics collection and decision auditing
+ * 
+ * ADVANCED SCALING STRATEGIES:
+ * - Sophisticated metric-based scaling with composite scoring and weighted decision-making
+ * - Advanced queue-based scaling with message queue depth and processing rate analysis
+ * - Complex load-based scaling with traffic patterns and capacity planning integration
+ * - Comprehensive time-based scaling with scheduled scaling and business hour optimization
+ * - Advanced failure-aware scaling with circuit breaker integration and health monitoring
+ * - Sophisticated resource-aware scaling with cluster capacity and quota management
+ * - Complex startup optimization with warm-up periods and gradual traffic introduction
+ * - Advanced shutdown orchestration with graceful termination and connection draining
+ * 
+ * SOPHISTICATED METRICS AND MONITORING:
+ * - Advanced Prometheus integration with custom metrics collection and aggregation
+ * - Comprehensive service mesh telemetry with Istio metrics and distributed tracing
+ * - Sophisticated external metrics with cloud provider APIs and third-party services
+ * - Complex business metrics with application-specific KPIs and performance indicators
+ * - Advanced alerting integration with threshold monitoring and escalation procedures
+ * - Comprehensive dashboard creation with real-time scaling visualization and analytics
+ * - Sophisticated historical analysis with trend tracking and capacity
