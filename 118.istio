@@ -1,0 +1,184 @@
+# Istio Service Utilization Configuration Prompt - CRAFT Format
+
+```yaml
+# You are a world-class Istio service mesh architect and resource optimization expert with 25+ years of experience in enterprise-grade microservices infrastructure,
+# specializing in Istio service utilization configuration, performance optimization, and comprehensive resource management for modern Kubernetes environments.
+#
+# CONTEXT: Design and implement comprehensive Istio service utilization YAML configurations for [PROJECT_NAME] application
+# to optimize [DOMAIN_NAME] domain service performance serving [BUSINESS_PURPOSE] with complete resource management and traffic optimization
+#
+# REQUIREMENTS:
+# Functional: Comprehensive service utilization configuration with CPU, memory, and network resource optimization, Advanced traffic management with load balancing algorithms and connection pooling strategies, Sophisticated circuit breaking with failure detection and automatic recovery mechanisms, Complete retry policies with exponential backoff and jitter for resilience, Advanced timeout configuration with request-level and service-level timeout management, Resource quota management with namespace-level limits and service-specific allocations, Quality of Service (QoS) configuration with priority classes and resource guarantees, Auto-scaling integration with HPA and VPA for dynamic resource adjustment, Rate limiting configuration with token bucket algorithms and quota enforcement, Connection management with keep-alive settings and connection pool optimization, Observability integration with metrics collection and distributed tracing, Security policy enforcement with mutual TLS and access control integration
+# Non-Functional: Enhanced service performance through optimized resource utilization and intelligent traffic management, Improved system reliability with comprehensive fault tolerance and automatic recovery mechanisms, Better resource efficiency through dynamic scaling and intelligent resource allocation, Enhanced cost optimization through right-sizing and efficient resource utilization, Improved user experience through reduced latency and increased throughput, Better capacity planning through detailed utilization metrics and trend analysis, Enhanced security posture through encrypted communications and access control enforcement, Improved operational efficiency through automated scaling and self-healing capabilities
+#
+# ARCHITECTURE: Istio service mesh architecture with comprehensive sidecar proxy configuration and control plane optimization, Resource management architecture with multi-tier resource allocation and quality of service enforcement, Traffic management architecture with sophisticated routing and load balancing strategies, Observability architecture with distributed metrics collection and performance monitoring, Security architecture with zero-trust networking and comprehensive policy enforcement
+#
+# TESTING: Service utilization testing with load simulation and resource consumption validation, Performance testing with throughput and latency measurement under various load conditions, Resilience testing with fault injection and failure scenario simulation, Scaling testing with automatic resource adjustment and capacity validation, Security testing with policy enforcement and access control verification
+#
+# CONSTRAINTS:
+# Quality: Zero service disruption during configuration updates with rolling deployments and health checking, Complete resource optimization with efficient allocation and waste reduction, Reliable service communication with fault tolerance and automatic recovery, Comprehensive monitoring with detailed metrics and alerting integration, Security compliance with encryption and access control enforcement across all services, Configuration consistency with standardized policies and centralized management, Performance optimization with minimal latency overhead and maximum throughput
+# Performance: Optimized proxy performance with efficient sidecar configuration and resource allocation, Memory usage optimization with intelligent buffer management and connection pooling, CPU efficiency through optimized routing algorithms and request processing, Network performance optimization with connection reuse and traffic compression, Latency minimization through intelligent load balancing and proximity-based routing, Throughput maximization through efficient resource utilization and scaling strategies
+# Security: Comprehensive security policy enforcement with mutual TLS and zero-trust networking, Access control integration with role-based permissions and service-to-service authentication, Traffic encryption with end-to-end security and certificate management, Audit logging with comprehensive security event tracking and compliance reporting, Vulnerability protection with security scanning and policy enforcement
+#
+# FRAMEWORKS: Istio 1.20+, Kubernetes 1.28+, Envoy Proxy, Prometheus, Grafana, Jaeger, Kiali, Helm, Kustomize
+#
+# ORIGINALITY REQUIREMENTS:
+# - Create COMPREHENSIVE service utilization configs for [PROJECT_NAME] Istio deployment and [DOMAIN_NAME] performance optimization
+# - Implement ADVANCED resource management tailored to [PROJECT_NAME] service architecture and [BUSINESS_PURPOSE] requirements
+# - Design SOPHISTICATED traffic policies for [DOMAIN_NAME] load balancing and connection optimization
+# - Generate THOROUGH resilience configuration for [PROJECT_NAME] fault tolerance and automatic recovery
+# - Create ROBUST scaling strategies for [BUSINESS_PURPOSE] dynamic resource adjustment and capacity management
+# - Implement COMPLETE monitoring integration for [DOMAIN_NAME] performance tracking and utilization analysis
+# - Design COMPREHENSIVE security policies for [PROJECT_NAME] zero-trust networking and access control
+# - Generate ADVANCED automation for [BUSINESS_PURPOSE] configuration management and deployment optimization
+# - Create DETAILED documentation for [DOMAIN_NAME] service utilization best practices and operational procedures
+# - Implement AUTOMATED validation for [PROJECT_NAME] configuration compliance and performance verification
+#
+# Generate comprehensive Istio service utilization solution that:
+# - Creates COMPLETE YAML configurations with service utilization optimization and resource management
+# - Implements ADVANCED traffic management with intelligent load balancing and connection pooling
+# - Develops SOPHISTICATED resilience patterns with circuit breaking, retries, and timeout management
+# - Generates THOROUGH scaling configurations with HPA/VPA integration and dynamic resource adjustment
+# - Creates ROBUST monitoring integration with comprehensive metrics collection and alerting
+# - Implements COMPREHENSIVE security policies with mutual TLS and access control enforcement
+# - Develops ADVANCED automation with configuration templating and deployment orchestration
+# - Generates COMPLETE observability with distributed tracing and performance analytics
+# - Creates DETAILED documentation explaining configuration decisions and operational procedures
+# - Implements AUTOMATED testing procedures ensuring configuration reliability and performance validation
+
+/*
+ * ENHANCED CRAFT METHOD FOR COMPREHENSIVE ISTIO SERVICE UTILIZATION CONFIGURATION
+ * This enterprise-grade prompt generates COMPLETE, production-ready Istio configuration with:
+ * 
+ * COMPREHENSIVE SERVICE UTILIZATION OPTIMIZATION:
+ * - Advanced resource allocation with CPU, memory, and network optimization
+ * - Sophisticated quality of service configuration with priority classes and guarantees
+ * - Complete auto-scaling integration with HPA and VPA for dynamic resource adjustment
+ * - Advanced connection pooling with intelligent connection management and reuse
+ * - Comprehensive rate limiting with token bucket algorithms and quota enforcement
+ * - Sophisticated load balancing with multiple algorithms and health-based routing
+ * - Advanced circuit breaking with failure detection and automatic recovery
+ * - Complete timeout management with request-level and service-level configuration
+ * 
+ * ADVANCED TRAFFIC MANAGEMENT STRATEGIES:
+ * - Sophisticated destination rules with load balancing and connection pool optimization
+ * - Advanced virtual services with intelligent routing and traffic splitting
+ * - Complex service entries for external service integration and optimization
+ * - Comprehensive gateways with ingress/egress traffic management and security
+ * - Advanced fault injection for resilience testing and chaos engineering
+ * - Sophisticated traffic policies with fine-grained control and optimization
+ * - Complex routing rules with header-based routing and traffic steering
+ * - Advanced canary deployments with automated traffic shifting and validation
+ * 
+ * SOPHISTICATED RESILIENCE AND PERFORMANCE:
+ * - Advanced retry policies with exponential backoff and jitter for optimal recovery
+ * - Comprehensive circuit breaker patterns with intelligent failure detection
+ * - Sophisticated timeout strategies with cascading timeout prevention
+ * - Complex bulkhead patterns with resource isolation and failure containment
+ * - Advanced health checking with multi-level validation and automatic recovery
+ * - Sophisticated degradation strategies with graceful service degradation
+ * - Complex rate limiting with distributed quota management and enforcement
+ * - Advanced caching strategies with intelligent cache management and invalidation
+ * 
+ * PRODUCTION-READY ISTIO IMPLEMENTATIONS:
+ * - Thread-safe configuration management with proper resource isolation and updates
+ * - Memory-efficient proxy configuration with optimized resource allocation
+ * - Performance-optimized routing with efficient algorithms and minimal latency
+ * - Error-resilient service communication with comprehensive fault tolerance
+ * - Scalable architecture with dynamic resource adjustment and capacity management
+ * - Monitored service utilization with comprehensive metrics and alerting
+ * - Documented configuration patterns with operational runbooks and best practices
+ * - Maintainable service mesh with modular design and centralized management
+ * 
+ * PARAMETERIZED PLACEHOLDERS - Replace with your specific values:
+ * - [PROJECT_NAME] → Your project name (ECommerceApp, PaymentService, UserManagement, etc.)
+ * - [DOMAIN_NAME] → Your business domain (ecommerce, payments, user-management, etc.)
+ * - [BUSINESS_PURPOSE] → Your business purpose (online shopping, payment processing, user authentication, etc.)
+ * - [SERVICE_NAME] → Your service name (checkout-service, payment-gateway, user-service, etc.)
+ * - [COMPANY_NAME] → Your company name (RetailCorp, PaymentInc, UserSystems, etc.)
+ * - [NAMESPACE] → Your namespace (production, staging, development, etc.)
+ * - [CLUSTER_NAME] → Your cluster name (prod-cluster, staging-cluster, dev-cluster, etc.)
+ * - [INGRESS_HOST] → Your ingress hostname (api.company.com, app.domain.com, etc.)
+ * 
+ * ISTIO SERVICE UTILIZATION CUSTOMIZATIONS:
+ * - Identify your specific service resource requirements and performance characteristics for optimized configuration
+ * - Define your traffic patterns and load balancing requirements for intelligent routing strategies
+ * - Specify your resilience requirements and fault tolerance needs for comprehensive error handling
+ * - Configure your scaling requirements and capacity management for dynamic resource adjustment
+ * - Set up your monitoring and observability requirements for comprehensive performance tracking
+ * - Define your security requirements and compliance needs for zero-trust networking implementation
+ * - Specify your integration requirements with existing infrastructure and tooling
+ * - Configure your automation requirements and deployment strategies for operational efficiency
+ * 
+ * The more specific your service architecture and [DOMAIN_NAME] performance requirements, the more targeted and effective the Istio configuration will be!
+ */
+
+## COMPREHENSIVE ISTIO SERVICE UTILIZATION FRAMEWORK
+
+### Phase 1: Advanced Service Resource Configuration
+**Enterprise [DOMAIN_NAME] Service Mesh Optimization Foundation**
+
+#### Complete Service Utilization Configuration
+```yaml
+# Istio Service Utilization Configuration for [PROJECT_NAME]
+# File: istio/service-utilization/[SERVICE_NAME]-utilization.yaml
+
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: [SERVICE_NAME]-utilization-dr
+  namespace: [NAMESPACE]
+  labels:
+    app: [SERVICE_NAME]
+    project: [PROJECT_NAME]
+    domain: [DOMAIN_NAME]
+    purpose: service-utilization
+    managed-by: istio-platform-team
+  annotations:
+    description: "Comprehensive service utilization configuration for [SERVICE_NAME]"
+    owner: "[COMPANY_NAME]-platform-team"
+    performance-tier: "high"
+    resource-optimization: "enabled"
+    monitoring-enabled: "true"
+    last-updated: "{{ .Values.global.timestamp }}"
+spec:
+  host: [SERVICE_NAME].[NAMESPACE].svc.cluster.local
+  
+  # Advanced Traffic Policy for Resource Optimization
+  trafficPolicy:
+    # Connection Pool Configuration for Optimal Resource Utilization
+    connectionPool:
+      tcp:
+        # Maximum number of HTTP connections to a destination host
+        maxConnections: 100
+        
+        # TCP connection timeout (10s default, optimized for [DOMAIN_NAME])
+        connectTimeout: 10s
+        
+        # TCP keep-alive settings for connection reuse
+        tcpKeepalive:
+          time: 7200s        # 2 hours keep-alive time
+          interval: 30s      # Probe interval
+          probes: 3          # Number of keep-alive probes
+          
+      http:
+        # Maximum number of pending HTTP requests to a destination
+        http1MaxPendingRequests: 50
+        
+        # Maximum number of requests to a backend (HTTP/2)
+        http2MaxRequests: 100
+        
+        # Maximum number of requests per connection to a backend
+        maxRequestsPerConnection: 10
+        
+        # Maximum number of retries per request
+        maxRetries: 3
+        
+        # Request timeout for individual requests
+        timeout: 30s
+        
+        # Idle timeout for connection pool cleanup
+        idleTimeout: 300s
+        
+        # HTTP/2 specific settings for performance optimization
+        h2Up
