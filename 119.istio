@@ -1,0 +1,116 @@
+# Istio Cucumber Container Configuration Prompt - CRAFT Format
+
+```yaml
+# You are a world-class Istio testing architect and container orchestration expert with 25+ years of experience in enterprise-grade microservices testing,
+# specializing in Cucumber BDD testing within Istio service mesh, containerized test execution, and comprehensive end-to-end validation for modern Kubernetes environments.
+#
+# CONTEXT: Design and implement comprehensive Cucumber container configuration for [PROJECT_NAME] Istio service mesh testing
+# to validate [DOMAIN_NAME] domain service behaviors serving [BUSINESS_PURPOSE] with complete BDD test automation and service mesh integration
+#
+# REQUIREMENTS:
+# Functional: Complete Cucumber container configuration with Istio sidecar injection and service mesh integration, Advanced BDD test framework with Gherkin scenarios for service mesh validation, Comprehensive test data management with realistic dataset generation and cleanup procedures, Service discovery integration with Istio virtual services and destination rules testing, Traffic management testing with load balancing, circuit breaking, and retry policy validation, Security testing with mutual TLS verification and authorization policy validation, Performance testing with latency measurement and throughput validation within service mesh, Cross-service communication testing with inter-service dependency validation, Gateway testing with ingress/egress traffic validation and routing verification, Observability testing with distributed tracing and metrics collection validation, Configuration drift testing with Istio configuration changes and impact assessment, Chaos engineering integration with fault injection and resilience testing
+# Non-Functional: Enhanced test reliability through containerized isolation and consistent execution environments, Improved test maintainability with modular BDD scenarios and reusable step definitions, Better CI/CD integration with automated test execution and result reporting, Enhanced debugging capability with comprehensive logging and test result analysis, Improved scalability through parallel test execution and distributed testing strategies, Better resource efficiency through optimized container configuration and resource allocation, Enhanced security testing with comprehensive policy validation and vulnerability assessment, Improved observability through detailed test metrics and performance monitoring
+#
+# ARCHITECTURE: Containerized testing architecture with Istio sidecar integration and service mesh connectivity, Multi-stage testing architecture with unit, integration, and end-to-end test separation, Cloud-native testing architecture with Kubernetes-native test execution and resource management, Observability architecture with comprehensive test monitoring and result aggregation, Security architecture with secure test data handling and encrypted communications
+#
+# TESTING: Cucumber BDD testing with comprehensive service mesh scenario coverage, Container testing with resource allocation and performance validation, Istio integration testing with sidecar proxy validation and traffic management verification, Security testing with policy enforcement and encryption validation, Performance testing with load simulation and latency measurement within service mesh
+#
+# CONSTRAINTS:
+# Quality: Zero test flakiness with deterministic test execution and reliable assertions, Complete service mesh coverage with comprehensive Istio feature validation, Reliable test data management with consistent setup and cleanup procedures, Comprehensive error handling with detailed failure analysis and debugging information, Security compliance with secure test execution and data protection, Configuration consistency with standardized test environments and repeatable results, Performance optimization with efficient test execution and minimal resource overhead
+# Performance: Optimized container performance with efficient resource allocation and fast startup times, Memory usage optimization with intelligent test data management and cleanup procedures, CPU efficiency through parallel test execution and optimized test algorithms, Network performance optimization with efficient service mesh communication and minimal latency, Storage optimization with efficient test artifact management and result archival, Test execution speed optimization with selective test running and intelligent parallelization
+# Security: Secure test execution with isolated containers and encrypted communications, Test data security with realistic but non-sensitive information and proper anonymization, Access control integration with role-based test execution and secure credential management, Audit logging with comprehensive test activity tracking and compliance reporting, Vulnerability testing with security policy validation and penetration testing integration
+#
+# FRAMEWORKS: Cucumber, Docker, Kubernetes, Istio 1.20+, Spring Boot Test, TestContainers, RestAssured, WireMock, Prometheus, Jaeger
+#
+# ORIGINALITY REQUIREMENTS:
+# - Create COMPREHENSIVE Cucumber container setup for [PROJECT_NAME] Istio testing and [DOMAIN_NAME] service validation
+# - Implement ADVANCED BDD scenarios tailored to [PROJECT_NAME] service mesh architecture and [BUSINESS_PURPOSE] requirements
+# - Design SOPHISTICATED test data management for [DOMAIN_NAME] realistic testing and comprehensive coverage
+# - Generate THOROUGH Istio integration for [PROJECT_NAME] service mesh feature validation and performance testing
+# - Create ROBUST container orchestration for [BUSINESS_PURPOSE] automated testing and CI/CD integration
+# - Implement COMPLETE observability integration for [DOMAIN_NAME] test monitoring and result analysis
+# - Design COMPREHENSIVE security testing for [PROJECT_NAME] policy validation and vulnerability assessment
+# - Generate ADVANCED automation for [BUSINESS_PURPOSE] test execution and result reporting
+# - Create DETAILED documentation for [DOMAIN_NAME] testing procedures and maintenance guidelines
+# - Implement AUTOMATED validation for [PROJECT_NAME] test reliability and configuration compliance
+#
+# Generate comprehensive Istio Cucumber container solution that:
+# - Creates COMPLETE Docker container configuration with Cucumber BDD framework and Istio integration
+# - Implements ADVANCED test scenarios with comprehensive service mesh feature validation and behavior verification
+# - Develops SOPHISTICATED test data management with realistic datasets and automated cleanup procedures
+# - Generates THOROUGH Istio service discovery integration with virtual service and destination rule testing
+# - Creates ROBUST traffic management testing with load balancing, circuit breaking, and policy validation
+# - Implements COMPREHENSIVE security testing with mutual TLS verification and authorization policy validation
+# - Develops ADVANCED observability testing with distributed tracing and metrics collection verification
+# - Generates COMPLETE CI/CD integration with automated test execution and result reporting
+# - Creates DETAILED documentation explaining container configuration and testing procedures
+# - Implements AUTOMATED monitoring and validation ensuring test reliability and comprehensive coverage
+
+/*
+ * ENHANCED CRAFT METHOD FOR COMPREHENSIVE ISTIO CUCUMBER CONTAINER CONFIGURATION
+ * This enterprise-grade prompt generates COMPLETE, production-ready testing solution with:
+ * 
+ * COMPREHENSIVE CUCUMBER CONTAINER INTEGRATION:
+ * - Advanced Docker container configuration with multi-stage builds and optimization
+ * - Sophisticated Istio sidecar integration with automatic injection and configuration
+ * - Complete test framework setup with Cucumber BDD and comprehensive step definitions
+ * - Advanced test data management with builders, fixtures, and realistic datasets
+ * - Comprehensive service discovery with Istio service registry integration
+ * - Sophisticated networking configuration with service mesh connectivity
+ * - Advanced logging and monitoring with structured output and metrics collection
+ * - Complete CI/CD integration with automated test execution and reporting
+ * 
+ * ADVANCED BDD TESTING STRATEGIES:
+ * - Sophisticated Gherkin scenarios with service mesh specific testing patterns
+ * - Advanced step definitions with Istio API integration and validation
+ * - Complex test orchestration with multi-service scenario coordination
+ * - Comprehensive assertion libraries with service mesh aware validations
+ * - Advanced test data management with dynamic generation and cleanup
+ * - Sophisticated mock integration with external service simulation
+ * - Complex parallel execution with thread-safe test isolation
+ * - Advanced reporting with detailed test results and failure analysis
+ * 
+ * SOPHISTICATED ISTIO SERVICE MESH TESTING:
+ * - Advanced traffic management testing with virtual services and destination rules
+ * - Comprehensive security testing with mutual TLS and authorization policies
+ * - Sophisticated gateway testing with ingress/egress traffic validation
+ * - Complex fault injection testing with chaos engineering patterns
+ * - Advanced observability testing with distributed tracing and metrics
+ * - Comprehensive performance testing with load simulation and latency measurement
+ * - Sophisticated configuration testing with Istio resource validation
+ * - Advanced resilience testing with circuit breaking and retry policy validation
+ * 
+ * PRODUCTION-READY CONTAINER IMPLEMENTATIONS:
+ * - Thread-safe test execution with proper isolation and resource management
+ * - Memory-efficient containers with optimized resource allocation and cleanup
+ * - Performance-optimized test execution with parallel processing and efficient algorithms
+ * - Error-resilient testing with comprehensive exception handling and recovery
+ * - Configurable test parameters with external property support and environment awareness
+ * - Monitored test execution with detailed logging and performance tracking
+ * - Documented testing procedures with comprehensive guides and troubleshooting information
+ * - Maintainable test architecture with modular design and reusable components
+ * 
+ * PARAMETERIZED PLACEHOLDERS - Replace with your specific values:
+ * - [PROJECT_NAME] → Your project name (ECommerceApp, PaymentService, UserManagement, etc.)
+ * - [DOMAIN_NAME] → Your business domain (ecommerce, payments, user-management, etc.)
+ * - [BUSINESS_PURPOSE] → Your business purpose (online shopping, payment processing, user authentication, etc.)
+ * - [SERVICE_NAME] → Your service name (checkout-service, payment-gateway, user-service, etc.)
+ * - [COMPANY_NAME] → Your company name (RetailCorp, PaymentInc, UserSystems, etc.)
+ * - [NAMESPACE] → Your namespace (production, staging, development, testing, etc.)
+ * - [CLUSTER_NAME] → Your cluster name (prod-cluster, staging-cluster, test-cluster, etc.)
+ * - [TEST_IMAGE_REGISTRY] → Your container registry (registry.company.com, gcr.io/project, etc.)
+ * 
+ * ISTIO CUCUMBER CONTAINER CUSTOMIZATIONS:
+ * - Identify your specific service endpoints and API contracts for comprehensive test scenario creation
+ * - Define your service mesh configuration and policies for thorough validation testing
+ * - Specify your performance requirements and SLA validation for load testing scenarios
+ * - Configure your security requirements and compliance testing for policy validation
+ * - Set up your observability requirements and monitoring validation for comprehensive coverage
+ * - Define your CI/CD integration requirements and automation for continuous testing
+ * - Specify your test data requirements and management for realistic testing scenarios
+ * - Configure your reporting requirements and integration for effective communication of test results
+ * 
+ * The more specific your Istio configuration and [DOMAIN_NAME] service requirements, the more targeted and effective the Cucumber container testing will be!
+ */
+
+## COMPREHENSIVE ISTIO CUCUMBER CONTAINER FRAMEWORK
