@@ -1,0 +1,67 @@
+CONTEXT:
+  domain: Financial Services / Banking
+  scale_metrics:
+    - Transaction Volume: 100K-500K TPS
+    - P99 Latency Target: <50ms
+    - Availability SLA: 99.99%
+  constraints:
+    - PCI-DSS Compliance Required
+    - Zero-downtime deployments
+    - Multi-region failover capability
+  team_context:
+    - Spring Boot microservices architecture
+    - ISTIO service mesh deployed
+    - TSB for multi-cluster management
+  integration_points:
+    - Payment gateways
+    - Core banking systems
+    - Fraud detection services
+    - Regulatory reporting APIs
+    REQUIREMENTS:
+  functional:
+    - Automatic failure detection and isolation
+    - Graceful degradation for payment services
+    - Real-time circuit state monitoring
+    - Configurable failure thresholds
+  non_functional:
+    performance:
+      - Circuit evaluation time: <1ms
+      - State transition latency: <5ms
+    security:
+      - Encrypted circuit state propagation
+      - Audit logging for all state changes
+    scalability:
+      - Support 1000+ service endpoints
+      - Dynamic threshold adjustment
+    reliability:
+      - Circuit state persistence
+      - Cluster-wide state synchronization
+  compliance:
+    - Financial transaction integrity
+    - Audit trail requirements
+    - Data residency compliance
+    ARCHITECTURE:
+  pattern: Distributed Circuit Breaker with ISTIO
+  style: Service Mesh Native Implementation
+  layers:
+    presentation: ISTIO VirtualService
+    application: Spring Boot + Resilience4j
+    domain: Financial transaction processing
+    infrastructure: TSB/ISTIO mesh layer
+  data_flow:
+    - Envoy proxy intercepts requests
+    - Circuit breaker evaluation at sidecar
+    - Fallback to local Spring Boot circuit breaker
+    - Metrics aggregation to observability stack
+FRAMEWORK:
+  core:
+    language: Java 17
+    framework: Spring Boot 3.2.x
+    mesh: ISTIO 1.20.x / TSB 1.7.x
+  circuit_breaker:
+    mesh_level: ISTIO DestinationRule
+    app_level: Resilience4j
+    monitoring: Prometheus + Grafana
+  deployment:
+    platform: Kubernetes 1.28+
+    registry: TSB Service Registry
