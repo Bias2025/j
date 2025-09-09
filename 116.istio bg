@@ -1,0 +1,157 @@
+# TSB Blue-Green Deployment Configuration Prompt - CRAFT Format
+
+```yaml
+# You are a world-class service mesh architect and cloud infrastructure expert with 25+ years of experience in enterprise-grade deployment strategies,
+# specializing in Tetrate Service Bridge (TSB) configuration, Blue-Green deployments, and comprehensive traffic management for modern microservices architectures.
+#
+# CONTEXT: Analyze and optimize TSB YAML configuration files for [PROJECT_NAME] infrastructure repository
+# to implement Blue-Green deployment strategies for [DOMAIN_NAME] domain services serving [BUSINESS_PURPOSE] with complete traffic management and rollback capabilities
+#
+# REQUIREMENTS:
+# Functional: Complete Blue-Green deployment configuration with TSB traffic management and service routing, Advanced traffic splitting strategies with weighted routing and canary deployment support, Comprehensive health check integration with automated failover and rollback mechanisms, Service mesh configuration with Istio integration and secure communication protocols, Multi-cluster deployment support with cross-cluster traffic management and disaster recovery, Database migration coordination with Blue-Green environment synchronization, Configuration management with environment-specific settings and secret handling, Monitoring integration with observability stack and deployment tracking, Automated rollback procedures with failure detection and traffic redirection, Load balancer configuration with session affinity and sticky session management, DNS management with blue-green environment switching and TTL optimization, Security policy enforcement with mutual TLS and access control across environments
+# Non-Functional: Enhanced deployment reliability through zero-downtime Blue-Green transitions and automated validation, Improved system availability with instant rollback capabilities and failure isolation, Better performance optimization through traffic routing efficiency and load distribution, Enhanced security posture with encrypted communications and policy enforcement across environments, Improved operational efficiency through automated deployment workflows and infrastructure as code, Better disaster recovery with multi-environment redundancy and cross-region failover, Enhanced monitoring and observability with comprehensive deployment tracking and performance metrics, Improved compliance with audit trails and security policy enforcement across deployment environments
+#
+# ARCHITECTURE: TSB service mesh architecture with Blue-Green environment isolation and traffic management, Multi-cluster Kubernetes architecture with centralized control plane and distributed data planes, Cloud-native deployment architecture with container orchestration and automated scaling, Security architecture with Zero Trust networking and comprehensive policy enforcement, Monitoring architecture with distributed tracing and comprehensive observability across environments
+#
+# TESTING: Blue-Green deployment testing with automated validation and rollback verification, Traffic management testing with load balancing and failover scenario validation, Security testing with policy enforcement and encryption validation across environments, Performance testing with load distribution and scalability verification, Disaster recovery testing with multi-cluster failover and data consistency validation
+#
+# CONSTRAINTS:
+# Quality: Zero-downtime deployments with seamless Blue-Green transitions and automated validation, Complete traffic isolation between environments with secure communication protocols, Robust rollback capabilities with automated failure detection and instant recovery, Comprehensive monitoring with deployment tracking and performance validation, Security compliance with encryption, authentication, and authorization across all environments, Configuration consistency with infrastructure as code and version control integration, Disaster recovery readiness with multi-cluster redundancy and automated failover procedures
+# Performance: Optimized traffic routing with efficient load balancing and minimal latency overhead, Resource utilization optimization with dynamic scaling and efficient resource allocation, Network performance optimization with connection pooling and traffic compression, Database performance coordination with synchronized migrations and optimized queries, Monitoring overhead minimization with efficient metrics collection and aggregation, Storage optimization with efficient image management and registry optimization
+# Security: Comprehensive security policy enforcement with mutual TLS and zero trust networking, Access control integration with role-based permissions and service-to-service authentication, Secret management with encrypted storage and secure distribution across environments, Network isolation with proper segmentation and firewall rules between Blue-Green environments, Compliance validation with audit logging and security scanning across deployment pipeline
+#
+# FRAMEWORKS: Tetrate Service Bridge (TSB), Istio Service Mesh, Kubernetes, Helm, ArgoCD, Prometheus, Grafana, Jaeger, Fluentd
+#
+# ORIGINALITY REQUIREMENTS:
+# - Create COMPREHENSIVE TSB configuration for [PROJECT_NAME] Blue-Green deployments and [DOMAIN_NAME] traffic management
+# - Implement ADVANCED traffic routing strategies tailored to [PROJECT_NAME] service architecture and [BUSINESS_PURPOSE] requirements
+# - Design SOPHISTICATED health checking for [DOMAIN_NAME] service validation and automated failover mechanisms
+# - Generate THOROUGH security policies for [PROJECT_NAME] Zero Trust networking and comprehensive access control
+# - Create ROBUST monitoring integration for [BUSINESS_PURPOSE] deployment tracking and performance validation
+# - Implement COMPLETE rollback procedures for [DOMAIN_NAME] failure recovery and service restoration
+# - Design COMPREHENSIVE multi-cluster support for [PROJECT_NAME] disaster recovery and cross-region deployment
+# - Generate ADVANCED automation for [BUSINESS_PURPOSE] deployment orchestration and infrastructure management
+# - Create DETAILED documentation for [DOMAIN_NAME] Blue-Green deployment procedures and operational runbooks
+# - Implement AUTOMATED validation for [PROJECT_NAME] deployment success and configuration compliance
+#
+# Generate comprehensive TSB Blue-Green deployment solution that:
+# - Creates COMPLETE TSB YAML configurations with Blue-Green environment setup and traffic management
+# - Implements ADVANCED traffic splitting with weighted routing and automated failover capabilities
+# - Develops SOPHISTICATED health checking with service validation and deployment verification
+# - Generates THOROUGH security configurations with mutual TLS and comprehensive policy enforcement
+# - Creates ROBUST monitoring integration with observability stack and deployment tracking
+# - Implements COMPREHENSIVE rollback procedures with automated failure detection and recovery
+# - Develops ADVANCED multi-cluster support with cross-cluster traffic management and disaster recovery
+# - Generates COMPLETE automation with deployment orchestration and infrastructure lifecycle management
+# - Creates DETAILED documentation explaining TSB configuration decisions and operational procedures
+# - Implements AUTOMATED validation ensuring deployment success and configuration compliance
+
+/*
+ * ENHANCED CRAFT METHOD FOR COMPREHENSIVE TSB BLUE-GREEN DEPLOYMENT CONFIGURATION
+ * This enterprise-grade prompt generates COMPLETE, production-ready TSB configuration with:
+ * 
+ * COMPREHENSIVE TSB SERVICE MESH CONFIGURATION:
+ * - Advanced Workspace and Group configuration with Blue-Green environment isolation
+ * - Sophisticated Traffic Management with weighted routing and canary deployment support
+ * - Complete Security Policy enforcement with mutual TLS and access control
+ * - Advanced Gateway configuration with ingress/egress traffic management
+ * - Comprehensive Service Discovery with cross-cluster service registration
+ * - Sophisticated Fault Injection and Circuit Breaking for resilience testing
+ * - Advanced Observability configuration with distributed tracing and metrics
+ * - Complete Policy enforcement with rate limiting and security controls
+ * 
+ * ADVANCED BLUE-GREEN DEPLOYMENT STRATEGIES:
+ * - Sophisticated traffic splitting with gradual migration and validation gates
+ * - Advanced health checking with multi-level validation and automated decisions
+ * - Complex rollback automation with failure detection and instant recovery
+ * - Comprehensive database migration coordination with Blue-Green synchronization
+ * - Advanced configuration management with environment-specific overrides
+ * - Sophisticated load balancing with session affinity and sticky sessions
+ * - Complex DNS management with automated environment switching
+ * - Advanced monitoring integration with deployment tracking and alerting
+ * 
+ * SOPHISTICATED TRAFFIC MANAGEMENT:
+ * - Advanced Virtual Service configuration with sophisticated routing rules
+ * - Complex Destination Rule setup with load balancing and circuit breaking
+ * - Sophisticated Gateway configuration with TLS termination and routing
+ * - Advanced Service Entry management for external service integration
+ * - Comprehensive Sidecar configuration with resource optimization
+ * - Sophisticated Authorization Policy with fine-grained access control
+ * - Advanced Peer Authentication with mutual TLS configuration
+ * - Complex Request Authentication with JWT validation and RBAC
+ * 
+ * PRODUCTION-READY TSB IMPLEMENTATIONS:
+ * - Thread-safe configuration management with proper resource isolation
+ * - Performance-optimized traffic routing with efficient load balancing
+ * - Security-hardened implementations with comprehensive policy enforcement
+ * - Error-resilient configurations with automated recovery and failover
+ * - Scalable architecture with dynamic resource allocation and optimization
+ * - Monitored deployments with comprehensive observability and alerting
+ * - Documented configurations with operational runbooks and troubleshooting guides
+ * - Maintainable infrastructure with modular design and version control integration
+ * 
+ * PARAMETERIZED PLACEHOLDERS - Replace with your specific values:
+ * - [PROJECT_NAME] → Your project name (ECommerceApp, PaymentService, UserManagement, etc.)
+ * - [DOMAIN_NAME] → Your business domain (ecommerce, payments, user-management, etc.)
+ * - [BUSINESS_PURPOSE] → Your business purpose (online shopping, payment processing, user authentication, etc.)
+ * - [SERVICE_NAME] → Your service name (checkout-service, payment-gateway, user-service, etc.)
+ * - [COMPANY_NAME] → Your company name (RetailCorp, PaymentInc, UserSystems, etc.)
+ * - [CLUSTER_NAME] → Your cluster name (prod-cluster, staging-cluster, dev-cluster, etc.)
+ * - [NAMESPACE] → Your namespace (production, staging, development, etc.)
+ * - [INGRESS_HOST] → Your ingress hostname (api.company.com, app.domain.com, etc.)
+ * 
+ * TSB BLUE-GREEN DEPLOYMENT CUSTOMIZATIONS:
+ * - Identify your specific service dependencies and traffic patterns for optimized routing configuration
+ * - Define your health check requirements and validation criteria for automated deployment decisions
+ * - Specify your security requirements and compliance needs for comprehensive policy enforcement
+ * - Configure your monitoring and observability requirements for complete deployment visibility
+ * - Set up your rollback criteria and automation requirements for failure recovery procedures
+ * - Define your multi-cluster requirements and disaster recovery needs for cross-region deployment
+ * - Specify your performance requirements and optimization needs for efficient traffic management
+ * - Configure your automation requirements and integration needs for CI/CD pipeline optimization
+ * 
+ * The more specific your service architecture and [DOMAIN_NAME] deployment requirements, the more targeted and effective the TSB Blue-Green configuration will be!
+ */
+
+## COMPREHENSIVE TSB BLUE-GREEN DEPLOYMENT FRAMEWORK
+
+### Phase 1: TSB Workspace and Tenant Configuration
+**Enterprise [DOMAIN_NAME] Service Mesh Foundation**
+
+#### Complete TSB Workspace Configuration
+```yaml
+# TSB Workspace Configuration for [PROJECT_NAME] Blue-Green Deployment
+# File: infrastructure/tsb/workspace/[PROJECT_NAME]-workspace.yaml
+
+apiVersion: install.tetrate.io/v1alpha1
+kind: Workspace
+metadata:
+  name: [PROJECT_NAME]-workspace
+  namespace: [NAMESPACE]
+  annotations:
+    description: "Comprehensive workspace for [PROJECT_NAME] Blue-Green deployments"
+    owner: "[COMPANY_NAME]-platform-team"
+    project: "[PROJECT_NAME]"
+    environment: "production"
+    deployment-strategy: "blue-green"
+spec:
+  # Workspace-level configuration for Blue-Green environments
+  displayName: "[PROJECT_NAME] Blue-Green Workspace"
+  description: |
+    Enterprise workspace for [PROJECT_NAME] Blue-Green deployment strategy
+    providing complete traffic management, security policies, and observability
+    for [DOMAIN_NAME] domain services serving [BUSINESS_PURPOSE]
+    
+    Features:
+    - Blue-Green environment isolation with secure traffic routing
+    - Automated health checking and validation gates
+    - Comprehensive monitoring and observability integration
+    - Zero-downtime deployment with instant rollback capabilities
+    - Multi-cluster support with disaster recovery procedures
+  
+  # Namespace selector for Blue-Green environments
+  namespaceSelector:
+    names:
+      - [NAMESPACE]-blue      # Blue environment namespace
+      - [NAMESPACE]-green     # Green environment namespace
+      - [NAMESPACE]-shared    # Shared services
