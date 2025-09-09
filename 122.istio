@@ -1,0 +1,173 @@
+# Istio Gateway Configuration Prompt - CRAFT Format
+
+```yaml
+# You are a world-class Istio gateway architect and traffic management expert with 25+ years of experience in enterprise-grade service mesh networking,
+# specializing in Istio Gateway configuration, ingress/egress traffic management, and comprehensive edge connectivity for modern microservices architectures.
+#
+# CONTEXT: Design and implement comprehensive Istio Gateway configurations for [PROJECT_NAME] service mesh
+# to manage [DOMAIN_NAME] domain traffic ingress/egress serving [BUSINESS_PURPOSE] with complete traffic routing and security integration
+#
+# REQUIREMENTS:
+# Functional: Comprehensive Gateway configuration with HTTP/HTTPS traffic management and protocol support, Advanced TLS termination with certificate management and SNI-based routing, Multi-host routing with domain-based traffic distribution and virtual host configuration, Protocol support including HTTP/1.1, HTTP/2, gRPC, and WebSocket with optimized settings, Port configuration with multiple protocol support and service-specific routing, Load balancer integration with cloud provider load balancers and external traffic management, Certificate management with automatic provisioning and renewal using cert-manager integration, Security policy integration with authentication, authorization, and rate limiting at gateway level, Cross-origin resource sharing (CORS) configuration with domain-specific policies, Request/response transformation with header manipulation and traffic modification, Health check configuration with gateway-level health monitoring and failover, Observability integration with metrics collection and distributed tracing at gateway level
+# Non-Functional: Enhanced traffic management through intelligent routing and load distribution, Improved security posture with comprehensive TLS encryption and certificate management, Better performance optimization through protocol optimization and connection management, Enhanced scalability through efficient traffic handling and resource utilization, Improved reliability through health checking and automatic failover mechanisms, Better monitoring with comprehensive gateway metrics and observability, Enhanced user experience through optimized routing and reduced latency, Improved operational efficiency through automated certificate management and configuration
+#
+# ARCHITECTURE: Istio Gateway architecture with ingress and egress traffic management, Multi-tier gateway architecture with edge, regional, and cluster-level gateways, Security architecture with TLS termination and comprehensive policy enforcement, Load balancing architecture with intelligent traffic distribution and failover, Observability architecture with comprehensive gateway monitoring and analytics
+#
+# TESTING: Gateway testing with traffic simulation and routing validation, TLS testing with certificate validation and encryption verification, Load testing with high-volume traffic and performance measurement, Security testing with policy enforcement and vulnerability assessment, Integration testing with service mesh functionality and end-to-end validation
+#
+# CONSTRAINTS:
+# Quality: Zero traffic disruption during gateway configuration updates with rolling deployments, Complete TLS security with proper certificate management and encryption enforcement, Reliable traffic routing with consistent behavior and predictable performance, Comprehensive monitoring with detailed gateway metrics and health tracking, Configuration consistency with standardized gateway policies and centralized management, Error handling with graceful degradation and automatic recovery, Performance optimization with minimal latency overhead and maximum throughput
+# Performance: Optimized traffic handling with efficient routing algorithms and connection management, Memory usage optimization with intelligent buffer management and resource allocation, CPU efficiency through optimized proxy configuration and request processing, Network performance optimization with connection pooling and traffic compression, Latency minimization through intelligent routing and proximity-based traffic management, Throughput maximization through efficient resource utilization and scaling strategies
+# Security: Comprehensive TLS encryption with strong cipher suites and certificate validation, Access control integration with authentication and authorization at gateway level, Security policy enforcement with rate limiting and DDoS protection, Certificate security with proper management and automatic renewal, Audit logging with comprehensive security event tracking and compliance reporting
+#
+# FRAMEWORKS: Istio 1.20+, Kubernetes 1.28+, Envoy Proxy, cert-manager, External-DNS, Prometheus, Grafana, Jaeger
+#
+# ORIGINALITY REQUIREMENTS:
+# - Create COMPREHENSIVE Gateway configuration for [PROJECT_NAME] Istio traffic management and [DOMAIN_NAME] routing optimization
+# - Implement ADVANCED TLS management tailored to [PROJECT_NAME] security requirements and [BUSINESS_PURPOSE] compliance needs
+# - Design SOPHISTICATED routing strategies for [DOMAIN_NAME] multi-host traffic distribution and protocol optimization
+# - Generate THOROUGH security integration for [PROJECT_NAME] authentication, authorization, and policy enforcement
+# - Create ROBUST certificate management for [BUSINESS_PURPOSE] automated provisioning and renewal processes
+# - Implement COMPLETE observability integration for [DOMAIN_NAME] gateway monitoring and performance tracking
+# - Design COMPREHENSIVE load balancing for [PROJECT_NAME] traffic distribution and failover mechanisms
+# - Generate ADVANCED automation for [BUSINESS_PURPOSE] gateway management and operational efficiency
+# - Create DETAILED documentation for [DOMAIN_NAME] gateway configuration and maintenance procedures
+# - Implement AUTOMATED validation for [PROJECT_NAME] gateway functionality and security compliance
+#
+# Generate comprehensive Istio Gateway solution that:
+# - Creates COMPLETE Gateway YAML configurations with ingress/egress traffic management and multi-protocol support
+# - Implements ADVANCED TLS configuration with certificate management and SNI-based routing capabilities
+# - Develops SOPHISTICATED routing rules with host-based routing and protocol-specific optimization
+# - Generates THOROUGH security integration with authentication, authorization, and rate limiting policies
+# - Creates ROBUST certificate automation with cert-manager integration and automatic renewal
+# - Implements COMPREHENSIVE monitoring integration with gateway metrics and distributed tracing
+# - Develops ADVANCED load balancing with intelligent traffic distribution and health checking
+# - Generates COMPLETE observability with gateway analytics and performance monitoring
+# - Creates DETAILED documentation explaining gateway architecture and operational procedures
+# - Implements AUTOMATED testing procedures ensuring gateway reliability and security validation
+
+/*
+ * ENHANCED CRAFT METHOD FOR COMPREHENSIVE ISTIO GATEWAY CONFIGURATION
+ * This enterprise-grade prompt generates COMPLETE, production-ready gateway solution with:
+ * 
+ * COMPREHENSIVE GATEWAY ARCHITECTURE:
+ * - Advanced ingress gateway configuration with multi-host and multi-protocol support
+ * - Sophisticated egress gateway setup with external service access and security policies
+ * - Complete TLS termination with certificate management and SNI-based routing
+ * - Advanced port configuration with protocol-specific optimization and security
+ * - Comprehensive load balancer integration with cloud provider services
+ * - Sophisticated traffic management with intelligent routing and load distribution
+ * - Advanced security policy integration with authentication and authorization
+ * - Complete observability integration with metrics, tracing, and logging
+ * 
+ * ADVANCED TLS AND CERTIFICATE MANAGEMENT:
+ * - Sophisticated TLS configuration with strong cipher suites and security protocols
+ * - Advanced certificate provisioning with cert-manager integration and automation
+ * - Complex SNI-based routing with multiple certificate support and domain management
+ * - Comprehensive certificate lifecycle management with automatic renewal and validation
+ * - Advanced MTLS configuration with client certificate authentication and validation
+ * - Sophisticated certificate storage with Kubernetes secrets and secure distribution
+ * - Complex certificate validation with OCSP stapling and CRL checking
+ * - Advanced certificate monitoring with expiration alerts and health checking
+ * 
+ * SOPHISTICATED TRAFFIC ROUTING AND MANAGEMENT:
+ * - Advanced host-based routing with domain-specific traffic distribution
+ * - Complex path-based routing with URI matching and redirection rules
+ * - Sophisticated header-based routing with custom header processing and transformation
+ * - Advanced protocol support with HTTP/1.1, HTTP/2, gRPC, and WebSocket optimization
+ * - Comprehensive CORS configuration with domain-specific policies and security
+ * - Sophisticated request/response transformation with header manipulation
+ * - Complex traffic splitting with weighted routing and canary deployment support
+ * - Advanced rate limiting with token bucket algorithms and quota enforcement
+ * 
+ * PRODUCTION-READY GATEWAY IMPLEMENTATIONS:
+ * - Thread-safe gateway configuration with proper resource isolation and updates
+ * - Memory-efficient gateway operation with optimized resource allocation
+ * - Performance-optimized traffic handling with efficient routing and processing
+ * - Error-resilient gateway operation with comprehensive fault tolerance
+ * - Scalable gateway architecture with dynamic resource allocation and load balancing
+ * - Monitored gateway operation with comprehensive metrics and alerting
+ * - Documented gateway configuration with operational runbooks and best practices
+ * - Maintainable gateway architecture with modular design and centralized management
+ * 
+ * PARAMETERIZED PLACEHOLDERS - Replace with your specific values:
+ * - [PROJECT_NAME] → Your project name (ECommerceApp, PaymentService, UserManagement, etc.)
+ * - [DOMAIN_NAME] → Your business domain (ecommerce, payments, user-management, etc.)
+ * - [BUSINESS_PURPOSE] → Your business purpose (online shopping, payment processing, user authentication, etc.)
+ * - [SERVICE_NAME] → Your service name (checkout-service, payment-gateway, user-service, etc.)
+ * - [COMPANY_NAME] → Your company name (RetailCorp, PaymentInc, UserSystems, etc.)
+ * - [NAMESPACE] → Your namespace (production, staging, development, etc.)
+ * - [INGRESS_HOST] → Your ingress hostname (api.company.com, app.domain.com, etc.)
+ * - [TLS_SECRET_NAME] → Your TLS secret name (api-tls-cert, app-certificate, etc.)
+ * 
+ * ISTIO GATEWAY CONFIGURATION CUSTOMIZATIONS:
+ * - Identify your specific domain requirements and routing patterns for optimized gateway configuration
+ * - Define your TLS and security requirements for comprehensive certificate management and encryption
+ * - Specify your protocol requirements and optimization needs for performance and compatibility
+ * - Configure your load balancing requirements and failover strategies for high availability
+ * - Set up your monitoring and observability requirements for comprehensive gateway visibility
+ * - Define your security requirements and compliance needs for policy enforcement and access control
+ * - Specify your automation requirements and integration needs for operational efficiency
+ * - Configure your testing requirements and validation strategies for gateway reliability
+ * 
+ * The more specific your traffic patterns and [DOMAIN_NAME] gateway requirements, the more targeted and effective the gateway configuration will be!
+ */
+
+## COMPREHENSIVE ISTIO GATEWAY CONFIGURATION FRAMEWORK
+
+### Phase 1: Advanced Ingress Gateway Configuration
+**Enterprise [DOMAIN_NAME] Traffic Management Foundation**
+
+#### Complete Ingress Gateway with Multi-Host and TLS Configuration
+```yaml
+# Comprehensive Istio Gateway Configuration for [PROJECT_NAME]
+# File: istio/gateway/[PROJECT_NAME]-ingress-gateway.yaml
+
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: [PROJECT_NAME]-ingress-gateway
+  namespace: [NAMESPACE]
+  labels:
+    app: [PROJECT_NAME]-gateway
+    project: [PROJECT_NAME]
+    domain: [DOMAIN_NAME]
+    purpose: traffic-ingress
+    managed-by: istio-platform-team
+    tier: edge
+  annotations:
+    description: "Enterprise ingress gateway for [PROJECT_NAME] with comprehensive TLS and routing"
+    owner: "[COMPANY_NAME]-platform-team"
+    gateway-type: "ingress"
+    traffic-profile: "high-volume"
+    security-level: "enterprise"
+    monitoring-enabled: "true"
+    last-updated: "{{ .Values.global.timestamp }}"
+    documentation: "https://docs.[COMPANY_NAME].com/istio/gateway/[PROJECT_NAME]"
+spec:
+  # Gateway Selector - Targets specific Istio ingress gateway pods
+  selector:
+    istio: ingressgateway    # Default Istio ingress gateway
+    # For custom gateway deployments:
+    # app: [PROJECT_NAME]-gateway
+    # version: v1
+  
+  # Comprehensive Server Configuration for Multiple Protocols and Hosts
+  servers:
+  
+  # HTTP Server Configuration (Redirect to HTTPS)
+  - port:
+      number: 80
+      name: http-[PROJECT_NAME]
+      protocol: HTTP
+    hosts:
+    - "[INGRESS_HOST]"                    # Primary domain
+    - "api.[INGRESS_HOST]"               # API subdomain
+    - "app.[INGRESS_HOST]"               # Application subdomain
+    - "admin.[INGRESS_HOST]"             # Admin subdomain
+    tls:
+      httpsRedirect: true                 # Force HTTPS redirect
+    # Optional: Direct HTTP for health checks
+    # hosts:
+    # - "[INGRESS_HOST]"
+    #
