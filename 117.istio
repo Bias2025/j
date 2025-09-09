@@ -1,0 +1,123 @@
+# TSB YAML Validation and Correction Prompt - CRAFT Format
+
+```yaml
+# You are a world-class Tetrate Service Bridge (TSB) configuration architect and YAML validation expert with 25+ years of experience in enterprise-grade service mesh configurations,
+# specializing in TSB YAML validation, configuration optimization, and comprehensive error detection for modern microservices infrastructure.
+#
+# CONTEXT: Analyze and validate TSB YAML configuration files for [PROJECT_NAME] infrastructure repository
+# to detect configuration errors, security vulnerabilities, and optimization opportunities for [DOMAIN_NAME] domain services serving [BUSINESS_PURPOSE]
+#
+# REQUIREMENTS:
+# Functional: Comprehensive TSB YAML syntax validation with schema compliance and structural integrity checking, Advanced semantic validation with TSB-specific rules and best practice enforcement, Configuration consistency validation across multiple YAML files and resource dependencies, Security policy validation with access control verification and encryption requirement checking, Traffic management validation with routing rule verification and load balancing configuration analysis, Service mesh configuration validation with Istio compatibility and resource optimization, Multi-cluster configuration validation with cross-cluster dependencies and network policies, Health check validation with endpoint verification and timeout configuration analysis, Resource limit validation with capacity planning and performance optimization recommendations, Version compatibility validation with TSB API versions and deprecation warnings, Namespace and label validation with organizational standards and naming convention compliance, Certificate and TLS validation with security protocol verification and expiration monitoring
+# Non-Functional: Enhanced configuration reliability through comprehensive validation and error prevention, Improved deployment success rate with pre-deployment validation and configuration optimization, Better security posture through automated security policy validation and vulnerability detection, Enhanced maintainability through consistent configuration standards and automated compliance checking, Improved operational efficiency through automated validation workflows and instant feedback, Better documentation quality through inline validation comments and correction suggestions, Enhanced team productivity through IDE integration and real-time validation feedback, Improved system stability through configuration drift detection and automated remediation
+#
+# ARCHITECTURE: Multi-layered validation architecture with syntax, semantic, and security validation stages, Plugin-based validation architecture with extensible rule sets and custom validators, Integration architecture with CI/CD pipelines and development tooling, Reporting architecture with structured output and actionable recommendations, Automation architecture with git hooks and pull request validation
+#
+# TESTING: Validation rule testing with comprehensive test cases and edge scenario coverage, Configuration testing with valid and invalid YAML samples, Integration testing with TSB control plane validation, Performance testing with large configuration file validation, Regression testing with validation rule updates and compatibility verification
+#
+# CONSTRAINTS:
+# Quality: Zero false positive validations with accurate error detection and precise recommendations, Complete TSB configuration coverage with all resource types and API versions, Reliable validation results with consistent rule application and deterministic output, Comprehensive error reporting with clear descriptions and actionable fix suggestions, Security compliance with industry standards and organizational security policies, Performance optimization with efficient validation algorithms and minimal processing overhead, Documentation quality with detailed validation explanations and best practice guidance
+# Performance: Fast validation execution with optimized parsing and efficient rule evaluation, Memory-efficient processing with streaming validation and minimal memory footprint, Scalable validation with parallel processing and distributed validation capabilities, Cache-optimized validation with intelligent caching and incremental validation, Network-efficient validation with minimal external dependencies and offline capabilities, Storage-optimized reporting with compressed output and efficient data serialization
+# Security: Secure validation with sensitive data protection and credential masking, Access control for validation results with role-based permissions and audit logging, Secure communication with encrypted data transmission and authenticated access, Compliance validation with regulatory requirements and security frameworks, Vulnerability detection with known security issue identification and remediation guidance
+#
+# FRAMEWORKS: Tetrate Service Bridge (TSB), Istio, Kubernetes, YAML Schema Validation, JSON Schema, OPA (Open Policy Agent), Helm, Kustomize
+#
+# ORIGINALITY REQUIREMENTS:
+# - Create COMPREHENSIVE validation rules for [PROJECT_NAME] TSB configurations and [DOMAIN_NAME] specific requirements
+# - Implement ADVANCED error detection tailored to [PROJECT_NAME] service mesh architecture and [BUSINESS_PURPOSE] needs
+# - Design SOPHISTICATED security validation for [DOMAIN_NAME] compliance requirements and organizational policies
+# - Generate THOROUGH optimization recommendations for [PROJECT_NAME] performance improvement and resource efficiency
+# - Create ROBUST consistency checking for [BUSINESS_PURPOSE] multi-file configurations and dependency validation
+# - Implement COMPLETE best practice enforcement for [DOMAIN_NAME] configuration standards and operational excellence
+# - Design COMPREHENSIVE reporting framework for [PROJECT_NAME] validation results and actionable insights
+# - Generate ADVANCED automation integration for [BUSINESS_PURPOSE] CI/CD pipeline validation and quality gates
+# - Create DETAILED documentation for [DOMAIN_NAME] validation procedures and team knowledge sharing
+# - Implement AUTOMATED remediation suggestions for [PROJECT_NAME] configuration optimization and error correction
+#
+# Generate comprehensive TSB YAML validation and correction solution that:
+# - Creates COMPLETE validation rule set with TSB-specific syntax, semantic, and security checks
+# - Implements ADVANCED error detection with precise location identification and clear error descriptions
+# - Develops SOPHISTICATED correction suggestions with automated fixes and best practice recommendations
+# - Generates THOROUGH security analysis with vulnerability detection and compliance validation
+# - Creates ROBUST consistency checking with cross-file dependency validation and conflict detection
+# - Implements COMPREHENSIVE optimization analysis with performance recommendations and resource efficiency improvements
+# - Develops ADVANCED reporting framework with structured output and actionable insights
+# - Generates COMPLETE automation integration with CI/CD pipeline validation and quality gate enforcement
+# - Creates DETAILED documentation explaining validation methodology and correction procedures
+# - Implements AUTOMATED remediation with intelligent suggestions and configuration optimization
+
+/*
+ * ENHANCED CRAFT METHOD FOR COMPREHENSIVE TSB YAML VALIDATION AND CORRECTION
+ * This enterprise-grade prompt generates COMPLETE, production-ready validation solution with:
+ * 
+ * COMPREHENSIVE TSB YAML VALIDATION:
+ * - Advanced syntax validation with YAML parsing and structural integrity checking
+ * - Sophisticated schema validation with TSB API version compatibility and resource validation
+ * - Complete semantic validation with TSB-specific rules and configuration logic verification
+ * - Advanced cross-reference validation with dependency checking and consistency enforcement
+ * - Comprehensive security validation with policy enforcement and vulnerability detection
+ * - Sophisticated performance validation with resource optimization and capacity planning
+ * - Advanced compliance validation with organizational standards and regulatory requirements
+ * - Complete best practice validation with industry standards and operational excellence
+ * 
+ * ADVANCED ERROR DETECTION AND CORRECTION:
+ * - Sophisticated error categorization with severity levels and impact assessment
+ * - Advanced location identification with precise line numbers and context information
+ * - Complex root cause analysis with dependency tracing and configuration correlation
+ * - Comprehensive fix suggestions with automated corrections and manual guidance
+ * - Advanced conflict detection with resolution strategies and priority recommendations
+ * - Sophisticated deprecation warnings with migration paths and upgrade guidance
+ * - Complex performance issue detection with optimization recommendations
+ * - Advanced security vulnerability identification with remediation procedures
+ * 
+ * SOPHISTICATED VALIDATION RULES ENGINE:
+ * - Advanced rule definition with flexible criteria and conditional logic
+ * - Complex pattern matching with regex validation and custom validators
+ * - Sophisticated constraint checking with business rule enforcement
+ * - Advanced dependency validation with graph analysis and circular dependency detection
+ * - Comprehensive policy validation with OPA integration and custom policies
+ * - Sophisticated version compatibility checking with API deprecation tracking
+ * - Advanced resource validation with Kubernetes API integration and CRD validation
+ * - Complex configuration optimization with best practice enforcement and recommendations
+ * 
+ * PRODUCTION-READY VALIDATION IMPLEMENTATIONS:
+ * - Thread-safe validation with concurrent processing and resource isolation
+ * - Memory-efficient validation with streaming processing and optimized algorithms
+ * - Performance-optimized validation with caching and incremental processing
+ * - Error-resilient validation with comprehensive exception handling and recovery
+ * - Configurable validation with rule customization and organizational policy integration
+ * - Monitored validation with detailed logging and performance metrics
+ * - Documented validation with comprehensive rule explanations and usage guidelines
+ * - Maintainable validation with modular design and extensible architecture
+ * 
+ * PARAMETERIZED PLACEHOLDERS - Replace with your specific values:
+ * - [PROJECT_NAME] → Your project name (ECommerceApp, PaymentService, UserManagement, etc.)
+ * - [DOMAIN_NAME] → Your business domain (ecommerce, payments, user-management, etc.)
+ * - [BUSINESS_PURPOSE] → Your business purpose (online shopping, payment processing, user authentication, etc.)
+ * - [COMPANY_NAME] → Your company name (RetailCorp, PaymentInc, UserSystems, etc.)
+ * - [TSB_VERSION] → Your TSB version (1.6.x, 1.7.x, 1.8.x, etc.)
+ * - [CLUSTER_NAME] → Your cluster name (prod-cluster, staging-cluster, dev-cluster, etc.)
+ * - [VALIDATION_RULES_PATH] → Your validation rules path (/validation, /policies, /rules, etc.)
+ * 
+ * TSB YAML VALIDATION CUSTOMIZATIONS:
+ * - Identify your specific TSB resource types and configuration patterns for targeted validation rules
+ * - Define your security requirements and compliance standards for comprehensive policy validation
+ * - Specify your performance requirements and optimization goals for resource efficiency validation
+ * - Configure your organizational standards and naming conventions for consistency enforcement
+ * - Set up your integration requirements with CI/CD pipelines for automated validation workflows
+ * - Define your reporting requirements and output formats for effective communication of validation results
+ * - Specify your remediation preferences and automation levels for intelligent correction suggestions
+ * - Configure your monitoring and alerting requirements for continuous configuration quality assurance
+ * 
+ * The more specific your TSB configuration patterns and [DOMAIN_NAME] requirements, the more targeted and effective the validation solution will be!
+ */
+
+## COMPREHENSIVE TSB YAML VALIDATION AND CORRECTION FRAMEWORK
+
+### Phase 1: Advanced TSB Configuration Validator
+**Enterprise [DOMAIN_NAME] Configuration Quality Assurance Foundation**
+
+#### Complete TSB YAML Validation Engine
+```python
+#!/usr/bin/env python3
+"""
