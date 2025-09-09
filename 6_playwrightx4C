@@ -1,0 +1,110 @@
+CONTEXT:
+  domain: Financial Services - Loan Management
+  system: LNC (Loan Navigation Center) Landing Page
+  scale: 
+    - Enterprise-level loan processing system
+    - Multi-component Angular frontend
+    - Real-time loan data validation
+  constraints: 
+    - Must handle invalid loan identifiers gracefully
+    - Error messages must be user-friendly and actionable
+    - Search functionality must be intuitive
+  team: 
+    - Frontend: Angular/TypeScript developers
+    - Backend: Spring Boot/Java engineers
+    - Testing: Playwright/Selenium automation engineers
+  integration:
+    - Loan database systems
+    - Error handling middleware
+    - Component-based UI architecture
+    REQUIREMENTS:
+  functional:
+    - Display "Loan Information" header on LNC landing page
+    - Provide search bar labeled "Search By Loan Number"
+    - Validate loan identifiers in real-time
+    - Display structured error messages for invalid inputs
+    - Support child component loading for loan info display
+  non_functional:
+    performance: 
+      - Page load < 2 seconds
+      - Search response < 500ms
+      - Error display immediate (< 100ms)
+    security:
+      - Input sanitization for loan numbers
+      - XSS prevention on error messages
+      - Secure loan data transmission
+    scalability:
+      - Support concurrent user searches
+      - Handle peak load scenarios
+    reliability:
+      - 99.9% uptime for search functionality
+      - Graceful degradation on component failures
+  compliance:
+    - PCI-DSS for financial data
+    - GDPR for user information
+    - SOX compliance for audit trails
+    ARCHITECTURE:
+  pattern: Component-Based with Error Boundary Pattern
+  style: Microservices with Angular Frontend
+  layers:
+    presentation:
+      - Angular standalone components
+      - Reactive forms for search input
+      - Error display components
+    application:
+      - Spring Boot REST controllers
+      - Loan validation service
+      - Error message composition service
+    domain:
+      - Loan entity model
+      - Validation rules engine
+      - Error message templates
+    infrastructure:
+      - PostgreSQL for loan data
+      - Redis for caching search results
+      - Kafka for audit events
+  data_flow:
+    - User input → Validation → Backend API → Response handling
+    - Error flow: Validation failure → Error service → UI display
+    FRAMEWORK:
+  core:
+    language: Java 17
+    framework: Spring Boot 3.2.x
+  frontend:
+    framework: Angular 18.2.x
+    typescript: 5.4.5
+    testing: Playwright 1.40+
+  persistence:
+    database: PostgreSQL 15
+    orm: Spring Data JPA
+    migration: Flyway
+  messaging: Apache Kafka
+  caching: Redis
+  monitoring: 
+    - Micrometer
+    - Prometheus
+    - Grafana
+  deployment: Kubernetes
+  TECHNOLOGY:
+  testing_framework:
+    - Playwright for E2E tests
+    - JUnit 5 + Mockito for backend
+    - Jasmine/Karma for Angular unit tests
+  error_handling:
+    - Custom ErrorBoundary components
+    - Structured error response DTOs
+    - Multi-part error messages
+  search_implementation:
+    - Debounced search input
+    - Real-time validation
+    - Cached recent searches
+    PERSONA:
+  end_users:
+    - Loan officers searching for loan information
+    - Customer service representatives
+    - Audit and compliance teams
+  developers:
+    - Senior Spring Boot engineers
+    - Angular frontend specialists
+    - QA automation engineers
+      
