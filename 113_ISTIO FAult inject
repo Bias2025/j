@@ -1,0 +1,99 @@
+CONTEXT:
+  domain: 
+    sector: "Financial Services / Banking"
+    regulatory: ["PCI-DSS", "SOX", "GDPR", "Basel III"]
+    criticality: "Tier-1 Mission Critical"
+  scale:
+    transactions_per_second: 50000
+    daily_volume: "$2.5B USD"
+    concurrent_users: 1000000
+    p99_latency_target: "< 100ms"
+  constraints:
+    zero_downtime: true
+    data_sovereignty: "Multi-region with locality"
+    audit_requirements: "Complete transaction lineage"
+    encryption: "At-rest and in-transit mandatory"
+  integration_points:
+    payment_gateways: ["SWIFT", "ACH", "SEPA"]
+    core_banking: "Temenos T24"
+    fraud_detection: "Real-time ML scoring"
+    kyc_aml: "External compliance APIs"
+    REQUIREMENTS:
+  functional:
+    - "Process payment transactions with idempotency"
+    - "Real-time balance calculations with consistency"
+    - "Multi-currency support with FX rates"
+    - "Transaction reversal and reconciliation"
+    - "Regulatory reporting automation"
+  non_functional:
+    performance:
+      throughput: "50K TPS sustained"
+      latency_p50: "20ms"
+      latency_p99: "100ms"
+    security:
+      authentication: "mTLS + OAuth2 + MFA"
+      authorization: "Fine-grained RBAC + ABAC"
+      encryption: "AES-256 + TLS 1.3"
+      key_management: "HSM integration"
+    reliability:
+      availability: "99.999% (5 nines)"
+      rpo: "0 seconds"
+      rto: "< 30 seconds"
+      data_consistency: "Strong consistency for transactions"
+  compliance:
+    pci_dss: "Level 1 compliance"
+    audit_trail: "Immutable ledger for all operations"
+    data_retention: "7 years minimum"
+    right_to_erasure: "GDPR Article 17 compliant"
+    ARCHITECTURE:
+  pattern: "Event-Driven Microservices with CQRS"
+  style: "Cell-based Architecture for Blast Radius Control"
+  layers:
+    presentation:
+      api_gateway: "Spring Cloud Gateway with rate limiting"
+      channels: ["Web", "Mobile", "Open Banking API"]
+    application:
+      services:
+        - "Payment Processing Service"
+        - "Account Management Service"
+        - "Transaction Ledger Service"
+        - "Fraud Detection Service"
+        - "Notification Service"
+    domain:
+      aggregates: ["Account", "Transaction", "Customer", "Product"]
+      events: ["TransactionInitiated", "PaymentProcessed", "BalanceUpdated"]
+    infrastructure:
+      service_mesh: "Istio with mTLS"
+      database: "PostgreSQL with Read Replicas"
+      event_store: "Apache Kafka"
+      cache: "Redis Cluster"
+  resilience_patterns:
+    - "Circuit Breaker with Hystrix"
+    - "Bulkhead Isolation"
+    - "Retry with Exponential Backoff"
+    - "Timeout Management"
+    - "Fault Injection Testing"
+    FRAMEWORK:
+  core:
+    language: "Java 17 LTS"
+    framework: "Spring Boot 3.2.x"
+    reactive: "Spring WebFlux for async operations"
+  persistence:
+    primary_db: "PostgreSQL 15 with JSONB"
+    read_replicas: "3x replicas per region"
+    orm: "Spring Data JPA with Hibernate"
+    migration: "Liquibase with rollback support"
+  messaging:
+    event_bus: "Apache Kafka 3.x"
+    protocol: "Avro with Schema Registry"
+  caching:
+    l1_cache: "Caffeine (in-process)"
+    l2_cache: "Redis Cluster 7.x"
+  observability:
+    metrics: "Micrometer + Prometheus"
+    tracing: "OpenTelemetry + Jaeger"
+    logging: "Structured JSON with ELK"
+  service_mesh:
+    platform: "Istio 1.20.x"
+    traffic_management: "TSB (Tetrate Service Bridge)"
+    
