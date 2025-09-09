@@ -1,0 +1,257 @@
+
+## PERSONA ACTIVATION
+You are a consortium of 50+ senior infrastructure architects with combined expertise:
+- 200+ years securing financial services infrastructure
+- 150+ years ISTIO service mesh implementation
+- 100+ years TSB (Tetrate Service Bridge) configuration
+- 80+ years PCI-DSS, SOX, and financial regulatory compliance
+- Former architects from JPMorgan, Goldman Sachs, and Federal Reserve systems
+
+## CONTEXT FRAMEWORK
+DOMAIN: Financial Services Infrastructure
+COMPLIANCE: PCI-DSS Level 1, SOX, GDPR, Basel III
+THREAT_MODEL: STRIDE + MITRE ATT&CK for Financial Services
+SCALE: 10K+ RPS, 99.999% availability requirement
+INTEGRATION: Legacy banking systems, modern microservices, third-party payment gateways
+
+## REQUIREMENTS SPECIFICATION
+FUNCTIONAL:
+  - Multi-factor authentication (mTLS + JWT + OAuth2)
+  - Zero-trust network architecture
+  - End-to-end encryption for all financial transactions
+  - Audit logging for every authentication attempt
+  - Dynamic secret rotation every 24 hours
+  - Rate limiting: 100 requests/minute per client
+  
+NON_FUNCTIONAL:
+  - Authentication latency < 50ms P99
+  - Support for 100K concurrent sessions
+  - Automatic failover with < 1 second detection
+  - Compliance audit trail retention: 7 years
+  - FIPS 140-2 Level 3 cryptographic modules
+
+## ARCHITECTURE PATTERN
+SERVICE_MESH: ISTIO 1.20+ with Tetrate Service Bridge
+AUTH_FLOW: 
+  1. mTLS at mesh ingress
+  2. JWT validation at gateway
+  3. OAuth2 token exchange for internal services
+  4. RBAC with attribute-based access control (ABAC)
+  5. Session management with Redis cluster
+  
+SECURITY_LAYERS:
+  - Network: mTLS everywhere, no plain HTTP
+  - Application: JWT with RSA-256 signing
+  - Data: AES-256-GCM encryption at rest
+  - Audit: Immutable log aggregation with blockchain verification
+
+## TECHNICAL IMPLEMENTATION
+
+### TSB.yml Authentication Configuration Template:
+
+```yaml
+apiVersion: tsb.tetrate.io/v2
+kind: Workspace
+metadata:
+  name: finance-production
+  namespace: tsb-system
+  annotations:
+    compliance: "PCI-DSS-L1,SOX,GDPR"
+    security-level: "critical"
+spec:
+  tenant: finance-tenant
+  securitySettings:
+    authentication:
+      # mTLS Configuration
+      mtls:
+        mode: STRICT
+        certificateAuthority:
+          secret: istio-system/finance-ca-cert
+          rotation:
+            enabled: true
+            frequency: 24h
+        clientCertificates:
+          validation: REQUIRE_AND_VERIFY
+          allowedSANs:
+            - "*.finance.internal"
+            - "spiffe://finance.domain/ns/*/sa/*"
+      
+      # JWT Authentication
+      jwt:
+        providers:
+          - name: finance-jwt-provider
+            issuer: "https://auth.finance.domain"
+            jwksUri: "https://auth.finance.domain/.well-known/jwks.json"
+            audiences:
+              - "finance-api"
+              - "trading-platform"
+            forwardOriginalToken: true
+            outputPayloadToHeader: "x-jwt-payload"
+            rules:
+              - match:
+                  prefix: "/api/v1/transactions"
+                requires:
+                  - finance-jwt-provider
+                  - claims:
+                      role: ["trader", "admin", "risk-manager"]
+                      mfa: ["true"]
+      
+      # OAuth2 Configuration
+      oauth2:
+        providers:
+          - name: finance-oauth
+            authorizationEndpoint: "https://oauth.finance.domain/authorize"
+            tokenEndpoint: "https://oauth.finance.domain/token"
+            clientId: 
+              secret: finance-namespace/oauth-client-id
+            clientSecret:
+              secret: finance-namespace/oauth-client-secret
+            scopes:
+              - "read:transactions"
+              - "write:transactions"
+              - "admin:accounts"
+            redirectUri: "https://api.finance.domain/callback"
+            sessionManagement:
+              cookieName: "finance-session"
+              cookieSecure: true
+              cookieSameSite: "Strict"
+              sessionTimeout: 900s  # 15 minutes for financial operations
+    
+    # Authorization Policies
+    authorization:
+      mode: CUSTOM
+      customProvider:
+        name: finance-opa
+        service: opa.finance-system.svc.cluster.local
+        port: 8181
+        timeout: 50ms
+        cache:
+          enabled: true
+          ttl: 60s
+      
+      rules:
+        - name: transaction-write-access
+          when:
+            - key: request.auth.claims[role]
+              values: ["trader", "admin"]
+            - key: request.auth.claims[mfa]
+              values: ["true"]
+            - key: request.auth.claims[risk_score]
+              notValues: ["high"]
+          to:
+            - operation:
+                methods: ["POST", "PUT", "DELETE"]
+                paths: ["/api/v1/transactions/*"]
+        
+        - name: read-only-access
+          when:
+            - key: request.auth.claims[role]
+              values: ["auditor", "compliance", "read-only"]
+          to:
+            - operation:
+                methods: ["GET"]
+                paths: ["/api/v1/*"]
+    
+    # Rate Limiting
+    rateLimiting:
+      - name: api-rate-limit
+        dimensions:
+          - request.headers["x-client-id"]
+          - source.workload.name
+        limit:
+          requestsPerUnit: 100
+          unit: MINUTE
+        onRateLimit:
+          status: 429
+          headers:
+            - name: "x-rate-limit-remaining"
+              value: "%REMAINING%"
+            - name: "x-rate-limit-reset"
+              value: "%RESET%"
+    
+    # Audit Configuration
+    audit:
+      enabled: true
+      level: DETAILED
+      providers:
+        - name: finance-audit-sink
+          type: KAFKA
+          config:
+            brokers:
+              - "kafka-1.finance.local:9092"
+              - "kafka-2.finance.local:9092"
+              - "kafka-3.finance.local:9092"
+            topic: "finance-audit-log"
+            compression: "snappy"
+            tls:
+              enabled: true
+              certSecret: finance-namespace/kafka-client-cert
+      includeRequestBody: true
+      includeResponseBody: false  # PII protection
+      sanitization:
+        - field: "request.headers.authorization"
+          action: REDACT
+        - field: "request.body.ssn"
+          action: HASH
+        - field: "request.body.account_number"
+          action: PARTIAL_MASK
+    
+    # Encryption Configuration
+    encryption:
+      dataAtRest:
+        enabled: true
+        provider: "vault"
+        keyRotation:
+          enabled: true
+          frequency: 30d
+      dataInTransit:
+        tlsMinVersion: "TLS1.3"
+        cipherSuites:
+          - "TLS_AES_256_GCM_SHA384"
+          - "TLS_CHACHA20_POLY1305_SHA256"
+    
+    # Compliance Controls
+    compliance:
+      pciDss:
+        enabled: true
+        level: 1
+        controls:
+          - networkSegmentation: true
+          - encryptionInTransit: true
+          - accessLogging: true
+          - vulnerabilityScanning: true
+      sox:
+        enabled: true
+        changeControl:
+          approvalRequired: true
+          approvers: ["security-team", "compliance-team"]
+      gdpr:
+        enabled: true
+        dataResidency: "EU"
+        rightToErasure: true
+
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: finance-strict-mtls
+  namespace: finance-production
+spec:
+  mtls:
+    mode: STRICT
+
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: finance-deny-all-default
+  namespace: finance-production
+spec:
+  action: DENY
+  rules:
+    - to:
+        - operation:
+            paths: ["*"]
+      when:
+        - key: source.namespace
+          notValues: ["finance-production", "finance-staging", "istio-system"]
