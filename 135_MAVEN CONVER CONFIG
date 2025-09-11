@@ -1,0 +1,77 @@
+CONTEXT
+Domain: Build System Migration for Enterprise Java Applications
+Scale: Supporting 10,000+ concurrent builds, 500+ microservices
+Performance Requirements:
+
+Build time reduction: 40% faster than Maven baseline
+Parallel execution: Support 16+ concurrent threads
+Cache hit rate: >95% for unchanged modules
+Constraints:
+Zero downtime migration
+Preserve all Maven profiles and configurations
+Maintain CI/CD pipeline compatibility
+Support multi-module projects with 50+ modules
+Team Composition: DevOps engineers, Java developers, Build engineers
+Integration Requirements: Jenkins, GitLab CI, GitHub Actions, Artifactory, Nexus
+REQUIREMENTS
+Functional Requirements:
+
+Complete Maven POM to Gradle build script conversion
+Preserve all dependencies with exact versions
+Migrate all plugins to Gradle equivalents
+Convert Maven profiles to Gradle build variants
+Maintain test execution order and configuration
+Support BOM (Bill of Materials) imports
+Non-Functional Requirements:
+
+Build performance: <30 seconds for incremental builds
+Memory usage: <2GB for standard builds
+Gradle daemon optimization
+Distributed cache support
+100% backward compatibility verification
+ARCHITECTURE
+Pattern: Modular Build Architecture with Composite Builds
+Deployment Style: Multi-module Gradle project with buildSrc conventions
+Layers:
+
+Convention Plugins Layer (buildSrc)
+Root Build Configuration
+Module Build Scripts
+Shared Configuration Scripts
+Performance Optimization Layer
+FRAMEWORK
+Technology Stack:
+
+Java 17 (Eclipse Temurin)
+Spring Boot 3.2.x
+Gradle 8.5+
+Kotlin DSL for build scripts
+TestContainers 1.19.x
+JUnit 5.10.x
+Mockito 5.x
+JaCoCo 0.8.11
+TECHNOLOGY
+Implementation Details:
+
+Gradle Build Cache (local + remote)
+Parallel execution with worker API
+Configuration avoidance APIs
+Lazy task configuration
+Incremental compilation
+Annotation processor optimization
+TESTING
+Coverage Requirements: 98% minimum
+
+Unit Tests: Validate each configuration mapping
+Integration Tests: Full build lifecycle validation
+Performance Tests: Build time benchmarks
+Compatibility Tests: Maven vs Gradle output comparison
+Regression Tests: CI/CD pipeline validation
+PERSONA
+Principal Build Engineer with 15+ years experience in enterprise Java build systems, expert in both Maven and Gradle ecosystems
+
+ORIGINALITY
+Intelligent plugin mapping with fallback strategies
+Automatic performance optimization based on project structure
+Self-validating migration with rollback capability
+AI-assisted dependency conflict resolution
